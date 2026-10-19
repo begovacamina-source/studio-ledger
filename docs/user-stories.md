@@ -1,6 +1,6 @@
 # User stories
 
-Full acceptance criteria are in the PRD ("Stories & criteria" tab, exported into `docs/PRD.md`). Must = required for release; Should = only after every Must in the same area ships.
+Full acceptance criteria are in `docs/PRD.md` ("Stories and acceptance criteria" section), the single source of truth. Must = required for release; Should = only after every Must in the same area ships.
 
 | ID | Story | Priority | Area |
 | --- | --- | --- | --- |

@@ -4,10 +4,10 @@ Work so far was done in a Claude.ai chat, then in Claude Code. This file tells t
 
 ## Done
 
-- PRD written and reviewed (Claude Doc, two tabs: main PRD + "Stories & criteria"): https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob
+- PRD written and reviewed, first as a Claude Doc (https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob). That doc is now a retired snapshot: it is no longer edited or exported.
 - Decisions made: USD default currency, switchable to EUR/BAM with no conversion; no partial payments; no Google Sheets sync in the MVP; discovery interviews skipped; MIT license; private repository.
-- `docs/PRD.md` holds the Markdown export of both PRD tabs (diagrams are placeholders pointing to the doc). Re-export when the doc changes.
-- PRD gap closed: **US-5.2 · Must: choose the app currency** is in the PRD doc, `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`. The F5 sample data criteria became **US-5.1 · Must: load sample data and clear all data** (issue #19); the dataset itself shipped in #18 and closed #16.
+- **`docs/PRD.md` is the single source of truth** for the product (decided 2026-10-20, see `docs/decisions.md`). Change it through pull requests. Its diagram placeholders point to the retired doc snapshot.
+- PRD gap closed: **US-5.2 · Must: choose the app currency** is in `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`. The F5 sample data criteria became **US-5.1 · Must: load sample data and clear all data** (issue #19); the dataset itself shipped in #18 and closed #16.
 - Repository foundation: README, AGENTS.md, CLAUDE.md, LICENSE (MIT), docs/, .gitignore, `.github/pull_request_template.md` (Definition of Done + "Closes #"), `.github/ISSUE_TEMPLATE/user-story.yml` (story, priority, area, acceptance criteria), `scripts/setup-github.sh`.
 - GitHub: private repository https://github.com/begovacamina-source/studio-ledger, branch `main`, first commit "Milestone 1: product foundation".
 - `scripts/setup-github.sh` has been run: 8 labels, the "MVP" milestone and 17 issues (#1–#17, one per story, acceptance criteria from `docs/PRD.md`). A second run skips everything.
@@ -20,4 +20,4 @@ Work so far was done in a Claude.ai chat, then in Claude Code. This file tells t
 
 ## Notes
 
-- If a story changes, update the PRD doc first, re-export `docs/PRD.md`, then edit the matching GitHub issue by hand (the setup script skips issues that already exist).
+- If a story changes, update `docs/PRD.md` (and `docs/user-stories.md` if the title or priority changes) in a pull request, then edit the matching GitHub issue by hand (the setup script skips issues that already exist).

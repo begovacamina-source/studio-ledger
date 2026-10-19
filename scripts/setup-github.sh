@@ -29,7 +29,7 @@ while [ $# -gt 0 ]; do
 done
 
 if grep -q '^> Placeholder' "$PRD"; then
-  echo "docs/PRD.md is still the placeholder. Export the PRD doc into it first." >&2
+  echo "docs/PRD.md is still the placeholder. Write the PRD into it first." >&2
   exit 1
 fi
 

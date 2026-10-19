@@ -35,6 +35,8 @@ Everything else is out of scope until the PRD changes. See [docs/PRD.md](docs/PR
 | [docs/decisions.md](docs/decisions.md) | Decision log |
 | [AGENTS.md](AGENTS.md) | Instructions for Codex and other coding agents |
 
+`docs/PRD.md` is the single source of truth for the product: change it through pull requests. The PRD was first written in a Claude Doc, which is now a retired snapshot and is no longer exported or edited.
+
 ## Planned tech stack
 
 React + TypeScript (Vite) · Recharts · Papa Parse · browser storage (no backend) · Vitest, Testing Library, Playwright · deployed on Vercel or Netlify.

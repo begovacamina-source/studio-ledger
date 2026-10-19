@@ -1,8 +1,10 @@
+Source of truth. Change this file through pull requests; it is not exported from anywhere.
+
 # Studio Ledger — Product Requirements Document
 
 Oct 19, 2026
 
-> Exported from the PRD doc (https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob) on 2026-10-19. The doc is the source; re-export after changes. Diagrams are not included in this export.
+> First written in a Claude Doc (https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob), now a retired snapshot that is no longer edited. Diagram placeholders below point to that snapshot.
 
 > **At a glance.** Studio Ledger helps freelance creatives see what they've received, what they've spent, and who still owes them. The MVP is four things: an overview dashboard, invoices and clients, expenses, and CSV import.
 
@@ -143,7 +145,7 @@ The MVP has four feature areas plus sample data for the prototype. Priorities us
 | US-5.1 | Load sample data and clear all data | Must |
 | US-5.2 | Choose the app currency | Must |
 
-Full user stories and acceptance criteria are in the Stories & criteria tab.
+Full user stories and acceptance criteria are in [Stories and acceptance criteria](#stories-and-acceptance-criteria) below.
 
 ---
 
@@ -421,7 +423,7 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 - [ ] Received, Expenses and Net income follow the selected period; Outstanding is always a current snapshot.
 - [ ] The Outstanding card shows how many invoices are unpaid and how many are overdue (e.g. "3 invoices · 1 overdue"), never a period change.
 - [ ] (Should) Received, Expenses and Net income show the change versus the previous equal period.
-- [ ] All figures follow the calculation rules on the main tab exactly.
+- [ ] All figures follow the calculation rules in [Financial definitions and calculation rules](#financial-definitions-and-calculation-rules) exactly.
 
 **US-1.2 · Must** — As a freelancer, I want to compare income and expenses over time, so I can see trends.
 
