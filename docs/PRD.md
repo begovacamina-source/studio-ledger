@@ -416,13 +416,13 @@ flowchart LR
   P4 -->|All stories meet DoD| P5["5. Validate<br/>1–2 weeks"]
 ```
 
-**Milestone 1: Product foundation (current)**
+**Milestone 1: Product foundation (approved)**
 
-- [ ] Finalize the target audience and primary problem
-- [ ] Approve this PRD and its MVP boundaries
-- [ ] Confirm the data fields and calculation rules
-- [ ] Map the three core user journeys in detail
-- [ ] Create the GitHub repository and add this PRD to `docs/`
+- [x] Finalize the target audience and primary problem
+- [x] Approve this PRD and its MVP boundaries
+- [x] Confirm the data fields and calculation rules
+- [x] Map the three core user journeys in detail
+- [x] Create the GitHub repository and add this PRD to `docs/`
 
 ---
 
