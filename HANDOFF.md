@@ -7,7 +7,7 @@ Work so far was done in a Claude.ai chat, then in Claude Code. This file tells t
 - PRD written and reviewed (Claude Doc, two tabs: main PRD + "Stories & criteria"): https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob
 - Decisions made: USD default currency, switchable to EUR/BAM with no conversion; no partial payments; no Google Sheets sync in the MVP; discovery interviews skipped; MIT license; private repository.
 - `docs/PRD.md` holds the Markdown export of both PRD tabs (diagrams are placeholders pointing to the doc). Re-export when the doc changes.
-- PRD gap closed: **US-5.2 · Must: choose the app currency** is in the PRD doc, `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`. Sample data keeps the ID `F5`.
+- PRD gap closed: **US-5.2 · Must: choose the app currency** is in the PRD doc, `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`. The F5 sample data criteria became **US-5.1 · Must: load sample data and clear all data** (issue #19); the dataset itself shipped in #18 and closed #16.
 - Repository foundation: README, AGENTS.md, CLAUDE.md, LICENSE (MIT), docs/, .gitignore, `.github/pull_request_template.md` (Definition of Done + "Closes #"), `.github/ISSUE_TEMPLATE/user-story.yml` (story, priority, area, acceptance criteria), `scripts/setup-github.sh`.
 - GitHub: private repository https://github.com/begovacamina-source/studio-ledger, branch `main`, first commit "Milestone 1: product foundation".
 - `scripts/setup-github.sh` has been run: 8 labels, the "MVP" milestone and 17 issues (#1–#17, one per story, acceptance criteria from `docs/PRD.md`). A second run skips everything.

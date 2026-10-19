@@ -19,5 +19,5 @@ Full acceptance criteria are in the PRD ("Stories & criteria" tab, exported into
 | US-4.2 | Match columns, date format and decimals | Must | Import |
 | US-4.3 | Preview and validate before importing | Must | Import |
 | US-4.4 | See imported records on the dashboard | Must | Import |
-| F5 | Load and clear a fictional sample dataset | Must | Sample data |
+| US-5.1 | Load sample data and clear all data | Must | Sample data |
 | US-5.2 | Choose the app currency | Must | Settings |

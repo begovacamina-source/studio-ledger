@@ -140,6 +140,7 @@ The MVP has four feature areas plus sample data for the prototype. Priorities us
 | US-4.2 | Match columns, date format and decimals | Must |
 | US-4.3 | Preview and validate before importing | Must |
 | US-4.4 | See imported records on the dashboard | Must |
+| US-5.1 | Load sample data and clear all data | Must |
 | US-5.2 | Choose the app currency | Must |
 
 Full user stories and acceptance criteria are in the Stories & criteria tab.
@@ -522,8 +523,13 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 
 ### F5. Sample data (prototype only) and settings
 
-- [ ] App can load a fictional dataset: 6 months, 5–6 clients, ~40 invoices, ~120 expenses, including overdue invoices and an empty month.
-- [ ] User can clear all data and start empty.
+**US-5.1 · Must** — As a freelancer, I want to load sample data and clear all data, so I can try the app with realistic records and then start fresh.
+
+- [ ] Settings has "Load sample data", which loads `data/sample-invoices.csv` and `data/sample-expenses.csv` (6 months, 6 clients, 41 invoices, 120 expenses, including overdue invoices and an empty month) with source = sample.
+- [ ] If records already exist, loading asks for confirmation first.
+- [ ] Settings has "Clear all data", which removes all clients, invoices and expenses after a confirmation that names what will be deleted.
+- [ ] First-use empty states offer "Load sample data" as one of their actions.
+- [ ] After either action, the dashboard updates immediately.
 
 **US-5.2 · Must** — As a freelancer, I want to choose the app currency, so amounts show in the currency I work in.
 
