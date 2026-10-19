@@ -1,0 +1,121 @@
+date,amount,category,description
+2026-04-01,54.99,Software,Figma subscription
+2026-04-03,59.99,Software,Adobe Creative Cloud
+2026-04-05,275.00,Office,Coworking desk membership
+2026-04-07,59.00,Equipment,USB-C hub
+2026-04-08,320.00,Equipment,Drawing tablet
+2026-04-09,89.00,Software,Font license
+2026-04-10,14.00,Software,Google Workspace
+2026-04-11,42.50,Office,Printer paper and ink
+2026-04-12,70.00,Office,Internet service
+2026-04-14,38.40,Other,Client meeting lunch
+2026-04-15,45.00,Other,Phone plan
+2026-04-16,64.00,Marketing,Business cards printing
+2026-04-18,86.00,Travel,Train to client workshop
+2026-04-20,11.99,Software,Cloud storage plan
+2026-04-22,129.00,Education,Online course: motion design
+2026-04-25,24.00,Software,Portfolio site hosting
+2026-04-26,49.00,Other,Stock photo pack
+2026-04-28,15.00,Fees,Bank account fee
+2026-04-29,18.60,Fees,Payment processing fees
+2026-04-30,150.00,Fees,Accountant consultation
+2026-05-01,54.99,Software,Figma subscription
+2026-05-02,149.99,Equipment,External SSD 2TB
+2026-05-03,59.99,Software,Adobe Creative Cloud
+2026-05-05,275.00,Office,Coworking desk membership
+2026-05-06,120.00,Marketing,Social media ads campaign
+2026-05-08,45.00,Office,Desk lamp
+2026-05-09,27.50,Travel,Taxi to client meeting
+2026-05-10,14.00,Software,Google Workspace
+2026-05-12,70.00,Office,Internet service
+2026-05-13,220.00,Education,Typography workshop
+2026-05-15,45.00,Other,Phone plan
+2026-05-16,39.00,Software,Mockup templates bundle
+2026-05-20,11.99,Software,Cloud storage plan
+2026-05-20,18.75,Other,Postage for print samples
+2026-05-23,312.00,Travel,Flight to Chicago design conference
+2026-05-24,395.00,Education,Design conference ticket
+2026-05-24,418.00,Travel,Hotel for design conference
+2026-05-28,15.00,Fees,Bank account fee
+2026-05-29,41.20,Fees,Payment processing fees
+2026-05-30,36.80,Office,Sketchbooks and markers
+2026-06-01,54.99,Software,Figma subscription
+2026-06-03,59.99,Software,Adobe Creative Cloud
+2026-06-03,179.00,Equipment,Monitor calibration tool
+2026-06-05,275.00,Office,Coworking desk membership
+2026-06-05,85.00,Marketing,Portfolio printing
+2026-06-08,35.00,Other,Stock illustration license
+2026-06-10,389.00,Office,Ergonomic chair
+2026-06-10,14.00,Software,Google Workspace
+2026-06-12,29.00,Software,Icon set license
+2026-06-12,70.00,Office,Internet service
+2026-06-14,46.20,Other,Lunch with prospective client
+2026-06-15,45.00,Other,Phone plan
+2026-06-17,64.00,Travel,Train to photo shoot
+2026-06-19,42.00,Education,Book on grid systems
+2026-06-20,11.99,Software,Cloud storage plan
+2026-06-22,18.00,Software,Domain renewal
+2026-06-24,150.00,Marketing,Sponsored newsletter placement
+2026-06-26,35.40,Fees,Payment processing fees
+2026-06-27,99.00,Equipment,Mechanical keyboard
+2026-06-28,15.00,Fees,Bank account fee
+2026-06-30,22.00,Other,Courier for print proofs
+2026-07-01,54.99,Software,Figma subscription
+2026-07-02,99.00,Software,3D rendering plugin
+2026-07-03,59.99,Software,Adobe Creative Cloud
+2026-07-05,275.00,Office,Coworking desk membership
+2026-07-07,96.00,Marketing,Portfolio platform annual plan
+2026-07-09,180.00,Equipment,Laptop repair
+2026-07-10,14.00,Software,Google Workspace
+2026-07-11,132.00,Travel,Car rental for client site visit
+2026-07-12,70.00,Office,Internet service
+2026-07-14,58.00,Office,Printer toner
+2026-07-15,45.00,Other,Phone plan
+2026-07-16,49.00,Education,Webinar: pricing for freelancers
+2026-07-18,16.00,Travel,Parking at client office
+2026-07-20,11.99,Software,Cloud storage plan
+2026-07-21,55.00,Other,Gift for referral partner
+2026-07-23,19.99,Equipment,Pen nibs for drawing tablet
+2026-07-25,38.90,Fees,Payment processing fees
+2026-07-28,15.00,Fees,Bank account fee
+2026-07-28,74.00,Marketing,Printed promo postcards
+2026-07-30,12.60,Other,Coffee with collaborator
+2026-08-01,54.99,Software,Figma subscription
+2026-08-03,59.99,Software,Adobe Creative Cloud
+2026-08-04,89.00,Education,Color management course
+2026-08-05,275.00,Office,Coworking desk membership
+2026-08-06,23.40,Office,Studio cleaning supplies
+2026-08-08,649.00,Equipment,Camera lens
+2026-08-10,14.00,Software,Google Workspace
+2026-08-11,300.00,Marketing,Brand photography for own website
+2026-08-12,70.00,Office,Internet service
+2026-08-13,284.00,Travel,Flight to Austin typography festival
+2026-08-14,175.00,Education,Typography festival pass
+2026-08-15,356.00,Travel,Hotel for typography festival
+2026-08-15,45.00,Other,Phone plan
+2026-08-19,120.00,Software,Font family license
+2026-08-20,11.99,Software,Cloud storage plan
+2026-08-25,25.00,Fees,Wire transfer fee
+2026-08-27,17.50,Office,Notebooks and stationery
+2026-08-28,15.00,Fees,Bank account fee
+2026-09-01,54.99,Software,Figma subscription
+2026-09-02,499.00,Equipment,Graphics card upgrade
+2026-09-03,59.99,Software,Adobe Creative Cloud
+2026-09-04,59.99,Marketing,Professional network premium plan
+2026-09-05,275.00,Office,Coworking desk membership
+2026-09-07,48.00,Office,Whiteboard and markers
+2026-09-09,92.00,Travel,Train to client workshop
+2026-09-10,14.00,Software,Google Workspace
+2026-09-11,199.00,Education,Online course: brand strategy
+2026-09-12,70.00,Office,Internet service
+2026-09-14,144.00,Software,Prototyping tool annual plan
+2026-09-15,45.00,Other,Phone plan
+2026-09-17,68.00,Other,Printing for client presentation
+2026-09-20,11.99,Software,Cloud storage plan
+2026-09-21,175.00,Fees,Tax advisor consultation
+2026-09-23,31.20,Travel,Rideshare to client meeting
+2026-09-25,62.40,Fees,Payment processing fees
+2026-09-26,36.00,Software,Website hosting upgrade
+2026-09-28,15.00,Fees,Bank account fee
+2026-09-29,84.00,Other,Lunch with collaborators
+2026-09-30,40.00,Office,Meeting room rental
