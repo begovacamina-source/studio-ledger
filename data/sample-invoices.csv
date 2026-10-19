@@ -1,0 +1,42 @@
+invoice_number,client,amount,issue_date,due_date,paid_date,description
+INV-001,Northwind Studio,1200.00,2026-04-02,2026-04-16,2026-04-14,Brand refresh phase 1
+INV-002,Lumen Coffee,850.00,2026-04-10,2026-04-24,,Menu design
+INV-003,Fernhill Records,1450.00,2026-04-13,2026-04-27,2026-04-24,Album cover artwork
+INV-004,Atlas & Oak Architects,2800.00,2026-04-17,2026-05-17,2026-05-12,Website redesign deposit
+INV-005,Paper Kite Publishing,640.00,2026-04-21,2026-05-05,2026-05-02,Book cover concepts
+INV-006,Brightwater Film Co.,1750.00,2026-04-24,2026-05-24,2026-05-20,Title sequence design
+INV-007,Northwind Studio,980.00,2026-04-28,2026-05-12,2026-05-09,Brand guidelines document
+INV-008,Lumen Coffee,420.00,2026-05-04,2026-05-18,2026-05-15,Loyalty card design
+INV-009,Fernhill Records,2200.00,2026-05-07,2026-05-21,2026-05-21,Tour poster series
+INV-010,Atlas & Oak Architects,3600.00,2026-05-12,2026-06-11,2026-06-08,Website redesign build
+INV-011,Paper Kite Publishing,1150.00,2026-05-15,2026-05-29,2026-06-03,Interior layout for chapters 1-4
+INV-012,Northwind Studio,1600.00,2026-05-19,2026-06-02,2026-05-30,Packaging design
+INV-013,Brightwater Film Co.,2400.00,2026-05-22,2026-06-21,2026-06-18,Festival poster and social kit
+INV-014,Fernhill Records,750.00,2026-05-27,2026-06-10,2026-06-06,Single artwork
+INV-015,Northwind Studio,1350.00,2026-06-02,2026-06-16,2026-06-12,Trade show booth graphics
+INV-016,Paper Kite Publishing,1900.00,2026-06-05,2026-06-19,,Catalog design
+INV-017,Atlas & Oak Architects,1200.00,2026-06-09,2026-07-09,2026-07-03,Project photography retouching
+INV-018,Lumen Coffee,680.00,2026-06-11,2026-06-25,2026-06-24,Summer menu update
+INV-019,Brightwater Film Co.,3200.00,2026-06-16,2026-07-16,2026-07-14,Documentary key art
+INV-020,Fernhill Records,1800.00,2026-06-19,2026-07-03,2026-06-30,Vinyl packaging design
+INV-021,Northwind Studio,560.00,2026-06-23,2026-07-07,2026-07-06,Email template design
+INV-022,Paper Kite Publishing,900.00,2026-06-26,2026-07-10,2026-07-08,Author website mockups
+INV-023,Atlas & Oak Architects,2600.00,2026-07-01,2026-07-31,2026-07-29,Brochure design
+INV-024,Fernhill Records,1250.00,2026-07-06,2026-07-20,2026-07-17,Merch designs
+INV-025,Brightwater Film Co.,1950.00,2026-07-08,2026-08-07,,Trailer motion graphics
+INV-026,Northwind Studio,2100.00,2026-07-13,2026-07-27,2026-07-24,Brand refresh phase 2
+INV-027,Lumen Coffee,520.00,2026-07-15,2026-07-29,2026-09-08,Seasonal signage
+INV-028,Paper Kite Publishing,1400.00,2026-07-20,2026-08-03,2026-09-02,Book cover final artwork
+INV-029,Atlas & Oak Architects,850.00,2026-07-24,2026-08-23,2026-09-15,Presentation template
+INV-030,Northwind Studio,1800.00,2026-09-01,2026-09-15,2026-09-12,Product launch campaign
+INV-031,Fernhill Records,2400.00,2026-09-03,2026-09-17,2026-09-16,Album rollout design kit
+INV-032,Atlas & Oak Architects,3200.00,2026-09-04,2026-10-04,,Office signage system
+INV-033,Lumen Coffee,760.00,2026-09-08,2026-09-22,2026-09-22,Coffee bag labels
+INV-034,Brightwater Film Co.,2750.00,2026-09-10,2026-10-10,2026-09-26,Festival submission poster
+INV-035,Paper Kite Publishing,1100.00,2026-09-15,2026-09-29,2026-09-26,Series cover template
+INV-036,Northwind Studio,940.00,2026-09-18,2026-10-18,,Social media templates
+INV-037,Fernhill Records,1650.00,2026-09-19,2026-10-03,2026-09-30,Music video stills retouching
+INV-038,Lumen Coffee,1200.00,2026-09-19,2026-10-19,,Cafe interior murals
+INV-039,Brightwater Film Co.,2300.00,2026-09-24,2026-10-24,,Streaming poster set
+INV-040,Atlas & Oak Architects,1500.00,2026-09-29,2026-10-29,,Annual report layout
+INV-041,Paper Kite Publishing,780.00,2026-09-30,2026-10-30,,Spring catalog concepts
