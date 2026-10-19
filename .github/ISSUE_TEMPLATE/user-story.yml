@@ -1,0 +1,42 @@
+name: User story
+description: One user story from docs/PRD.md. One story = one issue = one pull request.
+title: "US-X.Y · "
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: Story
+      placeholder: As a freelancer, I want to mark an invoice as paid, so Received updates.
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - Must
+        - Should
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Dashboard
+        - Invoices
+        - Expenses
+        - Import
+        - Sample data
+        - Settings
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance criteria
+      description: Copied from docs/PRD.md, one checkbox per criterion.
+      value: |
+        - [ ]
+    validations:
+      required: true

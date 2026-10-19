@@ -1,0 +1,64 @@
+# Glossary, calculations and behavior rules
+
+Extracted from the PRD. If this file and the PRD disagree, the PRD wins and this file must be updated.
+
+## The golden rule
+
+Income counts only when cash is received: a paid invoice counts in the period of its **paid date**, never its issue date. Billed revenue is never shown as income.
+
+## Glossary
+
+| Term | Meaning |
+| --- | --- |
+| Received | Money from invoices marked Paid |
+| Outstanding | Money from all invoices not yet paid |
+| Pending | An unpaid invoice whose due date has not passed |
+| Overdue | An unpaid invoice whose due date has passed |
+| Unpaid | Stored status covering Pending and Overdue; never shown in the UI |
+| Expenses | Money spent, recorded as expense entries |
+| Net income | Received minus Expenses for the period |
+
+## Calculations
+
+| Metric | Definition | Period rule |
+| --- | --- | --- |
+| Received | Sum of Paid invoice amounts | `paidDate` within the selected period |
+| Outstanding | Sum of all Unpaid invoice amounts | Current snapshot, ignores period |
+| Overdue | Sum of Unpaid invoices where `dueDate` < today | Current snapshot, ignores period |
+| Expenses | Sum of expense amounts | `date` within the selected period |
+| Net income | Received − Expenses | Selected period |
+| Change vs previous | (Current − Previous) ÷ Previous × 100 | Previous period of equal length; Received, Expenses and Net income only |
+
+The Outstanding card shows a count instead of a change, e.g. "3 invoices · 1 overdue".
+
+## Displayed invoice status
+
+- **Paid:** status is Paid (`paidDate` is set).
+- **Overdue:** status is Unpaid and `dueDate` is before today.
+- **Pending:** status is Unpaid and `dueDate` is today or later.
+
+## Edge cases
+
+- Previous period value of 0 → change shown as "—".
+- Net income can be negative; show a minus sign, not only red.
+- A month with no records shows 0 in the chart, not a gap.
+- All sums are calculated in cents and formatted only for display.
+- "Today" is the user's local date.
+
+## Behavior rules
+
+- Setting a paid invoice back to Unpaid clears its paid date and removes it from Received.
+- Editing a paid invoice's amount or paid date changes past totals immediately.
+- A client with invoices cannot be deleted until those invoices are deleted or moved.
+- Expense amounts must be greater than 0; refunds are out of scope.
+- An invoice is either Paid or Unpaid; partial payments are not supported.
+
+## Currency
+
+One currency per app, chosen in Settings: USD (default), EUR or BAM. Switching changes formatting only; amounts are never converted.
+
+| Currency | Format |
+| --- | --- |
+| USD | $1,250.00 |
+| EUR | €1,250.00 |
+| BAM | 1.250,00 KM |
