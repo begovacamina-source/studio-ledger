@@ -4,8 +4,6 @@ Source of truth. Change this file through pull requests; it is not exported from
 
 Oct 19, 2026
 
-> First written in a Claude Doc (https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob), now a retired snapshot that is no longer edited. Diagram placeholders below point to that snapshot.
-
 > **At a glance.** Studio Ledger helps freelance creatives see what they've received, what they've spent, and who still owes them. The MVP is four things: an overview dashboard, invoices and clients, expenses, and CSV import.
 
 ## Overview
@@ -113,7 +111,23 @@ The MVP succeeds if a freelancer can answer the three core questions in under 10
 
 Three journeys define the MVP; each must be completable without help and is covered by an end-to-end test.
 
-*[Diagram in the PRD doc: core user journeys · 3 flows, 1 error loop]*
+```mermaid
+flowchart LR
+  subgraph J1["1. Import records"]
+    direction LR
+    A1[Upload CSV file] --> A2[Match columns to fields] --> A3[Preview and validate rows]
+    A3 --> A4[Import valid rows] --> A5([Records appear on dashboard])
+    A3 -. "errors: fix the file, upload again" .-> A1
+  end
+  subgraph J2["2. Understand the month"]
+    direction LR
+    B1[Open dashboard] --> B2[Pick a period] --> B3[Read summary cards] --> B4([Compare months in the chart])
+  end
+  subgraph J3["3. Collect an unpaid invoice"]
+    direction LR
+    C1[See overdue in Outstanding] --> C2[Open the invoice] --> C3[Mark as paid, set paid date] --> C4([Totals update])
+  end
+```
 
 Import is the only journey with a branch: rows with errors send the user back to fix the file, or they import only the valid rows.
 
@@ -122,8 +136,6 @@ Import is the only journey with a branch: rows with errors send the user back to
 ## Features and user stories
 
 The MVP has four feature areas plus sample data for the prototype. Priorities use MoSCoW: Must = required for release, Should = include if time allows.
-
-*[Diagram in the PRD doc: feature map · 5 areas]*
 
 | ID | Story | Priority |
 | --- | --- | --- |
@@ -396,7 +408,13 @@ The MVP is a client-side React + TypeScript app with data stored in the browser,
 
 The work runs in five phases, and each one starts only when the previous gate is met; the estimate is 8–12 weeks in total, with exact dates set once Milestone 1 is done.
 
-*[Diagram in the PRD doc: roadmap · 5 phases, 4 gates]*
+```mermaid
+flowchart LR
+  P1["1. Foundation<br/>~1 week"] -->|PRD approved| P2["2. UX flows<br/>1–2 weeks"]
+  P2 -->|Wireframes reviewed| P3["3. Design system<br/>2–3 weeks"]
+  P3 -->|Hi-fi designs done| P4["4. Build<br/>3–4 weeks"]
+  P4 -->|All stories meet DoD| P5["5. Validate<br/>1–2 weeks"]
+```
 
 **Milestone 1: Product foundation (current)**
 
