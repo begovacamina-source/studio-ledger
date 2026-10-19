@@ -5,26 +5,19 @@ Work so far was done in a Claude.ai chat, then in Claude Code. This file tells t
 ## Done
 
 - PRD written and reviewed (Claude Doc, two tabs: main PRD + "Stories & criteria"): https://claude.ai/artifact/M62tYXz2FSFGwgmeqmzFob
-- Decisions made: USD default currency, switchable to EUR/BAM with no conversion; no partial payments; no Google Sheets sync in the MVP; discovery interviews skipped.
-- Repository scaffold: README, AGENTS.md, CLAUDE.md, docs/ (rules, data model, stories, decisions), .gitignore.
-- `docs/PRD.md` now holds the Markdown export of both PRD tabs (diagrams are left as placeholders pointing to the doc). Re-export when the doc changes.
-- PRD gap closed: **US-5.2 · Must: choose the app currency** added to the PRD doc (story table + "Stories & criteria", under F5, renamed "Sample data (prototype only) and settings"), `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`.
-- GitHub setup files:
-  - `.github/pull_request_template.md`: Definition of Done checklist from AGENTS.md.
-  - `.github/ISSUE_TEMPLATE/user-story.yml`: story ID, story, priority, area, acceptance criteria, notes.
-  - `scripts/setup-github.sh`: creates labels, the "MVP" milestone and one issue per story (17), reading stories from `docs/user-stories.md` and criteria from `docs/PRD.md`. Re-runnable; `--dry-run` previews without `gh`. Dry run verified; not yet run against GitHub.
+- Decisions made: USD default currency, switchable to EUR/BAM with no conversion; no partial payments; no Google Sheets sync in the MVP; discovery interviews skipped; MIT license; private repository.
+- `docs/PRD.md` holds the Markdown export of both PRD tabs (diagrams are placeholders pointing to the doc). Re-export when the doc changes.
+- PRD gap closed: **US-5.2 · Must: choose the app currency** is in the PRD doc, `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`. Sample data keeps the ID `F5`.
+- Repository foundation: README, AGENTS.md, CLAUDE.md, LICENSE (MIT), docs/, .gitignore, `.github/pull_request_template.md` (Definition of Done + "Closes #"), `.github/ISSUE_TEMPLATE/user-story.yml` (story, priority, area, acceptance criteria), `scripts/setup-github.sh`.
+- GitHub: private repository https://github.com/begovacamina-source/studio-ledger, branch `main`, first commit "Milestone 1: product foundation".
+- `scripts/setup-github.sh` has been run: 8 labels, the "MVP" milestone and 17 issues (#1–#17, one per story, acceptance criteria from `docs/PRD.md`). A second run skips everything.
+- The `gh` CLI is installed in `~/.local/bin` (add it to `PATH` if a shell can't find it). Commits use the GitHub noreply email, set for this repository only.
 
-## In progress (pick up here)
+## Next (pick up here)
 
-1. Create the GitHub repository (`git init`, first commit, `gh repo create`), then run `scripts/setup-github.sh` (needs the `gh` CLI, not installed on this machine yet, and `gh auth login`).
-2. Decide the ID scheme for sample data: it is listed as `F5` with no story ID, while currency is `US-5.2`. Renaming F5 to `US-5.1` would make it consistent; change the PRD doc first, then the docs, before running the script.
+1. Build the fictional sample dataset as CSV: 6 months, 5–6 clients, ~40 invoices, ~120 expenses, including overdue invoices and one empty month. Save it under `data/`; it doubles as the CSV import sample.
+2. Mark the PRD approved (gate 1), then start Phase 2: sitemap, user flows, low-fidelity wireframes with empty and error states.
 
-## Next after that
+## Notes
 
-- Build the fictional sample dataset as CSV: 6 months, 5–6 clients, ~40 invoices, ~120 expenses, including overdue invoices and one empty month. Save it under `data/`; it doubles as the CSV import sample.
-- Mark the PRD approved (gate 1), then start Phase 2: sitemap, user flows, low-fidelity wireframes with empty and error states.
-
-## Not yet decided
-
-- License (MIT is typical for a portfolio repo).
-- Public or private repository (public recommended for a portfolio).
+- If a story changes, update the PRD doc first, re-export `docs/PRD.md`, then edit the matching GitHub issue by hand (the setup script skips issues that already exist).
