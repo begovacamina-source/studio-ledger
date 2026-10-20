@@ -1,13 +1,6 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import App from './App'
-
-// ResizeObserver is used by the chart container but missing from jsdom.
-globalThis.ResizeObserver ??= class {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-}
+import { renderApp } from '@/test/render-app'
 
 describe('Overview dashboard', () => {
   beforeEach(() => {
@@ -17,7 +10,7 @@ describe('Overview dashboard', () => {
   afterEach(() => vi.useRealTimers())
 
   it('shows the four summary cards with the Outstanding snapshot', () => {
-    render(<App />)
+    renderApp()
     const cards = screen.getByRole('region', { name: 'Key figures' })
     for (const title of ['Received', 'Outstanding', 'Expenses', 'Net income']) {
       expect(within(cards).getByText(title)).toBeInTheDocument()
@@ -27,7 +20,7 @@ describe('Overview dashboard', () => {
   })
 
   it('lists who owes money with a text status, Overdue first', () => {
-    render(<App />)
+    renderApp()
     const badges = screen.getAllByText(/^(Overdue · \d+ days?|Pending)$/)
     expect(badges).toHaveLength(9)
     expect(badges[0]).toHaveTextContent(/^Overdue/)
@@ -36,14 +29,14 @@ describe('Overview dashboard', () => {
   })
 
   it('opens on Last 6 months', () => {
-    render(<App />)
+    renderApp()
     expect(screen.getByRole('combobox', { name: 'Period' })).toHaveTextContent('Last 6 months')
     // May–October 2026 on 2026-10-19.
     expect(screen.getByText('$47,160.00')).toBeInTheDocument()
   })
 
   it('never shows banned terms', () => {
-    const { container } = render(<App />)
+    const { container } = renderApp()
     expect(container.textContent).not.toMatch(/unpaid|revenue|billed/i)
   })
 })

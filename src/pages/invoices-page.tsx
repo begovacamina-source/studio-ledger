@@ -1,0 +1,163 @@
+import { SearchIcon } from 'lucide-react'
+import { useMemo } from 'react'
+import { Link, useSearchParams } from 'react-router'
+import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
+import { MarkPaidDialog } from '@/components/invoices/mark-paid-dialog'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { formatDate, todayLocal } from '@/lib/dates'
+import {
+  invoiceRows,
+  matchesSearch,
+  sortByNewest,
+  STATUS_FILTERS,
+  statusCounts,
+  type StatusFilter,
+} from '@/lib/invoices'
+import { formatMoney } from '@/lib/money'
+import { APP_CURRENCY } from '@/lib/settings'
+import { useLedger } from '@/state/use-ledger'
+
+function parseStatus(value: string | null): StatusFilter {
+  const match = STATUS_FILTERS.find((s) => s.toLowerCase() === value)
+  return match ?? 'All'
+}
+
+export function InvoicesPage() {
+  const { ledger } = useLedger()
+  const [params, setParams] = useSearchParams()
+  const status = parseStatus(params.get('status'))
+  const query = params.get('q') ?? ''
+  const today = todayLocal()
+
+  const searched = useMemo(
+    () =>
+      sortByNewest(invoiceRows(ledger.invoices, ledger.clients, today)).filter((r) =>
+        matchesSearch(r, query),
+      ),
+    [ledger, today, query],
+  )
+  const counts = statusCounts(searched)
+  const visible = status === 'All' ? searched : searched.filter((r) => r.status === status)
+
+  function update(next: { status?: StatusFilter; q?: string }) {
+    const s = next.status ?? status
+    const q = next.q ?? query
+    const p = new URLSearchParams()
+    if (s !== 'All') p.set('status', s.toLowerCase())
+    if (q) p.set('q', q)
+    setParams(p, { replace: true })
+  }
+
+  return (
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold">Invoices</h1>
+
+      <Tabs value={status} onValueChange={(value) => update({ status: value as StatusFilter })}>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <TabsList>
+            {STATUS_FILTERS.map((s) => (
+              <TabsTrigger key={s} value={s}>
+                {s} <span className="text-muted-foreground tabular-nums">{counts[s]}</span>
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <div className="relative w-full sm:w-72">
+            <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              type="search"
+              aria-label="Search invoices"
+              placeholder="Search invoice number or client"
+              className="pl-8"
+              value={query}
+              onChange={(e) => update({ q: e.target.value })}
+            />
+          </div>
+        </div>
+
+        <TabsContent value={status} className="mt-4">
+          <Card>
+            <CardContent>
+              {visible.length === 0 ? (
+                <div className="flex flex-col items-center gap-3 py-12 text-center">
+                  <p className="text-sm text-muted-foreground">
+                    {status === 'All' ? 'No invoices' : `No ${status.toLowerCase()} invoices`}
+                    {query && ` match "${query}"`}.
+                  </p>
+                  <Button variant="outline" onClick={() => setParams({}, { replace: true })}>
+                    Clear filters
+                  </Button>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Invoice</TableHead>
+                      <TableHead>Client</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                      <TableHead>Issue date</TableHead>
+                      <TableHead>Due date</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>
+                        <span className="sr-only">Actions</span>
+                      </TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {visible.map((row) => (
+                      <TableRow key={row.invoice.id}>
+                        <TableCell>
+                          <Link
+                            to={`/invoices/${row.invoice.invoiceNumber}`}
+                            className="font-medium underline-offset-4 hover:underline"
+                          >
+                            {row.invoice.invoiceNumber}
+                          </Link>
+                        </TableCell>
+                        <TableCell>{row.client?.name ?? 'Unknown client'}</TableCell>
+                        <TableCell className="text-right tabular-nums">
+                          {formatMoney(row.invoice.amount, APP_CURRENCY)}
+                        </TableCell>
+                        <TableCell>{formatDate(row.invoice.issueDate)}</TableCell>
+                        <TableCell>{formatDate(row.invoice.dueDate)}</TableCell>
+                        <TableCell>
+                          <InvoiceStatusBadge status={row.status} />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          {row.status !== 'Paid' && (
+                            <MarkPaidDialog
+                              invoice={row.invoice}
+                              trigger={
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  aria-label={`Mark ${row.invoice.invoiceNumber} as paid`}
+                                >
+                                  Mark as paid
+                                </Button>
+                              }
+                            />
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
