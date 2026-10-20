@@ -1,0 +1,53 @@
+# Verification log
+
+Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
+
+## 2026-10-20 · Baseline at `main` 96d7b23 (after #31)
+
+**Pull request:** the one that adds the Definition of Done (docs only; no app code changed).
+
+**Run on this commit:** `npm test` (14 files, 144 tests passed, none skipped), `npm run lint` (exit 0, no warnings), `npm run build` (`tsc -b` and `vite build` passed; one warning that the JavaScript bundle is 914 kB), and the dev server reviewed in the browser with fresh browser storage.
+
+| Items | What was verified |
+| --- | --- |
+| PB-1, PB-2, PB-3 | `calculations.test.ts`: Received per month by paid date, Outstanding snapshot (9 invoices, $14,620.00) on 2026-10-19. `invoices.test.ts`: "moves an invoice into Received for its paid date and out of Outstanding" and "setting back to Unpaid clears the paid date and removes it from Received". |
+| PB-4 | `calculations.test.ts` "treats yesterday as Overdue and today as Pending": INV-036 Overdue, INV-038 (due today) Pending, INV-001 Paid. |
+| PB-5, PB-6, PB-7 | `calculations.test.ts`: monthly Received, Expenses and Net income, "—" when the previous value is 0 or Net income was 0 or negative, equal-length previous period, 0 for an empty month. `money.test.ts`: minus sign for negative amounts. Preview: the chart table shows August 2026 Net income as -$2,584.87 and October 2026 as $0.00. |
+| PB-8 | `invoice-form.test.ts` "editing a paid invoice amount and paid date changes past totals immediately"; `invoice-form.test.tsx` checks the same through the panel and the dashboard. |
+| PB-9, PB-10 | `import.test.tsx` "imports the invoice sample end to end and the dashboard shows it". `csv-import.test.ts`: all four date formats, dot and comma decimals, European file, creating missing clients. Preview: `public/samples/studio-ledger-invoices-sample.csv` gave 4 valid rows, "4 invoices imported", new client Harbour Light Theatre, ledger went from 41 to 45 invoices. |
+| PB-11 | `csv-import.test.ts` "names the row, field and problem for each error"; `import.test.tsx` "reports errors and duplicates, and imports only the valid rows". |
+| PB-12 | `csv-import.test.ts`: duplicates in the ledger and earlier in the file, for invoices and expenses. Preview: imported the same sample file a second time; the preview showed 0 valid, 0 errors, 4 duplicates, every row "Duplicate", and no import button. Expense re-import was checked by unit test only. |
+| PB-13 | `csv-import.test.ts` "blocks the next step for unmatched required fields or a field used twice"; `import.test.tsx` "blocks the next step until required fields are matched". |
+| PB-14 | `csv-import.test.ts`: "accepts .csv files up to 5 MB", "rejects empty files and more than 5,000 rows" (empty, header-only, 5,001 rows). `import.test.tsx` "refuses a file that is not a CSV". |
+| PB-15 | `import.test.tsx` "cancel goes back to upload without importing". |
+| PB-16 | `settings.test.tsx` "a first visit opens on the sample data, with no banner". Preview with empty storage: Overview opened on the sample, no banner, Received $47,160.00. |
+| PB-17, PB-18 | `settings.test.tsx`: "clears all data after a confirmation that names what goes", "after clearing all data, a later visit stays empty", "after clearing, the empty state offers Load sample data and the dashboard fills straight away", "shows first-use states on Invoices and Expenses". |
+| PB-19 | `settings.test.tsx` "asks before replacing existing records with the sample" (confirmation only). Preview: with the sample already loaded, Settings → Load sample data → Replace with sample data left storage with exactly 6 clients, 41 invoices and 120 expenses. |
+| PB-20, PB-21 | `money.test.ts` "formats each currency without converting"; `settings.test.tsx` EUR and BAM on the Overview. |
+| PB-22 | Preview in EUR: 0 "$" on the Overview (cards, Outstanding, axis ticks €0 to €14,000, chart table), Invoices with the INV-002 panel open, and Expenses ("120 expenses · €11,770.14"). In BAM: 0 "$" or "€" on the Overview (Received "47.160,00 KM") and Expenses ("120 expenses · 11.770,14 KM"). Reload kept the choice (`settings.test.tsx` covers it too). |
+| PB-25 | Preview: the screen-reader table "Received, Expenses and Net income per month" has 6 rows (May to October 2026). Received sums to $47,160.00 and Expenses to $10,154.67, matching the cards. |
+| UX-1 | `App.test.tsx` "lists who owes money with a text status, Overdue first" (badges read "Overdue · N days" or "Pending"). |
+| UX-2 | `invoices.test.tsx` "searches invoice number and client name, with an empty state"; `expenses.test.tsx` checks "No expenses match these filters." and Clear filters. |
+| UX-6 | `settings.test.tsx` "Settings is an icon on the right of the top bar, not a main tab". |
+| A11Y-1 | `invoice-form.test.tsx` "shows inline errors and moves focus to the first one" (error is the field's accessible description); `expenses.test.tsx` "validates inline…" (focus on Amount). |
+| DATA-1, DATA-2 | `storage.test.ts`: read back what was saved, unreadable data starts empty with a message, currency default and saved value. `settings.test.tsx`: "records survive a reload", currency survives a reload. |
+| DATA-4 | Preview: Settings reads "Records are kept in this browser only, so clearing site data or using another browser won't show them." |
+| DATA-5 | `money.test.ts` "parses dot-decimal amounts into integer cents"; calculation tests assert exact cent totals. |
+| CODE-1, CODE-2, TEST-1 | The commands listed above. |
+| CODE-3 | Logic in `src/lib/` (calculations, csv-import, expense-form, invoice-form, invoices, money, format, storage), each with a test file. |
+| CODE-4 | Searched `src` outside `components/ui` for hex colours: none. |
+| GIT-1, GIT-2 | PRs #27 to #31 merged into `main` from feature branches. PR #31's Vercel preview status: success. |
+| DEP-1 | Vercel status on `main` 96d7b23: "Deployment has completed". The production URL itself was not opened. |
+| DOC-1 | Read `docs/rules.md` and `docs/data-model.md` against the PRD: glossary, calculations, periods, edge cases, currency formats and CSV formats match. |
+| DOC-2, DOC-3 | `HANDOFF.md` describes the current state after #31 and is updated in this PR; `docs/decisions.md` has today's entry for this checklist. |
+
+**Found, not fixed (items left open):**
+
+- PB-24: in BAM the chart's axis ticks wrap onto two lines ("14.000" over "KM") at the default desktop width. The amounts are correct; the layout breaks.
+- CODE-5: components use arbitrary values such as `ring-[3px]` and `min-w-[26rem]` to `min-w-[52rem]` on tables.
+- CODE-7: the bundle is 914 kB.
+- TEST-2: the rule "a client with invoices cannot be deleted" has no test (client management, US-2.5, is not built).
+- UX-3: no screen uses skeletons yet. UX-8: mobile card lists are not built yet (see `HANDOFF.md`).
+- UX-5: the banned-terms test covers the Overview only.
+
+**Not verified:** chart tooltips, form and dialog amounts, and import screens in other currencies (PB-23); clearing keeps the currency (DATA-7); the storage-full message (DATA-3); keyboard-only use of every flow, contrast, screen readers; mobile and tablet widths; no network calls; the production URL; a clean `npm ci`.

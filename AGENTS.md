@@ -48,3 +48,5 @@ Use only the glossary terms in `docs/rules.md`: Received, Outstanding, Pending, 
 - Keyboard accessible with visible focus; status never shown by colour alone.
 - No TypeScript errors or lint warnings.
 - PR description links the issue and includes a screenshot.
+
+The release checklist is `docs/definition-of-done.md`. Every feature PR must check off the items it completes there and add an entry to `docs/verification-log.md` (date, PR, item IDs, what was actually verified). Never check an item without evidence: working code seen running, a passing test or a reviewed preview. Keep evidence in the log, never in the checklist.
