@@ -34,17 +34,27 @@ describe('Settings and first use', () => {
     expect(settings).toHaveAttribute('aria-current', 'page')
   })
 
-  it('on phones, a menu button opens the main tabs and picking one closes it', async () => {
+  it('on phones, a menu button opens the tabs and Settings, and picking one closes it', async () => {
     const user = userEvent.setup()
     renderApp('/')
     await user.click(screen.getByRole('button', { name: 'Open menu' }))
-    const menu = screen.getByRole('dialog', { name: 'Studio Ledger' })
-    const links = within(within(menu).getByRole('navigation', { name: 'Main' })).getAllByRole('link')
-    expect(links.map((link) => link.textContent)).toEqual(['Overview', 'Invoices', 'Expenses', 'Import'])
+    const menu = screen.getByRole('menu')
+    const items = within(menu).getAllByRole('menuitem')
+    expect(items.map((item) => item.textContent)).toEqual([
+      'Overview',
+      'Invoices',
+      'Expenses',
+      'Import',
+      'Settings',
+    ])
+    expect(items[0]).toHaveAttribute('aria-current', 'page')
+    // Settings sits below a divider, as text only.
+    expect(within(menu).getByRole('separator')).toBeInTheDocument()
+    expect(items[4].querySelector('svg')).toBeNull()
 
-    await user.click(within(menu).getByRole('link', { name: 'Invoices' }))
-    expect(screen.getByRole('heading', { name: 'Invoices' })).toBeInTheDocument()
-    expect(screen.queryByRole('dialog', { name: 'Studio Ledger' })).not.toBeInTheDocument()
+    await user.click(within(menu).getByRole('menuitem', { name: 'Settings' }))
+    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
+    expect(screen.queryByRole('menu')).not.toBeInTheDocument()
   })
 
   it('after clearing all data, a later visit stays empty', async () => {

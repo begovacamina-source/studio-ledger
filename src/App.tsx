@@ -1,8 +1,13 @@
 import { MenuIcon, SettingsIcon } from 'lucide-react'
-import { useState } from 'react'
 import { Link, NavLink, Route, Routes, useMatch } from 'react-router'
 import { Button } from '@/components/ui/button'
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Toaster } from '@/components/ui/sonner'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
@@ -21,18 +26,16 @@ const NAV = [
   { to: '/import', label: 'Import', end: false },
 ]
 
-/** The main tabs: a row in the top bar from md up, a stacked list in the phone menu. */
-function NavLinks({ stacked = false, onNavigate }: { stacked?: boolean; onNavigate?: () => void }) {
+/** The main tabs as a row in the top bar, from md up. */
+function NavLinks() {
   return NAV.map((item) => (
     <NavLink
       key={item.to}
       to={item.to}
       end={item.end}
-      onClick={onNavigate}
       className={({ isActive }) =>
         cn(
           'rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
-          stacked && 'px-4 py-3 text-base',
           isActive && 'bg-muted font-medium text-foreground',
         )
       }
@@ -42,26 +45,38 @@ function NavLinks({ stacked = false, onNavigate }: { stacked?: boolean; onNaviga
   ))
 }
 
-/** Below md the tabs don't fit, so a menu button opens them in a sheet from the top. */
-function PhoneMenu() {
-  const [open, setOpen] = useState(false)
+/** One phone menu item; the current page is marked for sight and for screen readers. */
+function PhoneMenuItem({ to, end, label }: { to: string; end: boolean; label: string }) {
+  const active = useMatch({ path: to, end })
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open menu">
+    <DropdownMenuItem asChild className={cn('px-3 py-2', active && 'bg-muted font-medium')}>
+      <Link to={to} aria-current={active ? 'page' : undefined}>
+        {label}
+      </Link>
+    </DropdownMenuItem>
+  )
+}
+
+/**
+ * Below md the tabs don't fit, so a menu button on the left opens them in a
+ * dropdown, with Settings as plain text below a divider.
+ */
+function PhoneMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="-ml-2 md:hidden" aria-label="Open menu">
           <MenuIcon />
         </Button>
-      </SheetTrigger>
-      <SheetContent side="top" className="md:hidden">
-        <SheetHeader>
-          <SheetTitle>Studio Ledger</SheetTitle>
-          <SheetDescription className="sr-only">Go to a section of Studio Ledger</SheetDescription>
-        </SheetHeader>
-        <nav aria-label="Main" className="flex flex-col gap-1 px-2 pb-4">
-          <NavLinks stacked onNavigate={() => setOpen(false)} />
-        </nav>
-      </SheetContent>
-    </Sheet>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48">
+        {NAV.map((item) => (
+          <PhoneMenuItem key={item.to} {...item} />
+        ))}
+        <DropdownMenuSeparator />
+        <PhoneMenuItem to="/settings" end label="Settings" />
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }
 
@@ -99,13 +114,16 @@ export default function App() {
           <div className="min-h-svh bg-muted/60">
             <header className="bg-background">
               <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
-                <span className="truncate font-heading font-semibold">Studio Ledger</span>
+                <div className="flex min-w-0 items-center gap-1">
+                  <PhoneMenu />
+                  <span className="truncate font-heading font-semibold">Studio Ledger</span>
+                </div>
                 <nav aria-label="Main" className="hidden gap-1 md:flex">
                   <NavLinks />
                 </nav>
-                {/* Settings sits apart from the main tabs, as an icon on the far right. */}
-                <div className="flex items-center justify-end gap-1">
-                  <PhoneMenu />
+                {/* From md up, Settings sits apart from the main tabs, as an icon on the far right.
+                    On phones it is the last item in the menu instead. */}
+                <div className="hidden justify-end md:flex">
                   <SettingsLink />
                 </div>
               </div>
