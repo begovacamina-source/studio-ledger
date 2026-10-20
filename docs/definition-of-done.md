@@ -59,9 +59,9 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **UX-4** Must · Saving, marking as paid and importing each confirm with a toast, with undo where the PRD asks for it.
 - [x] **UX-5** Must · The UI uses only glossary terms: no screen shows "Unpaid", "revenue", "billed" or accounting jargon.
 - [x] **UX-6** Must · Settings is opened from the gear icon at the far right of the top bar, not from a main tab.
-- [ ] **UX-7** Must · Every screen is fully usable at 1280, 768 and 375 px wide with no sideways page scrolling.
+- [x] **UX-7** Must · Every screen is fully usable at 1280, 768 and 375 px wide with no sideways page scrolling.
 - [x] **UX-8** Must · On mobile, summary cards stack and tables become card lists.
-- [ ] **UX-9** Must · Each screen has one primary action.
+- [x] **UX-9** Must · Each screen has at most one primary action.
 - [ ] **UX-10** Must · The Phase 3 design review is passed: type, spacing, component states, charts and responsive layouts are portfolio quality.
 
 ## Accessibility

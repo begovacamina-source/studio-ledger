@@ -88,3 +88,27 @@ describe('Card lists on phones (UX-8)', () => {
     expect(rows[0]).toHaveTextContent('Valid')
   })
 })
+
+describe('Invoices on tablets (UX-7)', () => {
+  it.each([
+    [768, 'card list'],
+    [1023, 'card list'],
+    [1024, 'table'],
+  ])('at %i px the invoice list is a %s', (width, layout) => {
+    window.innerWidth = width
+    renderApp('/invoices')
+    if (layout === 'table') {
+      expect(screen.getByRole('table')).toBeInTheDocument()
+      expect(screen.queryByRole('list', { name: 'Invoices' })).not.toBeInTheDocument()
+    } else {
+      expect(screen.queryByRole('table')).not.toBeInTheDocument()
+      expect(within(screen.getByRole('list', { name: 'Invoices' })).getAllByRole('listitem')).toHaveLength(10)
+    }
+  })
+
+  it('other lists keep the table from 768 px', () => {
+    window.innerWidth = 768
+    renderApp('/expenses')
+    expect(screen.getByRole('table')).toBeInTheDocument()
+  })
+})

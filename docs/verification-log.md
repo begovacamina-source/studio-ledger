@@ -2,6 +2,19 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · UX-7 and UX-9 after the review decisions
+
+**Pull request:** the checklist checks PR (#43), after the decisions on it: the invoice list becomes a card list below 1024 px, and UX-9 is reworded to "at most one primary action".
+
+**Run on this branch:** `npx vitest run --dir src` (25 files, 219 tests passed), `npm run lint` (no warnings or errors), and the dev server on the sample data at 1280, 1024, 768 and 375 px. Screenshot: `docs/screenshots/ux-7/invoices-768.png`.
+
+| Items | What was verified |
+| --- | --- |
+| UX-7 (newly checked) | At 1280, 1024, 768 and 375 px, each of `/`, `/invoices`, `/invoices/INV-002` (panel), `/clients`, `/expenses`, `/import` and `/settings`, loaded at that width: the page doesn't scroll sideways (scrollWidth equals the window), no element sticks out past the edge, and no visible table is wider than its card. `/invoices` is now a card list at 768 px (and below 1024 px) with every status and "Mark as paid" in view, and a table from 1024 px. `phone-lists.test.tsx` "Invoices on tablets": card list at 768 and 1023 px, table at 1024 px, Expenses still a table at 768 px. `use-mobile.test.tsx`: the layout hooks read the width on the first render and follow width changes. |
+| UX-9 (newly checked, reworded) | No screen shows more than one filled primary button (counted at 1280 px): Invoices "Add invoice", Expenses "Add expense", the invoice panel "Mark as paid", import "Preview records" and "Import 4 valid rows" (the Done step's single primary, "Go to Overview", was read from `result-step.tsx`, not counted in the browser); the Overview, Clients, Settings and the import's upload step have none. |
+
+**Note on the browser check:** the browser pane's size emulation doesn't fire `matchMedia` change events (a listener on `(max-width: 767px)` recorded none across 1280 → 375 px), so a page already open before an emulated resize keeps its old layout. Each page was therefore measured after loading at its width. Real window resizes are covered by `use-mobile.test.tsx`.
+
 ## 2026-10-20 · Checklist checks: PB-23, PB-26, DATA-3, DATA-7, UX-3, UX-5, UX-7, UX-9, CODE-6, TEST-2, DEP-2, DEP-3
 
 **Pull request:** the checklist checks PR (branch `chore/dod-checks`, stacked on the scope decisions PR #42).
