@@ -5,7 +5,7 @@ import { deleteClient } from '@/lib/clients'
 import { applyImport, type RecordType, type ValidationResult } from '@/lib/csv-import'
 import { deleteExpense, saveExpense, type ValidExpense } from '@/lib/expense-form'
 import { deleteInvoice, saveInvoice, type ValidInvoice } from '@/lib/invoice-form'
-import { markPaid, markUnpaid } from '@/lib/invoices'
+import { markPaid, markUnpaid, restorePaidStatus, type PaidStatus } from '@/lib/invoices'
 import { EMPTY_LEDGER, readLedger, writeLedger } from '@/lib/storage'
 import type { ISODate, Invoice } from '@/lib/types'
 import { LedgerContext } from './ledger-context'
@@ -54,6 +54,8 @@ export function LedgerProvider({ children }: { children: ReactNode }) {
       markInvoicePaid: (invoiceId: string, paidDate: ISODate) =>
         updateInvoice(invoiceId, (i) => markPaid(i, paidDate)),
       markInvoiceNotPaid: (invoiceId: string) => updateInvoice(invoiceId, markUnpaid),
+      restoreInvoicePaidStatus: (invoiceId: string, previous: PaidStatus) =>
+        updateInvoice(invoiceId, (i) => restorePaidStatus(i, previous)),
       saveInvoice: (value: ValidInvoice, editingId?: string) =>
         setLedger((current) => saveInvoice(current, value, editingId)),
       deleteInvoice: (invoiceId: string) => setLedger((current) => deleteInvoice(current, invoiceId)),

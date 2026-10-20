@@ -57,7 +57,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **UX-1** Must · Status is never shown by colour alone: every badge reads Paid, Pending or "Overdue · N days".
 - [x] **UX-2** Must · A search or filter that matches nothing shows an empty state with a way to clear it, on Invoices and Expenses.
 - [ ] **UX-3** Must · Data views show skeleton rows and cards while loading.
-- [ ] **UX-4** Must · Saving, marking as paid and importing each confirm with a toast, with undo where the PRD asks for it.
+- [x] **UX-4** Must · Saving, marking as paid and importing each confirm with a toast, with undo where the PRD asks for it.
 - [ ] **UX-5** Must · The UI uses only glossary terms: no screen shows "Unpaid", "revenue", "billed" or accounting jargon.
 - [x] **UX-6** Must · Settings is opened from the gear icon at the far right of the top bar, not from a main tab.
 - [ ] **UX-7** Must · Every screen is fully usable at 1280, 768 and 375 px wide with no sideways page scrolling.

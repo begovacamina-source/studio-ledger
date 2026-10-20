@@ -5,6 +5,8 @@ import {
   invoiceRows,
   markPaid,
   markUnpaid,
+  restorePaidStatus,
+  UNDO_WINDOW_MS,
   matchesSearch,
   sortByNewest,
   statusCounts,
@@ -78,5 +80,32 @@ describe('markPaid and markUnpaid', () => {
     expect(unpaid.status).toBe('unpaid')
     expect(unpaid.paidDate).toBeUndefined()
     expect(received(invoices, april)).toBe(265000 - 120000)
+  })
+})
+
+describe('restorePaidStatus (Undo)', () => {
+  it('undoing Mark as paid makes the invoice Unpaid again with no paid date', () => {
+    const inv002 = find('INV-002')
+    const paid = markPaid(inv002, TODAY)
+    expect(restorePaidStatus(paid, { status: 'unpaid', paidDate: undefined })).toEqual(inv002)
+  })
+
+  it('undoing Mark as not paid brings back the original paid date', () => {
+    const inv001 = find('INV-001') // paid 2026-04-14
+    const restored = restorePaidStatus(markUnpaid(inv001), { status: 'paid', paidDate: '2026-04-14' })
+    expect(restored).toMatchObject({ status: 'paid', paidDate: '2026-04-14' })
+  })
+
+  it('keeps an edit made before Undo', () => {
+    const edited = { ...markPaid(find('INV-002'), TODAY), description: 'Menu design, revised' }
+    expect(restorePaidStatus(edited, { status: 'unpaid' })).toMatchObject({
+      status: 'unpaid',
+      paidDate: undefined,
+      description: 'Menu design, revised',
+    })
+  })
+
+  it('offers Undo for 5 seconds', () => {
+    expect(UNDO_WINDOW_MS).toBe(5000)
   })
 })

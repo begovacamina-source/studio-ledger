@@ -12,8 +12,9 @@ globalThis.ResizeObserver ??= class {
   disconnect() {}
 }
 
-// Radix Select uses pointer capture and scrollIntoView, which jsdom lacks.
+// Radix Select and Sonner's swipe use pointer capture and scrollIntoView, which jsdom lacks.
 Element.prototype.hasPointerCapture ??= () => false
+Element.prototype.setPointerCapture ??= () => {}
 Element.prototype.releasePointerCapture ??= () => {}
 Element.prototype.scrollIntoView ??= () => {}
 

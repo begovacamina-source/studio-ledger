@@ -1,5 +1,5 @@
 import { PencilIcon, Trash2Icon } from 'lucide-react'
-import { useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { InvoiceFormDialog } from '@/components/invoices/invoice-form-dialog'
@@ -24,12 +24,14 @@ import {
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
+import { usePaidActions } from '@/hooks/use-paid-actions'
 import { displayStatus } from '@/lib/calculations'
 import { daysBetween, formatDate, todayLocal } from '@/lib/dates'
 import { formatMoney } from '@/lib/money'
 import type { Invoice } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
 import { useCurrency } from '@/state/use-settings'
+import { useUndo } from '@/state/use-undo'
 
 function InvoiceDetails({
   invoice,
@@ -43,7 +45,18 @@ function InvoiceDetails({
   footer?: ReactNode
 }) {
   const currency = useCurrency()
-  const { ledger, markInvoiceNotPaid, deleteInvoice } = useLedger()
+  const { ledger, deleteInvoice } = useLedger()
+  const { markNotPaid } = usePaidActions()
+  const { pending, undo } = useUndo()
+  const offered = pending?.key === invoice.id
+  const undoRef = useRef<HTMLButtonElement>(null)
+  const statusRef = useRef<HTMLDivElement>(null)
+  // Keyboard users keep their place: focus goes to Undo while it's offered, then back
+  // to the status button once it's used or expires (unless focus has moved on).
+  useEffect(() => {
+    if (offered) undoRef.current?.focus()
+    else if (document.activeElement === document.body) statusRef.current?.querySelector('button')?.focus()
+  }, [offered])
   const [editing, setEditing] = useState(false)
   const today = todayLocal()
   const status = displayStatus(invoice, today)
@@ -83,20 +96,31 @@ function InvoiceDetails({
 
       {/* Actions sit at the bottom: the status change on top, then Edit and Delete. */}
       <SheetFooter className="p-6">
-        {status === 'Paid' ? (
-          <Button
-            variant="outline"
-            className="w-full"
-            onClick={() => {
-              markInvoiceNotPaid(invoice.id)
-              toast.success(`${invoice.invoiceNumber} is no longer Paid`)
-            }}
+        {/* The same Undo as the toast, inside the panel so keyboard users can reach it. */}
+        {offered && (
+          <div
+            role="status"
+            className="flex items-center justify-between gap-3 rounded-md bg-muted px-3 py-2 text-sm"
           >
-            Mark as not paid
-          </Button>
-        ) : (
-          <MarkPaidDialog invoice={invoice} trigger={<Button className="w-full">Mark as paid</Button>} />
+            <span>{pending.message}</span>
+            <Button ref={undoRef} variant="outline" size="sm" onClick={undo}>
+              Undo
+            </Button>
+          </div>
         )}
+        <div ref={statusRef} className="contents">
+          {status === 'Paid' ? (
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => markNotPaid(invoice)}
+            >
+              Mark as not paid
+            </Button>
+          ) : (
+            <MarkPaidDialog invoice={invoice} trigger={<Button className="w-full">Mark as paid</Button>} />
+          )}
+        </div>
         <div className="grid grid-cols-2 gap-2">
           <Button variant="outline" onClick={() => setEditing(true)}>
             <PencilIcon /> Edit

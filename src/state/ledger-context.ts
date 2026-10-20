@@ -2,12 +2,15 @@ import { createContext } from 'react'
 import type { ImportOutcome, RecordType, ValidationResult } from '@/lib/csv-import'
 import type { ValidExpense } from '@/lib/expense-form'
 import type { ValidInvoice } from '@/lib/invoice-form'
+import type { PaidStatus } from '@/lib/invoices'
 import type { ISODate, Ledger } from '@/lib/types'
 
 export interface LedgerContextValue {
   ledger: Ledger
   markInvoicePaid: (invoiceId: string, paidDate: ISODate) => void
   markInvoiceNotPaid: (invoiceId: string) => void
+  /** Undo for the two above: puts back the invoice's earlier status and paid date. */
+  restoreInvoicePaidStatus: (invoiceId: string, previous: PaidStatus) => void
   /** Adds a new invoice, or updates `editingId`. */
   saveInvoice: (value: ValidInvoice, editingId?: string) => void
   deleteInvoice: (invoiceId: string) => void

@@ -1,5 +1,4 @@
-import { useId, useState, type FormEvent, type ReactNode } from 'react'
-import { toast } from 'sonner'
+import { useId, useRef, useState, type FormEvent, type ReactNode } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -13,24 +12,27 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { usePaidActions } from '@/hooks/use-paid-actions'
 import { todayLocal } from '@/lib/dates'
 import { validatePaidDate } from '@/lib/invoices'
 import { formatMoney } from '@/lib/money'
 import type { Invoice } from '@/lib/types'
-import { useLedger } from '@/state/use-ledger'
 import { useCurrency } from '@/state/use-settings'
 
 export function MarkPaidDialog({ invoice, trigger }: { invoice: Invoice; trigger: ReactNode }) {
   const currency = useCurrency()
-  const { markInvoicePaid } = useLedger()
+  const { markPaid } = usePaidActions()
   const [open, setOpen] = useState(false)
   const [paidDate, setPaidDate] = useState('')
   const [error, setError] = useState<string | null>(null)
+  // After a successful submit the trigger is replaced, so the panel decides where focus goes.
+  const submitted = useRef(false)
   const inputId = useId()
   const errorId = useId()
 
   function handleOpenChange(next: boolean) {
     if (next) {
+      submitted.current = false
       setPaidDate(todayLocal())
       setError(null)
     }
@@ -44,15 +46,20 @@ export function MarkPaidDialog({ invoice, trigger }: { invoice: Invoice; trigger
       setError(message)
       return
     }
-    markInvoicePaid(invoice.id, paidDate)
+    submitted.current = true
     setOpen(false)
-    toast.success(`${invoice.invoiceNumber} marked as Paid`)
+    markPaid(invoice, paidDate)
   }
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="sm:max-w-sm">
+      <DialogContent
+        className="sm:max-w-sm"
+        onCloseAutoFocus={(event) => {
+          if (submitted.current) event.preventDefault()
+        }}
+      >
         <form onSubmit={handleSubmit} noValidate className="grid gap-4">
           <DialogHeader>
             <DialogTitle>Mark {invoice.invoiceNumber} as paid</DialogTitle>
