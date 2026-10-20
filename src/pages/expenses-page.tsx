@@ -5,6 +5,7 @@ import { CardList, CardListItem, CardListLine } from '@/components/card-list'
 import { ExpenseFormDialog } from '@/components/expenses/expense-form-dialog'
 import { ExpenseSheet } from '@/components/expenses/expense-sheet'
 import { FirstUse } from '@/components/first-use'
+import { ListPagination } from '@/components/list-pagination'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import {
@@ -24,10 +25,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { useIsMobile } from '@/hooks/use-mobile'
+import { usePageParam } from '@/hooks/use-page-param'
 import { formatDate, todayLocal } from '@/lib/dates'
 import { ALL_CATEGORIES, expenseTitle, filterExpenses, type ExpensePeriod } from '@/lib/expense-form'
 import { plural } from '@/lib/format'
 import { formatMoney } from '@/lib/money'
+import { paginate } from '@/lib/pagination'
 import { PERIOD_OPTIONS } from '@/lib/periods'
 import { EXPENSE_CATEGORIES, type ExpenseCategory } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
@@ -43,6 +46,7 @@ const parseCategory = (value: string | null): CategoryFilter =>
 export function ExpensesPage() {
   const currency = useCurrency()
   const phone = useIsMobile()
+  const pageParam = usePageParam()
   const { ledger } = useLedger()
   const [params, setParams] = useSearchParams()
   // ?add=1 (from the dashboard's first-use state) opens the add form straight away.
@@ -63,7 +67,9 @@ export function ExpensesPage() {
     () => filterExpenses(ledger.expenses, { period, category }, today),
     [ledger.expenses, period, category, today],
   )
+  // The count and total cover every matching expense; the list shows one page of them.
   const total = expenses.reduce((sum, e) => sum + e.amount, 0)
+  const shown = paginate(expenses, pageParam.page)
 
   // Filters live in the URL so they survive Back and can be bookmarked.
   function update(next: { period?: ExpensePeriod; category?: CategoryFilter }) {
@@ -158,7 +164,7 @@ export function ExpensesPage() {
               ) : phone ? (
                 // On phones each expense is two lines: what and how much, then when and its category.
                 <CardList aria-label="Expenses">
-                  {expenses.map((expense) => (
+                  {shown.items.map((expense) => (
                     <CardListItem
                       key={expense.id}
                       selected={expense.id === openId}
@@ -198,7 +204,7 @@ export function ExpensesPage() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {expenses.map((expense) => (
+                    {shown.items.map((expense) => (
                       <TableRow
                         key={expense.id}
                         className="cursor-pointer"
@@ -227,6 +233,7 @@ export function ExpensesPage() {
                   </TableBody>
                 </Table>
               )}
+              <ListPagination page={shown} noun="expenses" hrefFor={pageParam.hrefFor} onPageChange={pageParam.setPage} />
             </CardContent>
           </Card>
         </>

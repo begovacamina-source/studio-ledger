@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { CardList, CardListItem, CardListLine } from '@/components/card-list'
+import { ListPagination } from '@/components/list-pagination'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -12,12 +14,12 @@ import {
 } from '@/components/ui/table'
 import {
   FIELDS,
-  PREVIEW_ROWS,
   type ImportSettings,
   type ValidatedRow,
   type ValidationResult,
 } from '@/lib/csv-import'
 import { plural } from '@/lib/format'
+import { paginate } from '@/lib/pagination'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 
@@ -49,6 +51,9 @@ export function PreviewStep({
   onImport: () => void
 }) {
   const phone = useIsMobile()
+  // Every row of the file can be checked, a page at a time.
+  const [page, setPage] = useState(1)
+  const shown = paginate(result.rows, page)
   const fields = FIELDS[settings.type].filter((f) => settings.mapping.includes(f.key))
   const summary: [string, number][] = [
     ['Valid rows', result.valid],
@@ -71,12 +76,12 @@ export function PreviewStep({
 
       <div className="space-y-2">
         <h2 className="text-sm font-medium">
-          First {Math.min(PREVIEW_ROWS, result.rows.length)} of {plural(result.rows.length, 'row')}
+          {plural(result.rows.length, 'row')} in your file
         </h2>
         {phone ? (
           // On phones each file row is a short list of its fields, with its status on top.
           <CardList aria-label="Preview rows">
-            {result.rows.slice(0, PREVIEW_ROWS).map((row) => (
+            {shown.items.map((row) => (
               <CardListItem key={row.row}>
                 <CardListLine>
                   <span className="font-medium tabular-nums">Row {row.row}</span>
@@ -114,7 +119,7 @@ export function PreviewStep({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {result.rows.slice(0, PREVIEW_ROWS).map((row) => (
+              {shown.items.map((row) => (
                 <TableRow key={row.row}>
                   <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
                   {fields.map((f) => (
@@ -130,6 +135,8 @@ export function PreviewStep({
             </TableBody>
           </Table>
         )}
+        {/* The import steps aren't in the URL, so this page is kept in state. */}
+        <ListPagination page={shown} noun="rows" hrefFor={() => '#'} onPageChange={setPage} />
       </div>
 
       {result.errors.length > 0 && (

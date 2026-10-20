@@ -35,12 +35,15 @@ describe('Card lists on phones (UX-8)', () => {
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     const list = screen.getByRole('list', { name: 'Invoices' })
     const rows = within(list).getAllByRole('listitem')
-    expect(rows).toHaveLength(41)
+    // 10 per page on phones too.
+    expect(rows).toHaveLength(10)
+    expect(screen.getByText('Showing 1–10 of 41 invoices')).toBeInTheDocument()
+    expect(within(screen.getByRole('navigation', { name: 'Pages of invoices' })).getByRole('link', { name: '5' })).toBeInTheDocument()
     expect(rows[0]).toHaveTextContent('INV-041')
     expect(rows[0]).toHaveTextContent('Paper Kite Publishing')
     expect(rows[0]).toHaveTextContent('Pending')
-    // 4 Pending and 5 Overdue on this date: one Mark as paid each, none on Paid invoices.
-    expect(within(list).getAllByRole('button', { name: /^Mark INV-\d+ as paid$/ })).toHaveLength(9)
+    // The first page (INV-041 to INV-032) has 4 Pending and 2 Overdue: one Mark as paid each, none on Paid ones.
+    expect(within(list).getAllByRole('button', { name: /^Mark INV-\d+ as paid$/ })).toHaveLength(6)
 
     await user.click(within(list).getByRole('link', { name: 'INV-041' }))
     expect(screen.getByRole('dialog', { name: /INV-041/ })).toBeInTheDocument()
@@ -51,7 +54,8 @@ describe('Card lists on phones (UX-8)', () => {
     renderApp('/expenses')
     expect(screen.queryByRole('table')).not.toBeInTheDocument()
     const rows = within(screen.getByRole('list', { name: 'Expenses' })).getAllByRole('listitem')
-    expect(rows).toHaveLength(120)
+    expect(rows).toHaveLength(10)
+    expect(screen.getByText('Showing 1–10 of 120 expenses')).toBeInTheDocument()
     expect(rows[0]).toHaveTextContent('Meeting room rental')
     expect(rows[0]).toHaveTextContent('Sep 30, 2026 · Office')
 

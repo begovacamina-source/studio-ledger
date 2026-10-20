@@ -1,3 +1,4 @@
+import { Link } from 'react-router'
 import { CardList, CardListItem, CardListLine } from '@/components/card-list'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -15,6 +16,9 @@ import { formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
 import { useIsMobile } from '@/hooks/use-mobile'
 
+/** The Overview shows the most urgent invoices only; the rest are on Invoices. */
+const OUTSTANDING_LIMIT = 10
+
 export function OutstandingList({
   rows,
   currency,
@@ -28,6 +32,7 @@ export function OutstandingList({
   onOpen: (invoiceNumber: string) => void
 }) {
   const phone = useIsMobile()
+  const shown = rows.slice(0, OUTSTANDING_LIMIT)
   return (
     <Card>
       <CardHeader>
@@ -42,7 +47,7 @@ export function OutstandingList({
         ) : phone ? (
           // On phones each invoice is a short row: who and how much, which invoice and when, its status.
           <CardList aria-label="Outstanding invoices">
-            {rows.map((row) => (
+            {shown.map((row) => (
               <CardListItem
                 key={row.invoice.id}
                 selected={row.invoice.invoiceNumber === openInvoice}
@@ -83,7 +88,7 @@ export function OutstandingList({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map((row) => (
+              {shown.map((row) => (
                 <TableRow
                   key={row.invoice.id}
                   className="cursor-pointer"
@@ -111,6 +116,14 @@ export function OutstandingList({
               ))}
             </TableBody>
           </Table>
+        )}
+        {rows.length > shown.length && (
+          <p className="mt-4 text-sm text-muted-foreground">
+            The {shown.length} most urgent of {rows.length}.{' '}
+            <Link to="/invoices" className="font-medium text-foreground underline-offset-4 hover:underline">
+              See all in Invoices
+            </Link>
+          </p>
         )}
       </CardContent>
     </Card>

@@ -42,6 +42,30 @@ describe('CSV import', () => {
     // Outstanding was $14,620.00 (9 invoices, 6 overdue); the sample adds 3 unpaid invoices worth $3,800.00, and INV-102 (due 10-19) is overdue.
     expect(within(cards).getByText('$18,420.00')).toBeInTheDocument()
     expect(within(cards).getByText('12 invoices · 7 overdue')).toBeInTheDocument()
+    // The Overview's Outstanding list stops at the 10 most urgent and points to the rest.
+    const outstanding = screen.getByText('Outstanding', { selector: '[data-slot=card-title]' }).closest('[data-slot=card]') as HTMLElement
+    expect(within(outstanding).getAllByRole('row').slice(1)).toHaveLength(10)
+    expect(within(outstanding).getByText(/The 10 most urgent of 12\./)).toBeInTheDocument()
+    expect(within(outstanding).getByRole('link', { name: 'See all in Invoices' })).toHaveAttribute('href', '/invoices')
+  })
+
+  it('previews every row of the file, 10 per page', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    await user.click(screen.getByRole('radio', { name: /Expenses/ }))
+    const lines = Array.from({ length: 12 }, (_, i) => `2026-10-${String(i + 1).padStart(2, '0')},${i + 1}.00,Office,Item ${i + 1}`)
+    await user.upload(fileInput(), csv(['date,amount,category,description', ...lines].join('\n')))
+    await user.click(await screen.findByRole('button', { name: 'Preview records' }))
+
+    expect(screen.getByRole('heading', { name: '12 rows in your file' })).toBeInTheDocument()
+    const previewRows = () => within(screen.getAllByRole('table')[0]).getAllByRole('row').slice(1)
+    expect(previewRows()).toHaveLength(10)
+    expect(screen.getByText('Showing 1–10 of 12 rows')).toBeInTheDocument()
+
+    await user.click(screen.getByRole('link', { name: 'Go to next page' }))
+    expect(previewRows()).toHaveLength(2)
+    expect(previewRows()[1]).toHaveTextContent('Item 12')
+    expect(screen.getByRole('button', { name: 'Import 12 valid rows' })).toBeInTheDocument()
   })
 
   it('refuses a file that is not a CSV', async () => {
