@@ -96,7 +96,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [x] **TEST-1** Must · `npm test` passes with no failures or skipped tests.
 - [x] **TEST-2** Must · Every calculation and behavior rule in the PRD has a unit test against the sample dataset.
-- [ ] **TEST-3** Must · Playwright tests cover the three core journeys: import records, understand the month, collect an unpaid invoice.
+- [x] **TEST-3** Must · Playwright tests cover the three core journeys: import records, understand the month, collect an unpaid invoice.
 - [ ] **TEST-4** Must · Tests, lint and build run in CI on every pull request and must pass before merging.
 
 ## Git/GitHub workflow

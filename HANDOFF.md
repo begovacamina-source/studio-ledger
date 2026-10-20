@@ -38,6 +38,11 @@ Phase 2: Rough screens (1–2 weeks; gate: rough screens reviewed on the Vercel 
 4. ~~Undo for marking paid~~ Done (US-2.2, Should): Mark as paid and Mark as not paid each show a toast with Undo for 5 seconds (`UNDO_WINDOW_MS`), and the invoice panel shows the same Undo inside it, because a modal panel keeps keyboard focus away from the toast. Undo restores only the status and paid date (`restorePaidStatus`). One undo at a time lives in `src/state/undo-provider.tsx`; marking goes through `usePaidActions()`. The toaster takes clicks over modals, and clicking a toast doesn't close a panel (`src/components/ui/sheet.tsx`). UX-4 is checked.
 5. Next: the full design review on the Vercel preview (UX-10), and a full contrast check (A11Y-3).
 
+## Tests and CI
+
+- `npm test`: Vitest unit and component tests in `src/`. `npm run test:e2e`: Playwright core journeys in `e2e/` against `vite preview`, with the clock fixed at 2026-10-20 (`e2e/fixtures.ts`); locally it uses the installed Chrome.
+- `.github/workflows/ci.yml` runs lint, unit tests, the build and the journeys on every pull request and push to `main`, and keeps the Playwright report as an artifact.
+
 ## Notes
 
 - **Ready to revisit (US-5.1 is built):** the expense side panel is not in the URL (unlike invoices at `/invoices/<number>`), because expenses have no number to link by and their ids used to change on every reload. Browser storage now keeps ids stable, so `/expenses/<id>` would let a panel be linked and Back close it (decided on #28).

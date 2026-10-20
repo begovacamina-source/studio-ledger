@@ -16,6 +16,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     // Claude Code keeps working copies of the repo in .claude/worktrees/; their tests aren't ours.
-    exclude: [...configDefaults.exclude, '.claude/**'],
+    // e2e/ holds the Playwright journeys, which run with `npm run test:e2e`.
+    exclude: [...configDefaults.exclude, '.claude/**', 'e2e/**'],
   },
 })
