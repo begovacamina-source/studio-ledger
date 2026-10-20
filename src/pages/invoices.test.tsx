@@ -15,7 +15,9 @@ describe('Invoices', () => {
   it('shows status tabs with counts and filters by status', async () => {
     const user = userEvent.setup()
     renderApp('/invoices')
-    expect(rowsIn()).toHaveLength(41)
+    // 41 invoices, 10 per page.
+    expect(rowsIn()).toHaveLength(10)
+    expect(screen.getByText('Showing 1–10 of 41 invoices')).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Overdue 5' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('tab', { name: 'Overdue 5' }))
@@ -31,7 +33,8 @@ describe('Invoices', () => {
     await user.click(screen.getByRole('tab', { name: 'Overdue 0' }))
     expect(screen.getByText('No overdue invoices match "fernhill".')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Clear filters' }))
-    expect(rowsIn()).toHaveLength(41)
+    expect(rowsIn()).toHaveLength(10)
+    expect(screen.getByText('Showing 1–10 of 41 invoices')).toBeInTheDocument()
   })
 
   it('marks an invoice as paid from the list, and the dashboard updates', async () => {
@@ -69,7 +72,8 @@ describe('Invoices', () => {
 
   it('opens a row in the side panel and sets a paid invoice back', async () => {
     const user = userEvent.setup()
-    renderApp('/invoices')
+    // INV-001 is the oldest, on the last page.
+    renderApp('/invoices?page=5')
     await user.click(within(screen.getByRole('table')).getByRole('link', { name: 'INV-001' }))
     const panel = screen.getByRole('dialog', { name: 'INV-001' })
     expect(within(panel).getByText('Apr 14, 2026')).toBeInTheDocument()

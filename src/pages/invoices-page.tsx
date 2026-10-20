@@ -1,7 +1,9 @@
 import { PlusIcon, SearchIcon } from 'lucide-react'
 import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
+import { CardList, CardListItem, CardListLine } from '@/components/card-list'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
+import { ListPagination } from '@/components/list-pagination'
 import { InvoiceFormDialog } from '@/components/invoices/invoice-form-dialog'
 import { InvoiceSheet } from '@/components/invoices/invoice-sheet'
 import { MarkPaidDialog } from '@/components/invoices/mark-paid-dialog'
@@ -18,6 +20,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useIsMobile } from '@/hooks/use-mobile'
+import { usePageParam } from '@/hooks/use-page-param'
 import { formatDate, todayLocal } from '@/lib/dates'
 import {
   invoiceRows,
@@ -29,6 +33,7 @@ import {
 } from '@/lib/invoices'
 import { invoicePath } from '@/lib/invoice-form'
 import { formatMoney } from '@/lib/money'
+import { paginate } from '@/lib/pagination'
 import { useLedger } from '@/state/use-ledger'
 import { useCurrency } from '@/state/use-settings'
 
@@ -39,6 +44,8 @@ function parseStatus(value: string | null): StatusFilter {
 
 export function InvoicesPage() {
   const currency = useCurrency()
+  const phone = useIsMobile()
+  const pageParam = usePageParam()
   const { ledger } = useLedger()
   const { invoiceNumber: openInvoice } = useParams()
   const { search } = useLocation()
@@ -65,12 +72,13 @@ export function InvoicesPage() {
   )
   const counts = statusCounts(searched)
   const visible = status === 'All' ? searched : searched.filter((r) => r.status === status)
+  const shown = paginate(visible, pageParam.page)
 
   // The open invoice lives in the path, so links and Back work; filters stay in the query.
   const openPanel = (invoiceNumber: string) => navigate(invoicePath(invoiceNumber) + search)
   const closePanel = () => navigate('/invoices' + search)
 
-  function handleRowClick(event: MouseEvent<HTMLTableRowElement>, invoiceNumber: string) {
+  function handleRowClick(event: MouseEvent<HTMLElement>, invoiceNumber: string) {
     // Ignore clicks on the row's own links and buttons, and clicks inside dialogs opened from it.
     const target = event.target as HTMLElement
     if (!event.currentTarget.contains(target) || target.closest('a, button')) return
@@ -142,6 +150,52 @@ export function InvoicesPage() {
                         Clear filters
                       </Button>
                     </div>
+                  ) : phone ? (
+                    // On phones each invoice is a short row: number, client and amount, then
+                    // status and due date, with Mark as paid when it isn't paid yet.
+                    <CardList aria-label="Invoices">
+                      {shown.items.map((row) => (
+                        <CardListItem
+                          key={row.invoice.id}
+                          selected={row.invoice.invoiceNumber === openInvoice}
+                          onClick={(e) => handleRowClick(e, row.invoice.invoiceNumber)}
+                        >
+                          <CardListLine>
+                            <span className="flex min-w-0 items-baseline gap-2">
+                              <Link
+                                to={invoicePath(row.invoice.invoiceNumber) + search}
+                                className="shrink-0 font-medium"
+                              >
+                                {row.invoice.invoiceNumber}
+                              </Link>
+                              <span className="truncate">{row.client?.name ?? 'Unknown client'}</span>
+                            </span>
+                            <span className="shrink-0 tabular-nums">{formatMoney(row.invoice.amount, currency)}</span>
+                          </CardListLine>
+                          <CardListLine className="text-muted-foreground">
+                            <span className="flex min-w-0 items-center gap-2">
+                              <InvoiceStatusBadge status={row.status} />
+                              <span className="whitespace-nowrap">Due {formatDate(row.invoice.dueDate)}</span>
+                            </span>
+                            {row.status !== 'Paid' && (
+                              <MarkPaidDialog
+                                invoice={row.invoice}
+                                trigger={
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="-my-1 -mr-2 text-foreground"
+                                    aria-label={`Mark ${row.invoice.invoiceNumber} as paid`}
+                                  >
+                                    Mark as paid
+                                  </Button>
+                                }
+                              />
+                            )}
+                          </CardListLine>
+                        </CardListItem>
+                      ))}
+                    </CardList>
                   ) : (
                     <Table className="min-w-[52rem] table-fixed">
                       {/* Fixed column widths keep every column in the same place on every tab. */}
@@ -168,7 +222,7 @@ export function InvoicesPage() {
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {visible.map((row) => (
+                        {shown.items.map((row) => (
                           <TableRow
                             key={row.invoice.id}
                             className="cursor-pointer"
@@ -213,6 +267,7 @@ export function InvoicesPage() {
                       </TableBody>
                     </Table>
                   )}
+                  <ListPagination page={shown} noun="invoices" hrefFor={pageParam.hrefFor} onPageChange={pageParam.setPage} />
                 </CardContent>
               </Card>
             </TabsContent>

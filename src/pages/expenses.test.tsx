@@ -20,18 +20,51 @@ describe('Expenses', () => {
   it('lists every expense, newest first, and filters by period and category', async () => {
     const user = userEvent.setup()
     renderApp('/expenses')
-    expect(rows()).toHaveLength(120)
+    // 120 expenses, 10 per page.
+    expect(rows()).toHaveLength(10)
+    expect(screen.getByText('Showing 1–10 of 120 expenses')).toBeInTheDocument()
     expect(within(rows()[0]).getByRole('button')).toHaveTextContent('Sep 30, 2026')
 
     await choose(user, 'Category', 'Software')
-    expect(rows()).toHaveLength(33)
+    expect(screen.getByText('Showing 1–10 of 33 expenses')).toBeInTheDocument()
+    expect(rows().every((r) => r.textContent?.includes('Software'))).toBe(true)
     await choose(user, 'Period', 'Last month')
     expect(rows().every((r) => r.textContent?.includes('Sep') && r.textContent.includes('Software'))).toBe(true)
 
     await choose(user, 'Period', 'This month')
     expect(screen.getByText('No expenses match these filters.')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Clear filters' }))
-    expect(rows()).toHaveLength(120)
+    expect(screen.getByText('Showing 1–10 of 120 expenses')).toBeInTheDocument()
+  })
+
+  it('pages through expenses 10 at a time, kept in the URL, and a filter goes back to page 1', async () => {
+    const user = userEvent.setup()
+    renderApp('/expenses')
+    const pages = screen.getByRole('navigation', { name: 'Pages of expenses' })
+    expect(within(pages).getByRole('link', { name: 'Go to previous page' })).toHaveAttribute('aria-disabled', 'true')
+
+    await user.click(within(pages).getByRole('link', { name: 'Go to next page' }))
+    expect(screen.getByText('Showing 11–20 of 120 expenses')).toBeInTheDocument()
+    expect(within(pages).getByRole('link', { name: '2' })).toHaveAttribute('aria-current', 'page')
+    expect(within(pages).getByRole('link', { name: '3' })).toHaveAttribute('href', '/expenses?page=3')
+    // The count and total still cover every expense, not just the page.
+    expect(screen.getByText('120 expenses · $11,770.14')).toBeInTheDocument()
+
+    await user.click(within(pages).getByRole('link', { name: '12' }))
+    expect(rows()).toHaveLength(10)
+    expect(screen.getByText('Showing 111–120 of 120 expenses')).toBeInTheDocument()
+    expect(within(pages).getByRole('link', { name: 'Go to next page' })).toHaveAttribute('aria-disabled', 'true')
+
+    await choose(user, 'Category', 'Software')
+    expect(screen.getByText('Showing 1–10 of 33 expenses')).toBeInTheDocument()
+    expect(
+      within(screen.getByRole('navigation', { name: 'Pages of expenses' })).getByRole('link', { name: '1' }),
+    ).toHaveAttribute('aria-current', 'page')
+  })
+
+  it('opens on the page in the URL', () => {
+    renderApp('/expenses?page=3')
+    expect(screen.getByText('Showing 21–30 of 120 expenses')).toBeInTheDocument()
   })
 
   it('shows how many expenses match and their total', async () => {
@@ -41,7 +74,9 @@ describe('Expenses', () => {
     expect(screen.getByText('120 expenses · $11,770.14')).toBeInTheDocument()
 
     await choose(user, 'Period', 'Last month')
-    expect(screen.getByText(`${rows().length} expenses · $2,084.56`)).toBeInTheDocument()
+    // The count is every matching expense; the pager shows the same number.
+    const count = screen.getByText(/^\d+ expenses · \$2,084\.56$/).textContent!.split(' ')[0]
+    expect(screen.getByText(`Showing 1–10 of ${count} expenses`)).toBeInTheDocument()
 
     await choose(user, 'Period', 'This month')
     expect(screen.getByText('0 expenses · $0.00')).toBeInTheDocument()
@@ -109,7 +144,7 @@ describe('Expenses', () => {
     await user.click(within(confirm).getByRole('button', { name: 'Delete expense' }))
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
-    expect(rows()).toHaveLength(119)
+    expect(screen.getByText('Showing 1–10 of 119 expenses')).toBeInTheDocument()
   })
 
   it('opens the panel from the keyboard', async () => {

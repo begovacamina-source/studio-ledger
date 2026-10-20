@@ -4,6 +4,7 @@ Newest first. Each entry: what was decided, why, and what it rules out.
 
 | Date | Decision | Reason | Consequence |
 | --- | --- | --- | --- |
+| 2026-10-20 | Long lists paginate 10 per page (Invoices, Expenses, import preview); Overview Outstanding shows at most 10 | Asked for in the Phase 3 review: 41 invoices and 120 expenses made very long pages, worse as card lists on phones | Added to US-1.3, US-2.3, US-3.2 and US-4.3 in `docs/PRD.md`. The page is in the URL for Invoices and Expenses; the import preview no longer stops at 20 rows. Rules out infinite scroll |
 | 2026-10-20 | Release Definition of Done (`docs/definition-of-done.md`) kept separate from its evidence (`docs/verification-log.md`) | A checklist with evidence notes mixed in grows long and hard to scan, and evidence that sits next to a box gets edited when the box changes. A dated log keeps a history of what was verified on which commit. | Each feature PR checks items and adds a log entry; an item without a log entry is not done. Rules out evidence notes in the checklist |
 | 2026-10-20 | Design in code with shadcn/ui, no Figma; deploy on Vercel | Design engineer portfolio project: the design system lives in the code that ships | Tokens are shadcn's theme colours and Tailwind's spacing in one file; Phases 2–3 become rough screens, then design polish; every pull request is reviewed on its Vercel preview |
 | 2026-10-20 | PRD approved; gate 1 passed | Every Milestone 1 checklist item is done | Phase 2 (UX flows) starts |

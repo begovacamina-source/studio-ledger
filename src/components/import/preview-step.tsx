@@ -1,3 +1,6 @@
+import { useState } from 'react'
+import { CardList, CardListItem, CardListLine } from '@/components/card-list'
+import { ListPagination } from '@/components/list-pagination'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,12 +14,13 @@ import {
 } from '@/components/ui/table'
 import {
   FIELDS,
-  PREVIEW_ROWS,
   type ImportSettings,
   type ValidatedRow,
   type ValidationResult,
 } from '@/lib/csv-import'
 import { plural } from '@/lib/format'
+import { paginate } from '@/lib/pagination'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 
 // Short, predictable values get fixed widths; client and description share the rest.
@@ -46,6 +50,10 @@ export function PreviewStep({
   onCancel: () => void
   onImport: () => void
 }) {
+  const phone = useIsMobile()
+  // Every row of the file can be checked, a page at a time.
+  const [page, setPage] = useState(1)
+  const shown = paginate(result.rows, page)
   const fields = FIELDS[settings.type].filter((f) => settings.mapping.includes(f.key))
   const summary: [string, number][] = [
     ['Valid rows', result.valid],
@@ -68,41 +76,67 @@ export function PreviewStep({
 
       <div className="space-y-2">
         <h2 className="text-sm font-medium">
-          First {Math.min(PREVIEW_ROWS, result.rows.length)} of {plural(result.rows.length, 'row')}
+          {plural(result.rows.length, 'row')} in your file
         </h2>
-        <Table className="min-w-[48rem] table-fixed">
-          <colgroup>
-            <col className="w-14" />
-            {fields.map((f) => (
-              <col key={f.key} className={COLUMN_WIDTH[f.kind === 'text' ? f.key : f.kind]} />
-            ))}
-            <col className="w-28" />
-          </colgroup>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Row</TableHead>
-              {fields.map((f) => (
-                <TableHead key={f.key}>{f.label}</TableHead>
-              ))}
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {result.rows.slice(0, PREVIEW_ROWS).map((row) => (
-              <TableRow key={row.row}>
-                <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
-                {fields.map((f) => (
-                  <TableCell key={f.key} className="truncate" title={row.values[f.key] || undefined}>
-                    {row.values[f.key] || <span className="text-muted-foreground">—</span>}
-                  </TableCell>
-                ))}
-                <TableCell>
+        {phone ? (
+          // On phones each file row is a short list of its fields, with its status on top.
+          <CardList aria-label="Preview rows">
+            {shown.items.map((row) => (
+              <CardListItem key={row.row}>
+                <CardListLine>
+                  <span className="font-medium tabular-nums">Row {row.row}</span>
                   <RowStatus row={row} />
-                </TableCell>
-              </TableRow>
+                </CardListLine>
+                <dl className="grid grid-cols-3 gap-x-4 gap-y-1">
+                  {fields.map((f) => (
+                    <div key={f.key} className="col-span-3 grid grid-cols-subgrid">
+                      <dt className="text-muted-foreground">{f.label}</dt>
+                      <dd className="col-span-2 truncate">
+                        {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </CardListItem>
             ))}
-          </TableBody>
-        </Table>
+          </CardList>
+        ) : (
+          <Table className="min-w-[48rem] table-fixed">
+            <colgroup>
+              <col className="w-14" />
+              {fields.map((f) => (
+                <col key={f.key} className={COLUMN_WIDTH[f.kind === 'text' ? f.key : f.kind]} />
+              ))}
+              <col className="w-28" />
+            </colgroup>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Row</TableHead>
+                {fields.map((f) => (
+                  <TableHead key={f.key}>{f.label}</TableHead>
+                ))}
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {shown.items.map((row) => (
+                <TableRow key={row.row}>
+                  <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
+                  {fields.map((f) => (
+                    <TableCell key={f.key} className="truncate" title={row.values[f.key] || undefined}>
+                      {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <RowStatus row={row} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+        {/* The import steps aren't in the URL, so this page is kept in state. */}
+        <ListPagination page={shown} noun="rows" hrefFor={() => '#'} onPageChange={setPage} />
       </div>
 
       {result.errors.length > 0 && (

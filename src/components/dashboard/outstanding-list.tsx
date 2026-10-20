@@ -1,3 +1,5 @@
+import { Link } from 'react-router'
+import { CardList, CardListItem, CardListLine } from '@/components/card-list'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -12,6 +14,10 @@ import type { OutstandingRow } from '@/lib/calculations'
 import { formatDate } from '@/lib/dates'
 import { formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
+import { useIsMobile } from '@/hooks/use-mobile'
+
+/** The Overview shows the most urgent invoices only; the rest are on Invoices. */
+const OUTSTANDING_LIMIT = 10
 
 export function OutstandingList({
   rows,
@@ -25,6 +31,8 @@ export function OutstandingList({
   openInvoice: string | undefined
   onOpen: (invoiceNumber: string) => void
 }) {
+  const phone = useIsMobile()
+  const shown = rows.slice(0, OUTSTANDING_LIMIT)
   return (
     <Card>
       <CardHeader>
@@ -36,6 +44,35 @@ export function OutstandingList({
           <p className="py-8 text-center text-sm text-muted-foreground">
             Nothing outstanding. Every invoice is Paid.
           </p>
+        ) : phone ? (
+          // On phones each invoice is a short row: who and how much, which invoice and when, its status.
+          <CardList aria-label="Outstanding invoices">
+            {shown.map((row) => (
+              <CardListItem
+                key={row.invoice.id}
+                selected={row.invoice.invoiceNumber === openInvoice}
+                onClick={() => onOpen(row.invoice.invoiceNumber)}
+              >
+                <CardListLine>
+                  {/* The whole row opens the invoice; this button makes it reachable by keyboard. */}
+                  <button
+                    type="button"
+                    className="min-w-0 truncate rounded-sm text-left font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                  >
+                    {row.client?.name ?? 'Unknown client'}
+                  </button>
+                  <span className="shrink-0 tabular-nums">{formatMoney(row.invoice.amount, currency)}</span>
+                </CardListLine>
+                <div className="truncate text-muted-foreground">
+                  {row.invoice.invoiceNumber} · Due {formatDate(row.invoice.dueDate)}
+                </div>
+                {/* Its own line, so a long "Overdue · 179 days" never cuts off the due date. */}
+                <div>
+                  <InvoiceStatusBadge status={row.status} daysOverdue={row.daysOverdue} />
+                </div>
+              </CardListItem>
+            ))}
+          </CardList>
         ) : (
           <Table className="min-w-[26rem] table-fixed">
             <colgroup>
@@ -51,7 +88,7 @@ export function OutstandingList({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {rows.map((row) => (
+              {shown.map((row) => (
                 <TableRow
                   key={row.invoice.id}
                   className="cursor-pointer"
@@ -79,6 +116,14 @@ export function OutstandingList({
               ))}
             </TableBody>
           </Table>
+        )}
+        {rows.length > shown.length && (
+          <p className="mt-4 text-sm text-muted-foreground">
+            The {shown.length} most urgent of {rows.length}.{' '}
+            <Link to="/invoices" className="font-medium text-foreground">
+              See all in Invoices
+            </Link>
+          </p>
         )}
       </CardContent>
     </Card>
