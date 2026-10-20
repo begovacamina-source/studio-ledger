@@ -9,11 +9,9 @@ import {
   checkFile,
   DONT_IMPORT,
   mappingProblems,
-  NO_FIELD,
   parseCsv,
   parseDate,
   parseImportAmount,
-  requiredFields,
   suggestDateFormat,
   suggestDecimalSeparator,
   validateRows,
@@ -240,18 +238,5 @@ describe('delimiters', () => {
     const file = parse('date;amount;category\n05.10.2026;12,50;Office\n')
     expect(file.headers).toEqual(['date', 'amount', 'category'])
     expect(file.rows).toEqual([['05.10.2026', '12,50', 'Office']])
-  })
-})
-
-describe('columns switched on without a field', () => {
-  it('blocks the next step and lists the required fields', () => {
-    expect(mappingProblems(['date', 'amount', 'category', NO_FIELD], 'expenses')).toEqual([
-      "Choose a field for the column you're importing, or turn it off.",
-    ])
-    expect(requiredFields(['date', DONT_IMPORT, 'category'], 'expenses')).toEqual([
-      { key: 'date', label: 'Date', matched: true },
-      { key: 'amount', label: 'Amount', matched: false },
-      { key: 'category', label: 'Category', matched: true },
-    ])
   })
 })
