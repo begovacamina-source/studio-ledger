@@ -126,6 +126,7 @@ export function MatchStep({
           {file.headers.map((_, column) => {
             const value = settings.mapping[column]
             const on = value !== DONT_IMPORT
+            const required = fields.find((f) => f.key === value && f.required)
             return (
               <TableRow key={column} className={cn(!on && 'text-muted-foreground')}>
                 <TableCell className={cn('truncate', on && 'font-medium')}>{name(column)}</TableCell>
@@ -156,11 +157,35 @@ export function MatchStep({
                   </Select>
                 </TableCell>
                 <TableCell>
-                  <Switch
-                    checked={on}
-                    onCheckedChange={(checked) => setImport(column, checked)}
-                    aria-label={`Import ${name(column)}`}
-                  />
+                  {required ? (
+                    // Locked on: a required field has to be imported. It looks on but can't be
+                    // switched off; aria-disabled keeps it focusable so the tooltip can say why.
+                    // Its field menu still works.
+                    <Tooltip>
+                      {/* A wrapper as the trigger, so the tooltip's data-state doesn't replace the switch's. */}
+                      <TooltipTrigger asChild>
+                        <span className="inline-flex">
+                          <Switch
+                            checked
+                            aria-disabled
+                            aria-label={`Import ${name(column)}`}
+                            className="cursor-not-allowed"
+                            onClick={(e) => e.preventDefault()}
+                          />
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-64">
+                        {required.label} is required for {settings.type}. To import it from another column,
+                        choose {required.label} in that column's menu.
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <Switch
+                      checked={on}
+                      onCheckedChange={(checked) => setImport(column, checked)}
+                      aria-label={`Import ${name(column)}`}
+                    />
+                  )}
                 </TableCell>
               </TableRow>
             )

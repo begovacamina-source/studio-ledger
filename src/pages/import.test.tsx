@@ -115,6 +115,26 @@ describe('CSV import', () => {
     expect(screen.getByRole('combobox', { name: 'Field for paid_date' })).toHaveTextContent('Paid date')
   })
 
+  it('keeps required fields switched on, with a tooltip saying why', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    await user.upload(fileInput(), csv(invoicesSample))
+    const locked = await screen.findByRole('switch', { name: 'Import invoice_number' })
+    expect(locked).toBeChecked()
+    expect(locked).toHaveAttribute('aria-disabled', 'true')
+
+    await user.click(locked)
+    expect(locked).toBeChecked()
+    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
+
+    await user.hover(locked)
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(
+      "Invoice number is required for invoices. To import it from another column, choose Invoice number in that column's menu.",
+    )
+    // Optional fields can still be switched off.
+    expect(screen.getByRole('switch', { name: 'Import paid_date' })).not.toHaveAttribute('aria-disabled')
+  })
+
   it('resets the matching to what was matched automatically', async () => {
     const user = userEvent.setup()
     renderApp('/import')
