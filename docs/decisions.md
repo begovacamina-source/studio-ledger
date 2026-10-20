@@ -4,6 +4,7 @@ Newest first. Each entry: what was decided, why, and what it rules out.
 
 | Date | Decision | Reason | Consequence |
 | --- | --- | --- | --- |
+| 2026-10-20 | TEST-4 no longer requires branch protection: CI runs on every pull request, and a pull request is merged only once its CI run is green, checked by hand | Branch protection isn't available on GitHub's free plan for private repositories | Nothing technically blocks merging a red pull request, so the PR template has a "CI is green" check before merging |
 | 2026-10-20 | The invoice list is a card list below 1024 px (lg), not 768 px (md) | Its seven columns don't fit a tablet: at 768 px the table was 160 px wider than its card | Other lists still switch at 768 px; `useIsBelow(LG_BREAKPOINT)` in `src/hooks/use-mobile.ts` |
 | 2026-10-20 | UX-9 reads "at most one primary action" | Read-only screens (Overview, Clients, Settings, the import's upload step) have nothing to make primary | No screen shows two filled primary buttons; a screen may have none |
 | 2026-10-20 | Invoice table sorting (US-2.3's Should item) moves to future work (#41); #7 closed | Every Must criterion of US-2.3 is met, and sorting isn't needed to answer the three core questions | The MVP ships without sorting; the PRD marks the criterion as future work |
