@@ -245,6 +245,20 @@ date,amount,category,description
 | Net income | Received income − Expenses | Selected period |
 | Change vs previous | (Current − Previous) ÷ Previous × 100 | Previous period of equal length; Received, Expenses and Net income only |
 
+**Periods**
+
+Periods are whole calendar months, and "Last 3 months" and "Last 6 months" include the current month. The dashboard opens on Last 6 months.
+
+| Period | Months covered | Example on 2026-10-20 |
+| --- | --- | --- |
+| This month | The current calendar month | October 2026 |
+| Last month | The previous calendar month | September 2026 |
+| Last 3 months | The current month and the 2 before it | August–October 2026 |
+| Last 6 months | The current month and the 5 before it | May–October 2026 |
+| This year | January to December of the current year | January–December 2026 |
+
+The previous period for a change is the same number of whole months right before it: Last 6 months on 2026-10-20 is compared with November 2025–April 2026.
+
 **Displayed invoice status**
 
 - **Paid:** status is Paid (paidDate is set).
