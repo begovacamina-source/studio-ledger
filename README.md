@@ -19,6 +19,8 @@ npm run dev
 
 `npm test` runs the unit and component tests, `npm run lint` runs the linter, and `npm run build` makes a production build in `dist/`.
 
+`npm run test:e2e` runs the three core journeys in Playwright against a production build. Locally it uses your installed Google Chrome; without Chrome, run `npx playwright install chromium` once and remove `channel` in `playwright.config.ts`. CI (`.github/workflows/ci.yml`) runs lint, the unit tests, the build and the journeys on every pull request.
+
 ## Why this project exists
 
 Freelancers track invoices, clients, income and expenses across spreadsheets and tools, so understanding their finances takes manual calculation. Studio Ledger turns those records into a few clear numbers and lists. It is also a design engineer portfolio project, designed in code with no Figma: strategy → rough screens → design polish → build → validation.

@@ -2,6 +2,20 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Playwright core journeys (TEST-3) and CI (TEST-4)
+
+**Pull request:** the CI and Playwright PR (branch `test/ci-and-e2e`).
+
+**Run on this branch:** `npm run test:e2e` (3 journeys passed against `vite preview`, Chrome, 1280 × 800, clock fixed at 2026-10-20 12:00), `npm test` (25 files, 219 tests passed; Vitest now skips `e2e/`), `npm run lint` (no warnings or errors), `npx tsc -b` (now also checks `playwright.config.ts` and `e2e/`).
+
+| Items | What was verified |
+| --- | --- |
+| TEST-3 (newly checked) | `e2e/core-journeys.spec.ts`, each test in a fresh browser profile on the sample data. **Import records:** the sample invoice file auto-matches, previews 4 valid / 0 errors / 0 duplicates, imports ("4 invoices imported", new client Harbour Light Theatre), and the Overview shows Outstanding $18,420.00, "12 invoices · 7 overdue" and Received $48,610.00; importing it again shows 4 duplicates and no import button. **Understand the month:** opens on Last 6 months with the five sample figures; Last month shows $13,230.00, $2,084.56 and $11,145.44 with Outstanding unchanged; hovering the chart shows September's exact figures, and the screen-reader table has the same row. **Collect an unpaid invoice:** INV-002 opens from the Outstanding list ("Overdue · 179 days"), Mark as paid defaults to 2026-10-20, Undo in the toast puts it back, marking it again leaves Outstanding $13,770.00, "8 invoices · 5 overdue" and Received $48,010.00, and a reload keeps it. A deliberately wrong expectation ($13,771.00) made the journey fail with the real value shown, then was restored. |
+
+**TEST-4 not checked yet:** the workflow runs lint, unit tests, the build and the journeys on every pull request and on pushes to `main`. It needs a green run on this pull request, and "must pass before merging" needs a branch protection rule for `main` that requires the `checks` job, which is a repository setting for the owner.
+
+**Not verified:** Firefox and WebKit (TEST-5, future work); phone widths in Playwright.
+
 ## 2026-10-20 · UX-7 and UX-9 after the review decisions
 
 **Pull request:** the checklist checks PR (#43), after the decisions on it: the invoice list becomes a card list below 1024 px, and UX-9 is reworded to "at most one primary action".
