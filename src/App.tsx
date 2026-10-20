@@ -1,5 +1,13 @@
-import { SettingsIcon } from 'lucide-react'
+import { MenuIcon, SettingsIcon } from 'lucide-react'
 import { Link, NavLink, Route, Routes, useMatch } from 'react-router'
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import { Toaster } from '@/components/ui/sonner'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
@@ -17,6 +25,60 @@ const NAV = [
   { to: '/expenses', label: 'Expenses', end: false },
   { to: '/import', label: 'Import', end: false },
 ]
+
+/** The main tabs as a row in the top bar, from md up. */
+function NavLinks() {
+  return NAV.map((item) => (
+    <NavLink
+      key={item.to}
+      to={item.to}
+      end={item.end}
+      className={({ isActive }) =>
+        cn(
+          'rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+          isActive && 'bg-muted font-medium text-foreground',
+        )
+      }
+    >
+      {item.label}
+    </NavLink>
+  ))
+}
+
+/** One phone menu item; the current page is marked for sight and for screen readers. */
+function PhoneMenuItem({ to, end, label }: { to: string; end: boolean; label: string }) {
+  const active = useMatch({ path: to, end })
+  return (
+    <DropdownMenuItem asChild className={cn('px-3 py-2', active && 'bg-muted font-medium')}>
+      <Link to={to} aria-current={active ? 'page' : undefined}>
+        {label}
+      </Link>
+    </DropdownMenuItem>
+  )
+}
+
+/**
+ * Below md the tabs don't fit, so a menu button on the left opens them in a
+ * dropdown, with Settings as plain text below a divider.
+ */
+function PhoneMenu() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" size="icon" className="-ml-2 md:hidden" aria-label="Open menu">
+          <MenuIcon />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" className="w-48">
+        {NAV.map((item) => (
+          <PhoneMenuItem key={item.to} {...item} />
+        ))}
+        <DropdownMenuSeparator />
+        <PhoneMenuItem to="/settings" end label="Settings" />
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
 
 /**
  * The gear at the far right of the top bar. The active style is worked out
@@ -49,34 +111,24 @@ export default function App() {
     <SettingsProvider>
       <LedgerProvider>
         <TooltipProvider>
-          <div className="min-h-svh bg-muted/40">
-            <header className="border-b bg-background">
-              <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6">
-                <span className="font-semibold">Studio Ledger</span>
-                <nav aria-label="Main" className="flex gap-1">
-                  {NAV.map((item) => (
-                    <NavLink
-                      key={item.to}
-                      to={item.to}
-                      end={item.end}
-                      className={({ isActive }) =>
-                        cn(
-                          'rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
-                          isActive && 'bg-muted font-medium text-foreground',
-                        )
-                      }
-                    >
-                      {item.label}
-                    </NavLink>
-                  ))}
+          <div className="min-h-svh bg-muted/60">
+            <header className="bg-background">
+              <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
+                <div className="flex min-w-0 items-center gap-1">
+                  <PhoneMenu />
+                  <span className="truncate font-heading font-semibold">Studio Ledger</span>
+                </div>
+                <nav aria-label="Main" className="hidden gap-1 md:flex">
+                  <NavLinks />
                 </nav>
-                {/* Settings sits apart from the main tabs, as an icon on the far right. */}
-                <div className="flex justify-end">
+                {/* From md up, Settings sits apart from the main tabs, as an icon on the far right.
+                    On phones it is the last item in the menu instead. */}
+                <div className="hidden justify-end md:flex">
                   <SettingsLink />
                 </div>
               </div>
             </header>
-            <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+            <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
               <Routes>
                 <Route index element={<DashboardPage />} />
                 {/* One route, so the list keeps its state while the invoice panel opens and closes. */}

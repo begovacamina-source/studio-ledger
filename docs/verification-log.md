@@ -2,6 +2,47 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Phase 3 design polish: fonts, chart colours, phone top bar, design pass
+
+**Pull request:** the Phase 3 design polish PR (branch `design/phase-3-polish`, four commits: fonts, chart colours, phone top bar, design pass).
+
+**Run on this branch:** `npx vitest run --dir src` (14 files, 148 tests passed, including the new phone menu test), `npm run lint` (no warnings or errors), `npm run build` (passed; same bundle size warning, now 916 kB), and the dev server reviewed in the browser on the sample data at 1280, 768 and 375 px. Before and after screenshots: `docs/screenshots/before/` and `docs/screenshots/after/` (full page, 1280 and 375 px wide, plus `after/menu-phone.png` with the phone menu open).
+
+**No checklist items checked.** This PR affects the items below, but none is fully covered yet.
+
+| Items | What was verified | Why it stays open |
+| --- | --- | --- |
+| UX-7 | At 375, 768 and 1280 px, the page's `scrollWidth` equals the viewport width on Overview, Invoices, Expenses, Import and Settings (before: 459 px at 375, caused by the top bar). The phone captures are 375 px wide; the before set was 457–459 px. | Dialogs, panels and import steps 2–4 were not measured at every width, and tables still scroll sideways inside their card on phones (see UX-8). |
+| UX-10 | The design pass ran on every page (spacing, borders, corners, type), and every page was compared with its before screenshot. | The design review itself is a person's call on the Vercel preview. |
+| A11Y-3 | Contrast worked out from the new tokens: Received blue 4.9:1 and Expenses grey 9.2:1 on white (chart elements need 3:1); Paid 4.8:1, Pending 5.0:1 and Overdue 5.3:1 as text on their 10% badge tint. | Only the chart and status colours were checked, not every text and UI element. |
+| A11Y-2 | Phone menu in the browser (a shadcn dropdown opened by a menu button on the left of the top bar): Escape closes it and focus goes back to the button, and choosing an item navigates and closes it. `settings.test.tsx` "on phones, a menu button opens the tabs and Settings, and picking one closes it" checks the items (Overview, Invoices, Expenses, Import, a divider, then Settings as text with no icon), `aria-current` on the current page, and that choosing Settings opens it. | Only the new menu was checked, not every flow. |
+| UX-6 | From md up, Settings is still the gear at the far right of the top bar. On phones the gear is hidden, and Settings is the last menu item, below a divider (asked for in the PR review). | The item's wording only describes the gear; whether the phone menu meets it is for the reviewer. Left as checked. |
+| UX-1, CODE-4 | Still true after the change: badges still read Paid, Pending or "Overdue · N days"; new colours are tokens in `src/index.css` (`--chart-received`, `--chart-expenses`, status tokens). | Already checked. |
+| DATA-6 | Inter and Inter Tight are self-hosted from `@fontsource-variable` and bundled by Vite, so the fonts need no request to a font service. | The whole app's network use was not audited. |
+
+**Review changes (same day, verified in Chromium at 375 and 1280 px):**
+
+| Change | What was verified |
+| --- | --- |
+| Primary buttons in the Received blue (`--action`, `--action-hover`) | "Add invoice" and the panel's "Mark as paid" compute to `oklch(0.55 0.15 255)`, hover to `oklch(0.49 0.14 255)`; white text 4.9:1 and 6.3:1. Outline buttons stay white and "Clear all data" keeps its destructive tint. |
+| Checked radios in the same blue | The checked Import type radio computes to the blue at both widths; the selected tile's border is blue too (Import, Settings). |
+| White fill for dropdowns and text fields | Select triggers, Input and Textarea were `bg-transparent` in shadcn, so they showed the tinted page; they compute to white now (Expenses filters, Overview period, Invoices search). |
+| Import stepper on one line on phones | At 375 px the stepper is one 24 px line and only the current step's label shows; the others keep theirs for screen readers. All four labels show at 1280 px. |
+| Form dialog buttons stacked on phones | Add invoice at 375 px: "Add invoice" above "Cancel", both 311 px wide. The confirm dialogs already stacked (shadcn footers). |
+| Sample CSV link no longer looks disabled | Its text computes to the foreground colour instead of muted grey. |
+| No hover underline | `text-decoration-line` on a hovered invoice number is `none`; the Button and Badge link variants dropped `hover:underline`. |
+| Panel actions at the bottom; panels full width on phones | Chromium, invoice INV-038 (unpaid), INV-037 (paid), INV-002 from the Overview, and an expense: the footer sits at the bottom of the panel, with Mark as paid or Mark as not paid at full width, then Edit and Delete side by side, then Go to Invoices on the Overview. The panel is 375 px wide at 375 px (was ¾ of the screen, so buttons wrapped) and 448 px at 1280 px. |
+| Required-field tooltip test | Made reliable by hovering before clicking (Radix closes a tooltip on click). Eight full `npx vitest run --dir src` runs passed in a row. |
+
+**Found and fixed in this PR:** the import preview's counts (Valid rows, Rows with errors, Duplicates) had shrunk to small text, because the design pass gave their tiles the `sm` card size, whose title style overrides `text-3xl`. They use the default size again; checked in the browser at 1280 px (30 px figures).
+
+**Found, not fixed:**
+
+- On phones the Outstanding table and the Invoices and Expenses tables still scroll sideways inside their card, so Outstanding's due date and status are cut off until you scroll. Card lists on mobile are UX-8.
+- On this machine, `npm test` also runs the tests in a stale Claude worktree (`.claude/worktrees/objective-brattain-ce353b`, at ad8c55d): 28 files, 19 failures, all in that copy. The branch's own suite passes with `npx vitest run --dir src`. Removing that worktree, or excluding `.claude/**` in the Vitest config, would fix it.
+
+**Not verified:** the Vercel preview (checked after the PR opened), dark mode (out of scope), widths other than 375, 768 and 1280 px, and the chart tooltip on touch.
+
 ## 2026-10-20 · Chart axis labels on one line (PB-24)
 
 **Pull request:** the one that fixes the BAM axis labels (stacked on the Definition of Done PR).

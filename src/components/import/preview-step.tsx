@@ -57,10 +57,10 @@ export function PreviewStep({
     <div className="space-y-6">
       <section aria-label="Summary" className="grid gap-4 sm:grid-cols-3">
         {summary.map(([label, count]) => (
-          <Card key={label}>
+          <Card key={label} className="bg-muted/50 shadow-none">
             <CardHeader>
               <CardDescription>{label}</CardDescription>
-              <CardTitle className="text-3xl font-semibold tabular-nums">{count}</CardTitle>
+              <CardTitle className="text-3xl font-semibold tracking-tight tabular-nums">{count}</CardTitle>
             </CardHeader>
           </Card>
         ))}
@@ -108,7 +108,7 @@ export function PreviewStep({
       {result.errors.length > 0 && (
         <div className="space-y-2">
           <h2 className="text-sm font-medium">Problems to fix in your file</h2>
-          <ul className="max-h-60 space-y-1 overflow-y-auto rounded-lg border p-4 text-sm">
+          <ul className="max-h-60 space-y-1 overflow-y-auto rounded-lg bg-muted/50 p-4 text-sm">
             {result.errors.map((e, i) => (
               <li key={i}>{e.message}</li>
             ))}

@@ -25,7 +25,8 @@ type Step = (typeof STEPS)[number]
 function Steps({ current }: { current: Step }) {
   const index = STEPS.indexOf(current)
   return (
-    <ol className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+    // One line at every width: on phones only the current step shows its label.
+    <ol className="flex gap-x-4 text-sm md:gap-x-6">
       {STEPS.map((step, i) => (
         <li
           key={step}
@@ -37,13 +38,13 @@ function Steps({ current }: { current: Step }) {
         >
           <span
             className={cn(
-              'flex size-6 items-center justify-center rounded-full border text-xs tabular-nums',
-              i === index && 'border-primary bg-primary text-primary-foreground',
+              'flex size-6 items-center justify-center rounded-full bg-muted text-xs tabular-nums',
+              i === index && 'bg-primary text-primary-foreground',
             )}
           >
             {i + 1}
           </span>
-          {step}
+          <span className={cn(i !== index && 'sr-only md:not-sr-only')}>{step}</span>
         </li>
       ))}
     </ol>
@@ -93,15 +94,15 @@ export function ImportPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="space-y-4">
-        <h1 className="text-2xl font-semibold">Import CSV</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Import CSV</h1>
         <Steps current={step} />
       </div>
       <Card>
         <CardContent>
           {file && step !== 'Upload' && step !== 'Done' && (
-            <p className="mb-4 text-sm text-muted-foreground">
+            <p className="mb-6 text-sm text-muted-foreground">
               {file.name} · {file.parsed.rows.length.toLocaleString('en-US')} rows ·{' '}
               {type === 'invoices' ? 'Invoices' : 'Expenses'}
             </p>

@@ -35,10 +35,12 @@ function InvoiceDetails({
   invoice,
   onNumberChange,
   onDeleted,
+  footer,
 }: {
   invoice: Invoice
   onNumberChange: (invoiceNumber: string) => void
   onDeleted: () => void
+  footer?: ReactNode
 }) {
   const currency = useCurrency()
   const { ledger, markInvoiceNotPaid, deleteInvoice } = useLedger()
@@ -56,7 +58,7 @@ function InvoiceDetails({
 
   return (
     <>
-      <SheetHeader className="gap-2 border-b pr-12">
+      <SheetHeader className="gap-2 p-6 pr-12">
         <div className="flex items-center gap-2">
           <SheetTitle className="text-xl">{invoice.invoiceNumber}</SheetTitle>
           <InvoiceStatusBadge
@@ -68,26 +70,40 @@ function InvoiceDetails({
         <p className="text-2xl font-semibold text-foreground tabular-nums">
           {formatMoney(invoice.amount, currency)}
         </p>
-        <div className="flex flex-wrap gap-2 pt-2">
-          {status === 'Paid' ? (
-            <Button
-              variant="outline"
-              onClick={() => {
-                markInvoiceNotPaid(invoice.id)
-                toast.success(`${invoice.invoiceNumber} is no longer Paid`)
-              }}
-            >
-              Mark as not paid
-            </Button>
-          ) : (
-            <MarkPaidDialog invoice={invoice} trigger={<Button>Mark as paid</Button>} />
-          )}
+      </SheetHeader>
+
+      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-6">
+        {details.map(([term, value]) => (
+          <div key={term} className="contents">
+            <dt className="text-muted-foreground">{term}</dt>
+            <dd className="break-words">{value}</dd>
+          </div>
+        ))}
+      </dl>
+
+      {/* Actions sit at the bottom: the status change on top, then Edit and Delete. */}
+      <SheetFooter className="p-6">
+        {status === 'Paid' ? (
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => {
+              markInvoiceNotPaid(invoice.id)
+              toast.success(`${invoice.invoiceNumber} is no longer Paid`)
+            }}
+          >
+            Mark as not paid
+          </Button>
+        ) : (
+          <MarkPaidDialog invoice={invoice} trigger={<Button className="w-full">Mark as paid</Button>} />
+        )}
+        <div className="grid grid-cols-2 gap-2">
           <Button variant="outline" onClick={() => setEditing(true)}>
             <PencilIcon /> Edit
           </Button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="outline" className="w-full">
                 <Trash2Icon /> Delete
               </Button>
             </AlertDialogTrigger>
@@ -115,16 +131,8 @@ function InvoiceDetails({
             </AlertDialogContent>
           </AlertDialog>
         </div>
-      </SheetHeader>
-
-      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-4">
-        {details.map(([term, value]) => (
-          <div key={term} className="contents">
-            <dt className="text-muted-foreground">{term}</dt>
-            <dd className="break-words">{value}</dd>
-          </div>
-        ))}
-      </dl>
+        {footer}
+      </SheetFooter>
 
       <InvoiceFormDialog
         open={editing}
@@ -161,16 +169,19 @@ export function InvoiceSheet({
 
   return (
     <Sheet open={invoiceNumber !== undefined} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent className="w-full gap-4 sm:max-w-md">
+      {/* Full width on phones. The side-scoped classes replace shadcn's ¾ width and narrower cap. */}
+      <SheetContent className="gap-4 data-[side=right]:w-full data-[side=right]:sm:max-w-md">
         {shown ? (
-          <InvoiceDetails invoice={shown} onNumberChange={onNumberChange} onDeleted={onClose} />
+          <InvoiceDetails invoice={shown} onNumberChange={onNumberChange} onDeleted={onClose} footer={footer} />
         ) : (
-          <SheetHeader>
-            <SheetTitle>Invoice {invoiceNumber} was not found</SheetTitle>
-            <SheetDescription>It may have been deleted.</SheetDescription>
-          </SheetHeader>
+          <>
+            <SheetHeader className="p-6 pr-12">
+              <SheetTitle>Invoice {invoiceNumber} was not found</SheetTitle>
+              <SheetDescription>It may have been deleted.</SheetDescription>
+            </SheetHeader>
+            {footer && <SheetFooter className="p-6">{footer}</SheetFooter>}
+          </>
         )}
-        {footer && <SheetFooter className="border-t">{footer}</SheetFooter>}
       </SheetContent>
     </Sheet>
   )

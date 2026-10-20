@@ -157,7 +157,8 @@ export function InvoiceForm({
         </p>
       </Field>
 
-      <div className="flex justify-end gap-3 sm:col-span-2">
+      {/* On phones the buttons stack full width, the main action on top, as in shadcn dialog footers. */}
+      <div className="flex flex-col-reverse gap-2 sm:col-span-2 sm:flex-row sm:justify-end sm:gap-3">
         <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>

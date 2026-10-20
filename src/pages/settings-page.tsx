@@ -34,8 +34,8 @@ export function SettingsPage() {
   const empty = !hasRecords(ledger)
 
   return (
-    <div className="max-w-3xl space-y-6">
-      <h1 className="text-2xl font-semibold">Settings</h1>
+    <div className="max-w-3xl space-y-8">
+      <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
 
       <Card>
         <CardHeader>
@@ -59,7 +59,7 @@ export function SettingsPage() {
               <Label
                 key={c.value}
                 htmlFor={`currency-${c.value}`}
-                className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 font-normal has-data-[state=checked]:border-primary"
+                className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 font-normal has-data-[state=checked]:border-action"
               >
                 <RadioGroupItem id={`currency-${c.value}`} value={c.value} className="mt-0.5" />
                 <span className="grid gap-1">

@@ -80,9 +80,9 @@ export function ExpensesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Expenses</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Expenses</h1>
         <Button onClick={() => setAdding(true)}>
           <PlusIcon /> Add expense
         </Button>
@@ -179,7 +179,7 @@ export function ExpensesPage() {
                         <TableCell>
                           <button
                             type="button"
-                            className="rounded-sm font-medium underline-offset-4 hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                            className="rounded-sm font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
                             aria-label={`Open ${expenseTitle(expense)}, ${formatDate(expense.date)}`}
                             onClick={() => setOpenId(expense.id)}
                           >
