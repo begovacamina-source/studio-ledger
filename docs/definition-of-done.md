@@ -67,8 +67,8 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 ## Accessibility
 
 - [x] **A11Y-1** Must · Form fields have visible labels; each error is linked to its field, and submitting with errors moves focus to the first one (invoice and expense forms).
-- [ ] **A11Y-2** Must · Every flow works by keyboard alone, with visible focus and no focus traps.
-- [ ] **A11Y-3** Must · Text contrast is at least 4.5:1, and UI and chart elements at least 3:1.
+- [x] **A11Y-2** Must · Every flow works by keyboard alone, with visible focus and no focus traps.
+- [x] **A11Y-3** Must · Text contrast is at least 4.5:1, and UI and chart elements at least 3:1.
 - [ ] **A11Y-4** Must · A screen-reader spot check of each new screen passes: labels, statuses and form errors are announced.
 - [ ] **A11Y-7** Nice · At 200% zoom every action is reachable without clipping.
 
@@ -88,7 +88,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **CODE-2** Must · `npm run lint` reports no warnings or errors.
 - [x] **CODE-3** Must · Calculation, form, import and storage logic lives in pure functions in `src/lib/`, covered by unit tests.
 - [x] **CODE-4** Must · Components use theme colour tokens from `src/index.css`; no hard-coded colours.
-- [ ] **CODE-5** Must · No arbitrary pixel or rem values in components: spacing and sizes come from Tailwind's scale or tokens in `src/index.css`.
+- [x] **CODE-5** Must · No arbitrary pixel or rem values in the app's components (shadcn's generated files in `src/components/ui/` excepted): spacing and sizes come from Tailwind's scale or tokens in `src/index.css`.
 - [x] **CODE-6** Must · Nothing from the out-of-scope list in `AGENTS.md` is in the app.
 - [ ] **CODE-7** Nice · The production JavaScript bundle is under 500 kB, with no size warning on build.
 

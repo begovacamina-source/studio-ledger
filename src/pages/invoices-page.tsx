@@ -62,6 +62,9 @@ export function InvoicesPage() {
   }, [params, setParams])
   const status = parseStatus(params.get('status'))
   const query = params.get('q') ?? ''
+  // The field keeps its own text: the URL updates a moment later, and reading it back
+  // would drop letters typed in between.
+  const [searchText, setSearchText] = useState(query)
   const today = todayLocal()
 
   const searched = useMemo(
@@ -132,8 +135,11 @@ export function InvoicesPage() {
                   aria-label="Search invoices"
                   placeholder="Search invoice number or client"
                   className="pl-8"
-                  value={query}
-                  onChange={(e) => update({ q: e.target.value })}
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.target.value)
+                    update({ q: e.target.value })
+                  }}
                 />
               </div>
             </div>
@@ -147,7 +153,13 @@ export function InvoicesPage() {
                         {status === 'All' ? 'No invoices' : `No ${status.toLowerCase()} invoices`}
                         {query && ` match "${query}"`}.
                       </p>
-                      <Button variant="outline" onClick={() => setParams({}, { replace: true })}>
+                      <Button
+                        variant="outline"
+                        onClick={() => {
+                          setSearchText('')
+                          setParams({}, { replace: true })
+                        }}
+                      >
                         Clear filters
                       </Button>
                     </div>
@@ -198,7 +210,7 @@ export function InvoicesPage() {
                       ))}
                     </CardList>
                   ) : (
-                    <Table className="min-w-[52rem] table-fixed">
+                    <Table className="min-w-208 table-fixed">
                       {/* Fixed column widths keep every column in the same place on every tab. */}
                       <colgroup>
                         <col className="w-28" />

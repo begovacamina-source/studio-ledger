@@ -114,7 +114,7 @@ export function PreviewStep({
             ))}
           </CardList>
         ) : (
-          <Table className="min-w-[48rem] table-fixed">
+          <Table className="min-w-192 table-fixed">
             <colgroup>
               <col className="w-14" />
               {fields.map((f) => (

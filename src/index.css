@@ -72,13 +72,17 @@
     --secondary: oklch(0.97 0 0);
     --secondary-foreground: oklch(0.205 0 0);
     --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
+    /* A11Y-3: 0.52 (not shadcn's 0.556) so muted text is at least 4.5:1 on --muted too, e.g. tab counts. */
+    --muted-foreground: oklch(0.52 0 0);
     --accent: oklch(0.97 0 0);
     --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
+    /* A11Y-3: darker than shadcn's red so error text is at least 4.5:1 on its own 10% tint. */
+    --destructive: oklch(0.505 0.213 27.518);
     --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
+    /* A11Y-3: field borders and the focus ring are at least 3:1 on white and on muted,
+       so fields can be found and focus can be seen. Card and table borders stay light. */
+    --input: oklch(0.58 0 0);
+    --ring: oklch(0.556 0 0);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
@@ -91,12 +95,17 @@
     /* Studio Ledger: primary buttons, in the chart's Received blue. White text is 4.9:1,
        and 6.3:1 on the darker hover. Other primary uses (switches, radios) keep --primary. */
     --action: var(--chart-received);
+    /* Studio Ledger: layout sizes with no Tailwind utility (CODE-5). */
+    /* Label and value columns in the invoice and expense panels. */
+    --details-columns: 7rem 1fr;
+    /* Form dialogs keep 1rem of space above and below on short screens, and scroll inside. */
+    --dialog-max-height: calc(100svh - 2rem);
     --action-hover: oklch(0.49 0.14 255);
     --action-foreground: oklch(1 0 0);
     /* Studio Ledger: invoice status. Always paired with a text label. Hues are far
        apart (green, amber, red) and each is at least 4.5:1 as text on its own tint. */
-    --status-paid: oklch(0.52 0.13 155);
-    --status-pending: oklch(0.53 0.12 70);
+    --status-paid: oklch(0.49 0.12 155);
+    --status-pending: oklch(0.5 0.115 70);
     --status-overdue: oklch(0.53 0.19 25);
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
@@ -111,7 +120,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
     }
   body {
     @apply bg-background text-foreground;

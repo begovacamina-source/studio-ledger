@@ -38,7 +38,7 @@ function NavLinks() {
       end={item.end}
       className={({ isActive }) =>
         cn(
-          'rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+          'rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none',
           isActive && 'bg-muted font-medium text-foreground',
         )
       }
@@ -97,7 +97,7 @@ function SettingsLink() {
           aria-label="Settings"
           aria-current={active ? 'page' : undefined}
           className={cn(
-            'flex size-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+            'flex size-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none',
             active && 'bg-muted text-foreground',
           )}
         >

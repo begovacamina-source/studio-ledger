@@ -78,7 +78,7 @@ function ClientDetails({ summary, onDeleted }: { summary: ClientSummary; onDelet
                     {/* Opens the invoice in its own panel on the Invoices page. */}
                     <Link
                       to={invoicePath(invoice.invoiceNumber)}
-                      className="rounded-sm font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                      className="rounded-sm font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
                     >
                       {invoice.invoiceNumber}
                     </Link>

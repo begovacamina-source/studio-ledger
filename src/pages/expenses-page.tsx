@@ -173,7 +173,7 @@ export function ExpensesPage() {
                       <CardListLine>
                         <button
                           type="button"
-                          className="min-w-0 truncate rounded-sm text-left font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                          className="min-w-0 truncate rounded-sm text-left font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
                           aria-label={`Open ${expenseTitle(expense)}, ${formatDate(expense.date)}`}
                           onClick={() => setOpenId(expense.id)}
                         >
@@ -188,7 +188,7 @@ export function ExpensesPage() {
                   ))}
                 </CardList>
               ) : (
-                <Table className="min-w-[40rem] table-fixed">
+                <Table className="min-w-160 table-fixed">
                   <colgroup>
                     <col className="w-36" />
                     <col className="w-36" />
@@ -214,7 +214,7 @@ export function ExpensesPage() {
                         <TableCell>
                           <button
                             type="button"
-                            className="rounded-sm font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                            className="rounded-sm font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
                             aria-label={`Open ${expenseTitle(expense)}, ${formatDate(expense.date)}`}
                             onClick={() => setOpenId(expense.id)}
                           >

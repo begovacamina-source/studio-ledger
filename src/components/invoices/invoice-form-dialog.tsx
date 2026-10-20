@@ -22,7 +22,7 @@ export function InvoiceFormDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[calc(100svh-2rem)] overflow-y-auto sm:max-w-xl">
+      <DialogContent className="max-h-(--dialog-max-height) overflow-y-auto sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>{editing ? `Edit ${editing.invoiceNumber}` : 'Add invoice'}</DialogTitle>
           <DialogDescription>
