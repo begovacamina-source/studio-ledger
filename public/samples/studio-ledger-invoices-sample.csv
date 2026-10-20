@@ -1,0 +1,5 @@
+invoice_number,client,amount,issue_date,due_date,paid_date,description
+INV-101,Northwind Studio,1450.00,2026-10-01,2026-10-15,2026-10-12,Autumn campaign visuals
+INV-102,Lumen Coffee,620.00,2026-10-05,2026-10-19,,Loyalty card redesign
+INV-103,Harbour Light Theatre,2200.00,2026-10-08,2026-11-07,,Season poster series
+INV-104,Atlas & Oak Architects,980.00,2026-10-12,2026-10-26,,Project photography edit

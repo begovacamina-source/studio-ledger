@@ -4,3 +4,8 @@ export function formatChange(change: number | null): string {
   const rounded = Math.round(change)
   return `${rounded > 0 ? '+' : ''}${rounded}%`
 }
+
+/** "1 invoice", "3 invoices". */
+export function plural(count: number, word: string): string {
+  return `${count.toLocaleString('en-US')} ${word}${count === 1 ? '' : 's'}`
+}

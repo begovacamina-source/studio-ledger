@@ -1,10 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import type { OutstandingSummary, PeriodFigures } from '@/lib/calculations'
-import { formatChange } from '@/lib/format'
+import { formatChange, plural } from '@/lib/format'
 import { formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
 
-const plural = (count: number, word: string) => `${count} ${word}${count === 1 ? '' : 's'}`
 
 function SummaryCard({
   title,

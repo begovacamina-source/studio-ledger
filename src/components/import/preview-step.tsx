@@ -1,0 +1,147 @@
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+import {
+  FIELDS,
+  PREVIEW_ROWS,
+  type ImportSettings,
+  type ValidatedRow,
+  type ValidationResult,
+} from '@/lib/csv-import'
+import { plural } from '@/lib/format'
+
+
+// Short, predictable values get fixed widths; client and description share the rest.
+const COLUMN_WIDTH: Record<string, string | undefined> = {
+  date: 'w-28',
+  amount: 'w-24',
+  category: 'w-28',
+  invoiceNumber: 'w-28',
+}
+
+function RowStatus({ row }: { row: ValidatedRow }) {
+  if (row.status === 'valid') return <Badge variant="secondary">Valid</Badge>
+  if (row.status === 'duplicate') return <Badge variant="outline">Duplicate</Badge>
+  return <Badge variant="destructive">Error</Badge>
+}
+
+export function PreviewStep({
+  settings,
+  result,
+  onBack,
+  onCancel,
+  onImport,
+}: {
+  settings: ImportSettings
+  result: ValidationResult
+  onBack: () => void
+  onCancel: () => void
+  onImport: () => void
+}) {
+  const fields = FIELDS[settings.type].filter((f) => settings.mapping.includes(f.key))
+  const summary: [string, number][] = [
+    ['Valid rows', result.valid],
+    ['Rows with errors', result.withErrors],
+    ['Duplicates', result.duplicates],
+  ]
+
+  return (
+    <div className="space-y-6">
+      <section aria-label="Summary" className="grid gap-4 sm:grid-cols-3">
+        {summary.map(([label, count]) => (
+          <Card key={label}>
+            <CardHeader>
+              <CardDescription>{label}</CardDescription>
+              <CardTitle className="text-3xl font-semibold tabular-nums">{count}</CardTitle>
+            </CardHeader>
+          </Card>
+        ))}
+      </section>
+
+      <div className="space-y-2">
+        <h2 className="text-sm font-medium">
+          First {Math.min(PREVIEW_ROWS, result.rows.length)} of {plural(result.rows.length, 'row')}
+        </h2>
+        <Table className="min-w-[48rem] table-fixed">
+          <colgroup>
+            <col className="w-14" />
+            {fields.map((f) => (
+              <col key={f.key} className={COLUMN_WIDTH[f.kind === 'text' ? f.key : f.kind]} />
+            ))}
+            <col className="w-28" />
+          </colgroup>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Row</TableHead>
+              {fields.map((f) => (
+                <TableHead key={f.key}>{f.label}</TableHead>
+              ))}
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {result.rows.slice(0, PREVIEW_ROWS).map((row) => (
+              <TableRow key={row.row}>
+                <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
+                {fields.map((f) => (
+                  <TableCell key={f.key} className="truncate" title={row.values[f.key] || undefined}>
+                    {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                  </TableCell>
+                ))}
+                <TableCell>
+                  <RowStatus row={row} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {result.errors.length > 0 && (
+        <div className="space-y-2">
+          <h2 className="text-sm font-medium">Problems to fix in your file</h2>
+          <ul className="max-h-60 space-y-1 overflow-y-auto rounded-lg border p-4 text-sm">
+            {result.errors.map((e, i) => (
+              <li key={i}>{e.message}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {result.duplicates > 0 && (
+        <p className="text-sm text-muted-foreground">
+          {plural(result.duplicates, 'duplicate')} will be skipped:{' '}
+          {settings.type === 'invoices'
+            ? 'the invoice number already exists.'
+            : 'an expense with the same date, amount and description already exists.'}
+        </p>
+      )}
+
+      <div className="flex flex-wrap justify-between gap-3">
+        <Button variant="outline" onClick={onBack}>
+          Back
+        </Button>
+        <div className="flex flex-wrap gap-3">
+          <Button variant="outline" onClick={onCancel}>
+            Cancel and fix the file
+          </Button>
+          {result.valid > 0 ? (
+            <Button onClick={onImport}>
+              Import {plural(result.valid, 'valid row')}
+            </Button>
+          ) : (
+            <p className="self-center text-sm text-muted-foreground">No valid rows to import.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
