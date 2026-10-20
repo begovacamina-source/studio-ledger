@@ -123,14 +123,15 @@ describe('CSV import', () => {
     expect(locked).toBeChecked()
     expect(locked).toHaveAttribute('aria-disabled', 'true')
 
-    await user.click(locked)
-    expect(locked).toBeChecked()
-    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
-
+    // Hover before clicking: after a click Radix closes the tooltip, and hovering the
+    // element the pointer is already on doesn't reliably open it again.
     await user.hover(locked)
     expect(await screen.findByRole('tooltip')).toHaveTextContent(
       "Invoice number is required for invoices. To import it from another column, choose Invoice number in that column's menu.",
     )
+    await user.click(locked)
+    expect(locked).toBeChecked()
+    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
     // Optional fields can still be switched off.
     expect(screen.getByRole('switch', { name: 'Import paid_date' })).not.toHaveAttribute('aria-disabled')
   })
