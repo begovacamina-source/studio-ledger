@@ -179,7 +179,7 @@ export function ExpensesPage() {
                         <TableCell>
                           <button
                             type="button"
-                            className="rounded-sm font-medium underline-offset-4 hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                            className="rounded-sm font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
                             aria-label={`Open ${expenseTitle(expense)}, ${formatDate(expense.date)}`}
                             onClick={() => setOpenId(expense.id)}
                           >

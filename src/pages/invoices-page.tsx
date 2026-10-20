@@ -178,7 +178,7 @@ export function InvoicesPage() {
                             <TableCell>
                               <Link
                                 to={invoicePath(row.invoice.invoiceNumber) + search}
-                                className="font-medium underline-offset-4 hover:underline"
+                                className="font-medium"
                               >
                                 {row.invoice.invoiceNumber}
                               </Link>
