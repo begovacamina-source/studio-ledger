@@ -33,7 +33,12 @@ export function OutstandingList({
             Nothing outstanding. Every invoice is Paid.
           </p>
         ) : (
-          <Table>
+          <Table className="min-w-[26rem] table-fixed">
+            <colgroup>
+              <col />
+              <col className="w-24" />
+              <col className="w-36" />
+            </colgroup>
             <TableHeader>
               <TableRow>
                 <TableHead>Client</TableHead>
@@ -44,7 +49,7 @@ export function OutstandingList({
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.invoice.id}>
-                  <TableCell>
+                  <TableCell className="truncate">
                     <Link
                       to={`/invoices/${row.invoice.invoiceNumber}`}
                       className="font-medium underline-offset-4 hover:underline"

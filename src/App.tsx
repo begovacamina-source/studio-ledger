@@ -27,7 +27,7 @@ export default function App() {
   return (
     <div className="min-h-svh bg-muted/40">
       <header className="border-b bg-background">
-        <div className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6">
+        <div className="mx-auto grid h-14 max-w-7xl grid-cols-[1fr_auto_1fr] items-center gap-4 px-4 sm:px-6">
           <span className="font-semibold">Studio Ledger</span>
           <nav aria-label="Main" className="flex gap-1">
             {NAV.map((item) => (

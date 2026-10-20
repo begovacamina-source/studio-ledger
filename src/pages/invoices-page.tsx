@@ -99,7 +99,17 @@ export function InvoicesPage() {
                   </Button>
                 </div>
               ) : (
-                <Table>
+                <Table className="min-w-[52rem] table-fixed">
+                  {/* Fixed column widths keep every column in the same place on every tab. */}
+                  <colgroup>
+                    <col className="w-28" />
+                    <col />
+                    <col className="w-32" />
+                    <col className="w-32" />
+                    <col className="w-32" />
+                    <col className="w-28" />
+                    <col className="w-36" />
+                  </colgroup>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Invoice</TableHead>
@@ -124,7 +134,7 @@ export function InvoicesPage() {
                             {row.invoice.invoiceNumber}
                           </Link>
                         </TableCell>
-                        <TableCell>{row.client?.name ?? 'Unknown client'}</TableCell>
+                        <TableCell className="truncate">{row.client?.name ?? 'Unknown client'}</TableCell>
                         <TableCell className="text-right tabular-nums">
                           {formatMoney(row.invoice.amount, APP_CURRENCY)}
                         </TableCell>
