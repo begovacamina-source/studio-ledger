@@ -1,4 +1,3 @@
-import { Link } from 'react-router'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -11,22 +10,26 @@ import {
 } from '@/components/ui/table'
 import type { OutstandingRow } from '@/lib/calculations'
 import { formatDate } from '@/lib/dates'
-import { invoicePath } from '@/lib/invoice-form'
 import { formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
 
 export function OutstandingList({
   rows,
   currency,
+  openInvoice,
+  onOpen,
 }: {
   rows: OutstandingRow[]
   currency: Currency
+  /** The invoice open in the side panel, if any. */
+  openInvoice: string | undefined
+  onOpen: (invoiceNumber: string) => void
 }) {
   return (
     <Card>
       <CardHeader>
         <CardTitle>Outstanding</CardTitle>
-        <CardDescription>Who still owes you money, Overdue first</CardDescription>
+        <CardDescription>Who still owes you money</CardDescription>
       </CardHeader>
       <CardContent>
         {rows.length === 0 ? (
@@ -49,14 +52,20 @@ export function OutstandingList({
             </TableHeader>
             <TableBody>
               {rows.map((row) => (
-                <TableRow key={row.invoice.id}>
+                <TableRow
+                  key={row.invoice.id}
+                  className="cursor-pointer"
+                  data-state={row.invoice.invoiceNumber === openInvoice ? 'selected' : undefined}
+                  onClick={() => onOpen(row.invoice.invoiceNumber)}
+                >
                   <TableCell className="truncate">
-                    <Link
-                      to={invoicePath(row.invoice.invoiceNumber)}
-                      className="font-medium underline-offset-4 hover:underline"
+                    {/* The whole row opens the invoice; this button makes it reachable by keyboard. */}
+                    <button
+                      type="button"
+                      className="max-w-full truncate rounded-sm text-left font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
                     >
                       {row.client?.name ?? 'Unknown client'}
-                    </Link>
+                    </button>
                     <div className="text-xs text-muted-foreground">{row.invoice.invoiceNumber}</div>
                   </TableCell>
                   <TableCell className="text-right tabular-nums">

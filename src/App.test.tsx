@@ -17,6 +17,7 @@ describe('Overview dashboard', () => {
     }
     expect(within(cards).getByText('$14,620.00')).toBeInTheDocument()
     expect(within(cards).getByText('9 invoices · 5 overdue')).toBeInTheDocument()
+    expect(within(cards).getAllByText('vs previous period')).toHaveLength(3)
   })
 
   it('lists who owes money with a text status, Overdue first', () => {

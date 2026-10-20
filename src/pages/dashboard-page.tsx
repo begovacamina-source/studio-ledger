@@ -1,7 +1,10 @@
 import { useMemo, useState } from 'react'
+import { Link } from 'react-router'
 import { IncomeExpensesChart } from '@/components/dashboard/income-expenses-chart'
 import { OutstandingList } from '@/components/dashboard/outstanding-list'
 import { SummaryCards } from '@/components/dashboard/summary-cards'
+import { InvoiceSheet } from '@/components/invoices/invoice-sheet'
+import { Button } from '@/components/ui/button'
 import {
   Select,
   SelectContent,
@@ -18,6 +21,8 @@ import { useLedger } from '@/state/use-ledger'
 export function DashboardPage() {
   const { ledger } = useLedger()
   const [periodId, setPeriodId] = useState<PeriodId>('last-6-months')
+  // The invoice panel opens over the Overview; "Go to Invoices" leads to the full list.
+  const [openInvoice, setOpenInvoice] = useState<string>()
   const today = todayLocal()
   const period = useMemo(() => getPeriod(periodId, today), [periodId, today])
 
@@ -46,14 +51,31 @@ export function DashboardPage() {
 
       <SummaryCards figures={figures} outstanding={snapshot} currency={APP_CURRENCY} />
 
-      <div className="grid gap-6 lg:grid-cols-5">
-        <div className="min-w-0 lg:col-span-3">
+      {/* Same gap as the summary cards, so each half lines up with two cards above. */}
+      <div className="grid gap-4 xl:grid-cols-2">
+        <div className="min-w-0">
           <IncomeExpensesChart data={months} currency={APP_CURRENCY} />
         </div>
-        <div className="min-w-0 lg:col-span-2">
-          <OutstandingList rows={owed} currency={APP_CURRENCY} />
+        <div className="min-w-0">
+          <OutstandingList
+            rows={owed}
+            currency={APP_CURRENCY}
+            openInvoice={openInvoice}
+            onOpen={setOpenInvoice}
+          />
         </div>
       </div>
+
+      <InvoiceSheet
+        invoiceNumber={openInvoice}
+        onClose={() => setOpenInvoice(undefined)}
+        onNumberChange={setOpenInvoice}
+        footer={
+          <Button variant="outline" asChild>
+            <Link to="/invoices">Go to Invoices</Link>
+          </Button>
+        }
+      />
     </div>
   )
 }
