@@ -20,6 +20,8 @@ Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-d
 | UX-1, CODE-4 | Still true after the change: badges still read Paid, Pending or "Overdue · N days"; new colours are tokens in `src/index.css` (`--chart-received`, `--chart-expenses`, status tokens). | Already checked. |
 | DATA-6 | Inter and Inter Tight are self-hosted from `@fontsource-variable` and bundled by Vite, so the fonts need no request to a font service. | The whole app's network use was not audited. |
 
+**Found and fixed in this PR:** the import preview's counts (Valid rows, Rows with errors, Duplicates) had shrunk to small text, because the design pass gave their tiles the `sm` card size, whose title style overrides `text-3xl`. They use the default size again; checked in the browser at 1280 px (30 px figures).
+
 **Found, not fixed:**
 
 - On phones the Outstanding table and the Invoices and Expenses tables still scroll sideways inside their card, so Outstanding's due date and status are cut off until you scroll. Card lists on mobile are UX-8.
