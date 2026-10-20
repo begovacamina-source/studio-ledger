@@ -19,7 +19,10 @@ import {
   type ValidationResult,
 } from '@/lib/csv-import'
 import { plural } from '@/lib/format'
+import { formatMoney } from '@/lib/money'
 import { paginate } from '@/lib/pagination'
+import type { Currency } from '@/lib/types'
+import { useCurrency } from '@/state/use-settings'
 import { useIsMobile } from '@/hooks/use-mobile'
 
 
@@ -29,6 +32,15 @@ const COLUMN_WIDTH: Record<string, string | undefined> = {
   amount: 'w-24',
   category: 'w-28',
   invoiceNumber: 'w-28',
+}
+
+/**
+ * What a preview cell shows. Amounts that were read show as they'll be stored,
+ * in the app currency (€1,450.00); anything else shows as typed in the file.
+ */
+function cellText(row: ValidatedRow, field: { key: string; kind: string }, currency: Currency): string {
+  if (field.kind === 'amount' && row.record) return formatMoney(row.record.amount, currency)
+  return row.values[field.key] ?? ''
 }
 
 function RowStatus({ row }: { row: ValidatedRow }) {
@@ -50,6 +62,7 @@ export function PreviewStep({
   onCancel: () => void
   onImport: () => void
 }) {
+  const currency = useCurrency()
   const phone = useIsMobile()
   // Every row of the file can be checked, a page at a time.
   const [page, setPage] = useState(1)
@@ -92,7 +105,7 @@ export function PreviewStep({
                     <div key={f.key} className="col-span-3 grid grid-cols-subgrid">
                       <dt className="text-muted-foreground">{f.label}</dt>
                       <dd className="col-span-2 truncate">
-                        {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                        {cellText(row, f, currency) || <span className="text-muted-foreground">—</span>}
                       </dd>
                     </div>
                   ))}
@@ -123,8 +136,8 @@ export function PreviewStep({
                 <TableRow key={row.row}>
                   <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
                   {fields.map((f) => (
-                    <TableCell key={f.key} className="truncate" title={row.values[f.key] || undefined}>
-                      {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                    <TableCell key={f.key} className="truncate" title={cellText(row, f, currency) || undefined}>
+                      {cellText(row, f, currency) || <span className="text-muted-foreground">—</span>}
                     </TableCell>
                   ))}
                   <TableCell>

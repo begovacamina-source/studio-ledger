@@ -18,7 +18,8 @@ const chartConfig = {
   expenses: { label: 'Expenses', color: 'var(--chart-expenses)' },
 } satisfies ChartConfig
 
-function MonthTooltip({
+/** The chart tooltip: one month's exact Received, Expenses and Net income. */
+export function MonthTooltip({
   active,
   payload,
   currency,

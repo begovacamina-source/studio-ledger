@@ -20,7 +20,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useIsMobile } from '@/hooks/use-mobile'
+import { LG_BREAKPOINT, useIsBelow } from '@/hooks/use-mobile'
 import { usePageParam } from '@/hooks/use-page-param'
 import { formatDate, todayLocal } from '@/lib/dates'
 import {
@@ -44,7 +44,8 @@ function parseStatus(value: string | null): StatusFilter {
 
 export function InvoicesPage() {
   const currency = useCurrency()
-  const phone = useIsMobile()
+  // Seven columns don't fit a tablet, so below lg (1024 px) the list is the card list.
+  const compact = useIsBelow(LG_BREAKPOINT)
   const pageParam = usePageParam()
   const { ledger } = useLedger()
   const { invoiceNumber: openInvoice } = useParams()
@@ -150,8 +151,8 @@ export function InvoicesPage() {
                         Clear filters
                       </Button>
                     </div>
-                  ) : phone ? (
-                    // On phones each invoice is a short row: number, client and amount, then
+                  ) : compact ? (
+                    // On phones and tablets each invoice is a short row: number, client and amount, then
                     // status and due date, with Mark as paid when it isn't paid yet.
                     <CardList aria-label="Invoices">
                       {shown.items.map((row) => (
