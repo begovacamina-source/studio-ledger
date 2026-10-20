@@ -64,3 +64,16 @@ export function markPaid(invoice: Invoice, paidDate: ISODate): Invoice {
 export function markUnpaid(invoice: Invoice): Invoice {
   return { ...invoice, status: 'unpaid', paidDate: undefined }
 }
+
+/** How long the toast after marking an invoice Paid (or not paid) offers Undo. */
+export const UNDO_WINDOW_MS = 5000
+
+export type PaidStatus = Pick<Invoice, 'status' | 'paidDate'>
+
+/**
+ * Puts back an invoice's earlier paid status, for Undo. Only the status and
+ * paid date change, so an edit made in the meantime is kept.
+ */
+export function restorePaidStatus(invoice: Invoice, previous: PaidStatus): Invoice {
+  return { ...invoice, status: previous.status, paidDate: previous.status === 'paid' ? previous.paidDate : undefined }
+}

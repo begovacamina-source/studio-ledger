@@ -2,6 +2,22 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Undo for marking paid (US-2.2) and confirmation toasts (UX-4)
+
+**Pull request:** the US-2.2 undo PR (branch `feature/us-2-2-undo-mark-paid`).
+
+**Run on this branch:** `npx vitest run --dir src` (20 files, 186 tests passed), `npm run lint` (no warnings or errors), `npm run build` (passed; same bundle-size warning, now 948 kB), and the dev server on the sample data at 1280 px. Screenshot: `docs/screenshots/us-2-2-undo/undo-toast-and-panel.jpg`.
+
+| Items | What was verified |
+| --- | --- |
+| UX-4 (newly checked) | Toasts for saving, marking as paid and importing, with Undo where the PRD asks for it (US-2.2, the only undo the PRD asks for). `toasts.test.tsx`: "INV-002 saved" after editing an invoice, "$12.00 expense added", "4 invoices imported". `undo-paid.test.tsx`: Mark as paid from the list, then the toast's Undo puts INV-041 back to Pending and the Overview back to $14,620.00 and "9 invoices · 5 overdue"; Mark as not paid from the panel, then the panel's Undo brings back INV-001's paid date (Apr 14, 2026); after 5 seconds both Undo buttons are gone and nothing is undone. `invoices.test.ts`: `restorePaidStatus` restores status and paid date and keeps an edit made in between. Browser: marking INV-001 and INV-002 paid or not paid showed the toast with Undo and the same Undo in the panel; clicking the toast's Undo with the panel open undid the change and kept the panel open (the toaster now has `pointer-events: auto` while Radix sets `none` on the body); waiting past 5 seconds removed both Undo buttons and kept the change. |
+
+**Also verified (no checklist item, supports A11Y-2):** by keyboard in the browser, Mark as paid from the panel moved focus to the panel's Undo (role="status" with the toast text), Enter undid it and focus returned to "Mark as paid". Before this fix, focus fell to the page body after marking paid. Covered by `undo-paid.test.tsx` "keyboard users keep their place".
+
+**Found, not fixed:** the toast's own Undo can't be reached by keyboard while a modal panel is open (Radix keeps focus inside the panel), which is why the panel has its own Undo; from the invoice list, with no panel open, the toast is reachable. Sonner pauses a toast's timer on hover, so a hovered toast can stay past 5 seconds; its Undo still works then (each toast's Undo is tied to its own change, and a newer change dismisses the older toast), while the panel's Undo ends after exactly 5 seconds.
+
+**Not verified:** 375 and 768 px; a screen reader; the Vercel preview; Undo from the dashboard's Outstanding panel (same component as the invoice panel).
+
 ## 2026-10-20 · Clients page (US-2.5)
 
 **Pull request:** the US-2.5 Clients PR (branch `feature/us-2-5-clients`).

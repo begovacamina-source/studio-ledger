@@ -8,7 +8,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
     <Sonner
       // Light mode only in the MVP (dark mode is out of scope).
       theme="light"
-      className="toaster group"
+      // Clickable while a modal panel or dialog is open (Radix sets pointer-events: none on the body).
+      className="toaster group pointer-events-auto"
       icons={{
         success: (
           <CircleCheckIcon className="size-4" />

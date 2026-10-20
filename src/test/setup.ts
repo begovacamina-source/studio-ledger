@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest'
 import { cleanup } from '@testing-library/react'
+import { toast } from 'sonner'
 import { afterEach, vi } from 'vitest'
 
 // jsdom has no matchMedia; useIsMobile only needs it to listen for width changes.
@@ -21,6 +22,8 @@ const DESKTOP_WIDTH = window.innerWidth
 
 afterEach(() => {
   cleanup()
+  // Sonner keeps its toasts in a module-level store; clear them so tests don't share them.
+  toast.dismiss()
   localStorage.clear()
   window.innerWidth = DESKTOP_WIDTH
 })

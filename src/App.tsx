@@ -19,6 +19,7 @@ import { InvoicesPage } from '@/pages/invoices-page'
 import { SettingsPage } from '@/pages/settings-page'
 import { LedgerProvider } from '@/state/ledger-provider'
 import { SettingsProvider } from '@/state/settings-provider'
+import { UndoProvider } from '@/state/undo-provider'
 
 const NAV = [
   { to: '/', label: 'Overview', end: true },
@@ -112,40 +113,42 @@ export default function App() {
   return (
     <SettingsProvider>
       <LedgerProvider>
-        <TooltipProvider>
-          <div className="min-h-svh bg-muted/60">
-            <header className="bg-background">
-              <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
-                <div className="flex min-w-0 items-center gap-1">
-                  <PhoneMenu />
-                  <span className="truncate font-heading font-semibold">Studio Ledger</span>
+        <UndoProvider>
+          <TooltipProvider>
+            <div className="min-h-svh bg-muted/60">
+              <header className="bg-background">
+                <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
+                  <div className="flex min-w-0 items-center gap-1">
+                    <PhoneMenu />
+                    <span className="truncate font-heading font-semibold">Studio Ledger</span>
+                  </div>
+                  <nav aria-label="Main" className="hidden gap-1 md:flex">
+                    <NavLinks />
+                  </nav>
+                  {/* From md up, Settings sits apart from the main tabs, as an icon on the far right.
+                      On phones it is the last item in the menu instead. */}
+                  <div className="hidden justify-end md:flex">
+                    <SettingsLink />
+                  </div>
                 </div>
-                <nav aria-label="Main" className="hidden gap-1 md:flex">
-                  <NavLinks />
-                </nav>
-                {/* From md up, Settings sits apart from the main tabs, as an icon on the far right.
-                    On phones it is the last item in the menu instead. */}
-                <div className="hidden justify-end md:flex">
-                  <SettingsLink />
-                </div>
-              </div>
-            </header>
-            <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
-              <Routes>
-                <Route index element={<DashboardPage />} />
-                {/* One route, so the list keeps its state while the invoice panel opens and closes. */}
-                <Route path="invoices/:invoiceNumber?" element={<InvoicesPage />} />
-                {/* One route, so the list keeps its state while the client panel opens and closes. */}
-                <Route path="clients/:clientId?" element={<ClientsPage />} />
-                <Route path="expenses" element={<ExpensesPage />} />
-                <Route path="import" element={<ImportPage />} />
-                <Route path="settings" element={<SettingsPage />} />
-              </Routes>
-            </main>
-            {/* Top centre, so toasts never cover the invoice panel's actions. */}
-            <Toaster position="top-center" />
-          </div>
-        </TooltipProvider>
+              </header>
+              <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
+                <Routes>
+                  <Route index element={<DashboardPage />} />
+                  {/* One route, so the list keeps its state while the invoice panel opens and closes. */}
+                  <Route path="invoices/:invoiceNumber?" element={<InvoicesPage />} />
+                  {/* One route, so the list keeps its state while the client panel opens and closes. */}
+                  <Route path="clients/:clientId?" element={<ClientsPage />} />
+                  <Route path="expenses" element={<ExpensesPage />} />
+                  <Route path="import" element={<ImportPage />} />
+                  <Route path="settings" element={<SettingsPage />} />
+                </Routes>
+              </main>
+              {/* Top centre, so toasts never cover the invoice panel's actions. */}
+              <Toaster position="top-center" />
+            </div>
+          </TooltipProvider>
+        </UndoProvider>
       </LedgerProvider>
     </SettingsProvider>
   )
