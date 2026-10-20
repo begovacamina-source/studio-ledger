@@ -10,91 +10,114 @@ describe('Add, edit and delete invoices', () => {
   })
   afterEach(() => vi.useRealTimers())
 
-  async function chooseClient(user: ReturnType<typeof userEvent.setup>, name: string) {
-    await user.click(screen.getByRole('combobox', { name: 'Client' }))
-    await user.click(await screen.findByRole('option', { name }))
+  async function openAddDialog(user: ReturnType<typeof userEvent.setup>) {
+    renderApp('/invoices')
+    await user.click(screen.getByRole('button', { name: 'Add invoice' }))
+    return screen.getByRole('dialog', { name: 'Add invoice' })
   }
 
-  it('adds an invoice for a new client from the Invoices list', async () => {
+  it('adds an invoice in a modal, then shows it in the side panel', async () => {
     const user = userEvent.setup()
-    renderApp('/invoices')
-    await user.click(screen.getByRole('link', { name: 'Add invoice' }))
-    expect(screen.getByRole('heading', { name: 'Add invoice' })).toBeInTheDocument()
+    const dialog = await openAddDialog(user)
 
-    await chooseClient(user, 'New client…')
-    await user.type(screen.getByLabelText('New client name'), 'Kestrel Type')
-    await user.type(screen.getByLabelText('Invoice number'), 'INV-042')
-    await user.type(screen.getByLabelText('Amount (USD)'), '1200,50')
-    await user.type(screen.getByLabelText('Due date'), '2026-11-02')
-    await user.click(screen.getByRole('button', { name: 'Add invoice' }))
+    await user.click(within(dialog).getByRole('combobox', { name: 'Client' }))
+    await user.click(await screen.findByRole('option', { name: 'New client…' }))
+    await user.type(within(dialog).getByLabelText('New client name'), 'Kestrel Type')
+    await user.type(within(dialog).getByLabelText('Invoice number'), 'INV-042')
+    await user.type(within(dialog).getByLabelText('Amount (USD)'), '1200,50')
+    await user.type(within(dialog).getByLabelText('Due date'), '2026-11-02')
+    await user.click(within(dialog).getByRole('button', { name: 'Add invoice' }))
 
-    expect(screen.getByRole('heading', { name: 'INV-042' })).toBeInTheDocument()
-    expect(screen.getByText('Kestrel Type')).toBeInTheDocument()
-    expect(screen.getByText('$1,200.50')).toBeInTheDocument()
-    expect(screen.getByText('Pending')).toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'Add invoice' })).not.toBeInTheDocument()
+    const panel = screen.getByRole('dialog', { name: 'INV-042' })
+    expect(within(panel).getByText('Kestrel Type')).toBeInTheDocument()
+    expect(within(panel).getByText('$1,200.50')).toBeInTheDocument()
+    expect(within(panel).getByText('Pending')).toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'All 42', hidden: true })).toBeInTheDocument()
   })
 
   it('shows inline errors and moves focus to the first one', async () => {
     const user = userEvent.setup()
-    renderApp('/invoices/new')
-    await user.click(screen.getByRole('button', { name: 'Add invoice' }))
+    const dialog = await openAddDialog(user)
+    await user.click(within(dialog).getByRole('button', { name: 'Add invoice' }))
 
-    expect(screen.getByRole('combobox', { name: 'Client' })).toHaveFocus()
-    expect(screen.getByText('Choose a client or add a new one.')).toBeInTheDocument()
-    expect(screen.getByText('Enter an invoice number.')).toBeInTheDocument()
-    expect(screen.getByLabelText('Amount (USD)')).toHaveAccessibleDescription('Enter the amount.')
+    expect(within(dialog).getByRole('combobox', { name: 'Client' })).toHaveFocus()
+    expect(within(dialog).getByText('Choose a client or add a new one.')).toBeInTheDocument()
+    expect(within(dialog).getByText('Enter an invoice number.')).toBeInTheDocument()
+    expect(within(dialog).getByLabelText('Amount (USD)')).toHaveAccessibleDescription('Enter the amount.')
 
-    await user.type(screen.getByLabelText('Invoice number'), 'INV-002')
-    expect(screen.getByText('INV-002 is already used by another invoice.')).toBeInTheDocument()
+    await user.type(within(dialog).getByLabelText('Invoice number'), 'INV-002')
+    expect(within(dialog).getByText('INV-002 is already used by another invoice.')).toBeInTheDocument()
 
-    await user.type(screen.getByLabelText('Due date'), '2026-10-01')
-    expect(screen.getByText('Due date cannot be before the issue date.')).toBeInTheDocument()
+    await user.type(within(dialog).getByLabelText('Due date'), '2026-10-01')
+    expect(within(dialog).getByText('Due date cannot be before the issue date.')).toBeInTheDocument()
   })
 
   it('shows an error only after leaving a field', async () => {
     const user = userEvent.setup()
-    renderApp('/invoices/new')
-    await user.click(screen.getByLabelText('Invoice number'))
-    expect(screen.queryByText('Enter an invoice number.')).not.toBeInTheDocument()
+    const dialog = await openAddDialog(user)
+    await user.click(within(dialog).getByLabelText('Invoice number'))
+    expect(within(dialog).queryByText('Enter an invoice number.')).not.toBeInTheDocument()
     await user.tab()
-    expect(screen.getByText('Enter an invoice number.')).toBeInTheDocument()
+    expect(within(dialog).getByText('Enter an invoice number.')).toBeInTheDocument()
   })
 
-  it('edits a paid invoice and the dashboard totals change immediately', async () => {
+  it('cancel closes the modal without adding anything', async () => {
+    const user = userEvent.setup()
+    const dialog = await openAddDialog(user)
+    await user.type(within(dialog).getByLabelText('Invoice number'), 'INV-042')
+    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    expect(screen.getByRole('tab', { name: 'All 41' })).toBeInTheDocument()
+  })
+
+  it('edits a paid invoice from the panel and the dashboard totals change immediately', async () => {
     const user = userEvent.setup()
     renderApp('/invoices/INV-037') // $1,650.00, paid 2026-09-30
-    await user.click(screen.getByRole('link', { name: 'Edit' }))
-    expect(screen.getByRole('heading', { name: 'Edit INV-037' })).toBeInTheDocument()
-    expect(screen.getByLabelText('Paid date')).toBeInTheDocument()
+    await user.click(within(screen.getByRole('dialog', { name: 'INV-037' })).getByRole('button', { name: 'Edit' }))
 
-    const amount = screen.getByLabelText('Amount (USD)')
+    const form = screen.getByRole('dialog', { name: 'Edit INV-037' })
+    expect(within(form).getByLabelText('Paid date')).toHaveValue('2026-09-30')
+    const amount = within(form).getByLabelText('Amount (USD)')
     await user.clear(amount)
     await user.type(amount, '2000')
-    await user.click(screen.getByRole('button', { name: 'Save changes' }))
+    await user.click(within(form).getByRole('button', { name: 'Save changes' }))
 
-    expect(screen.getByRole('heading', { name: 'INV-037' })).toBeInTheDocument()
-    expect(screen.getByText('$2,000.00')).toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'Edit INV-037' })).not.toBeInTheDocument()
+    expect(within(screen.getByRole('dialog', { name: 'INV-037' })).getByText('$2,000.00')).toBeInTheDocument()
 
+    await user.keyboard('{Escape}')
     await user.click(screen.getByRole('link', { name: 'Overview' }))
     const cards = screen.getByRole('region', { name: 'Key figures' })
     // Last 6 months Received was $47,160.00; INV-037 grew by $350.00.
     expect(within(cards).getByText('$47,510.00')).toBeInTheDocument()
   })
 
-  it('deletes an invoice after confirmation', async () => {
+  it('renaming an invoice keeps the panel open on the new number', async () => {
+    const user = userEvent.setup()
+    renderApp('/invoices/INV-002')
+    await user.click(screen.getByRole('button', { name: 'Edit' }))
+    const number = within(screen.getByRole('dialog', { name: 'Edit INV-002' })).getByLabelText('Invoice number')
+    await user.clear(number)
+    await user.type(number, 'INV-002A')
+    await user.click(screen.getByRole('button', { name: 'Save changes' }))
+    expect(screen.getByRole('dialog', { name: 'INV-002A' })).toBeInTheDocument()
+  })
+
+  it('deletes an invoice after confirmation and closes the panel', async () => {
     const user = userEvent.setup()
     renderApp('/invoices/INV-002')
     await user.click(screen.getByRole('button', { name: 'Delete' }))
 
-    const dialog = screen.getByRole('alertdialog')
-    expect(dialog).toHaveTextContent('Delete INV-002?')
-    await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
-    expect(screen.getByRole('heading', { name: 'INV-002' })).toBeInTheDocument()
+    const confirm = screen.getByRole('alertdialog')
+    expect(confirm).toHaveTextContent('Delete INV-002?')
+    await user.click(within(confirm).getByRole('button', { name: 'Cancel' }))
+    expect(screen.getByRole('dialog', { name: 'INV-002' })).toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Delete' }))
     await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Delete invoice' }))
 
-    expect(screen.getByRole('heading', { name: 'Invoices' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'INV-002' })).not.toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'All 40' })).toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'INV-002' })).not.toBeInTheDocument()
   })

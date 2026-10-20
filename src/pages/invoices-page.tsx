@@ -1,7 +1,9 @@
 import { PlusIcon, SearchIcon } from 'lucide-react'
-import { useMemo } from 'react'
-import { Link, useSearchParams } from 'react-router'
+import { useMemo, useState, type MouseEvent } from 'react'
+import { Link, useLocation, useNavigate, useParams, useSearchParams } from 'react-router'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
+import { InvoiceFormDialog } from '@/components/invoices/invoice-form-dialog'
+import { InvoiceSheet } from '@/components/invoices/invoice-sheet'
 import { MarkPaidDialog } from '@/components/invoices/mark-paid-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -36,6 +38,10 @@ function parseStatus(value: string | null): StatusFilter {
 
 export function InvoicesPage() {
   const { ledger } = useLedger()
+  const { invoiceNumber: openInvoice } = useParams()
+  const { search } = useLocation()
+  const navigate = useNavigate()
+  const [adding, setAdding] = useState(false)
   const [params, setParams] = useSearchParams()
   const status = parseStatus(params.get('status'))
   const query = params.get('q') ?? ''
@@ -51,6 +57,17 @@ export function InvoicesPage() {
   const counts = statusCounts(searched)
   const visible = status === 'All' ? searched : searched.filter((r) => r.status === status)
 
+  // The open invoice lives in the path, so links and Back work; filters stay in the query.
+  const openPanel = (invoiceNumber: string) => navigate(invoicePath(invoiceNumber) + search)
+  const closePanel = () => navigate('/invoices' + search)
+
+  function handleRowClick(event: MouseEvent<HTMLTableRowElement>, invoiceNumber: string) {
+    // Ignore clicks on the row's own links and buttons, and clicks inside dialogs opened from it.
+    const target = event.target as HTMLElement
+    if (!event.currentTarget.contains(target) || target.closest('a, button')) return
+    openPanel(invoiceNumber)
+  }
+
   function update(next: { status?: StatusFilter; q?: string }) {
     const s = next.status ?? status
     const q = next.q ?? query
@@ -64,10 +81,8 @@ export function InvoicesPage() {
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Invoices</h1>
-        <Button asChild>
-          <Link to="/invoices/new">
-            <PlusIcon /> Add invoice
-          </Link>
+        <Button onClick={() => setAdding(true)}>
+          <PlusIcon /> Add invoice
         </Button>
       </div>
 
@@ -133,10 +148,15 @@ export function InvoicesPage() {
                   </TableHeader>
                   <TableBody>
                     {visible.map((row) => (
-                      <TableRow key={row.invoice.id}>
+                      <TableRow
+                        key={row.invoice.id}
+                        className="cursor-pointer"
+                        data-state={row.invoice.invoiceNumber === openInvoice ? 'selected' : undefined}
+                        onClick={(e) => handleRowClick(e, row.invoice.invoiceNumber)}
+                      >
                         <TableCell>
                           <Link
-                            to={invoicePath(row.invoice.invoiceNumber)}
+                            to={invoicePath(row.invoice.invoiceNumber) + search}
                             className="font-medium underline-offset-4 hover:underline"
                           >
                             {row.invoice.invoiceNumber}
@@ -176,6 +196,15 @@ export function InvoicesPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      <InvoiceSheet
+        invoiceNumber={openInvoice}
+        onClose={closePanel}
+        onNumberChange={(invoiceNumber) =>
+          navigate(invoicePath(invoiceNumber) + search, { replace: true })
+        }
+      />
+      <InvoiceFormDialog open={adding} onOpenChange={setAdding} onSaved={openPanel} />
     </div>
   )
 }
