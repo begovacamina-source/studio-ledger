@@ -111,15 +111,15 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **DOC-1** Must · `docs/rules.md` and `docs/data-model.md` match the PRD.
 - [x] **DOC-2** Must · `HANDOFF.md` says what is done and where to pick up next.
 - [x] **DOC-3** Must · Scope and process decisions are logged in `docs/decisions.md`.
-- [ ] **DOC-4** Must · The README states the current status and links to the deployed app.
-- [ ] **DOC-5** Must · From a clean clone, `npm ci`, `npm run dev`, `npm test`, `npm run lint` and `npm run build` work as the README says.
+- [x] **DOC-4** Must · The README states the current status and links to the deployed app.
+- [x] **DOC-5** Must · From a clean clone, `npm ci`, `npm run dev`, `npm test`, `npm run lint` and `npm run build` work as the README says.
 
 ## Deployment
 
 - [x] **DEP-1** Must · `main` deploys to Vercel production and the deployment succeeds.
 - [x] **DEP-2** Must · The production URL opens without a Vercel login, and the three core journeys pass a smoke test there.
 - [x] **DEP-3** Must · Direct links such as `/settings` and `/invoices/INV-002` load on production.
-- [ ] **DEP-4** Must · Page title, description and favicon identify Studio Ledger.
+- [x] **DEP-4** Must · Page title, description and favicon identify Studio Ledger.
 
 ## Portfolio/case study
 
