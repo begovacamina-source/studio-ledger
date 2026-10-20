@@ -20,6 +20,18 @@ Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-d
 | UX-1, CODE-4 | Still true after the change: badges still read Paid, Pending or "Overdue · N days"; new colours are tokens in `src/index.css` (`--chart-received`, `--chart-expenses`, status tokens). | Already checked. |
 | DATA-6 | Inter and Inter Tight are self-hosted from `@fontsource-variable` and bundled by Vite, so the fonts need no request to a font service. | The whole app's network use was not audited. |
 
+**Review changes (same day, verified in Chromium at 375 and 1280 px):**
+
+| Change | What was verified |
+| --- | --- |
+| Primary buttons in the Received blue (`--action`, `--action-hover`) | "Add invoice" and the panel's "Mark as paid" compute to `oklch(0.55 0.15 255)`, hover to `oklch(0.49 0.14 255)`; white text 4.9:1 and 6.3:1. Outline buttons stay white and "Clear all data" keeps its destructive tint. |
+| Checked radios in the same blue | The checked Import type radio computes to the blue at both widths; the selected tile's border is blue too (Import, Settings). |
+| White fill for dropdowns and text fields | Select triggers, Input and Textarea were `bg-transparent` in shadcn, so they showed the tinted page; they compute to white now (Expenses filters, Overview period, Invoices search). |
+| Import stepper on one line on phones | At 375 px the stepper is one 24 px line and only the current step's label shows; the others keep theirs for screen readers. All four labels show at 1280 px. |
+| Form dialog buttons stacked on phones | Add invoice at 375 px: "Add invoice" above "Cancel", both 311 px wide. The confirm dialogs already stacked (shadcn footers). |
+| Sample CSV link no longer looks disabled | Its text computes to the foreground colour instead of muted grey. |
+| No hover underline | `text-decoration-line` on a hovered invoice number is `none`; the Button and Badge link variants dropped `hover:underline`. |
+
 **Found and fixed in this PR:** the import preview's counts (Valid rows, Rows with errors, Duplicates) had shrunk to small text, because the design pass gave their tiles the `sm` card size, whose title style overrides `text-3xl`. They use the default size again; checked in the browser at 1280 px (30 px figures).
 
 **Found, not fixed:**

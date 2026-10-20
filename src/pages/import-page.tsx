@@ -25,7 +25,8 @@ type Step = (typeof STEPS)[number]
 function Steps({ current }: { current: Step }) {
   const index = STEPS.indexOf(current)
   return (
-    <ol className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+    // One line at every width: on phones only the current step shows its label.
+    <ol className="flex gap-x-4 text-sm md:gap-x-6">
       {STEPS.map((step, i) => (
         <li
           key={step}
@@ -43,7 +44,7 @@ function Steps({ current }: { current: Step }) {
           >
             {i + 1}
           </span>
-          {step}
+          <span className={cn(i !== index && 'sr-only md:not-sr-only')}>{step}</span>
         </li>
       ))}
     </ol>
