@@ -1,3 +1,4 @@
+import { RotateCcwIcon } from 'lucide-react'
 import { useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
@@ -17,7 +18,9 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import {
+  autoMatch,
   DATE_FORMATS,
   DONT_IMPORT,
   FIELDS,
@@ -56,6 +59,10 @@ export function MatchStep({
     return other === -1 ? undefined : name(other)
   }
 
+  // What was matched when the file was read; the reset button returns to it.
+  const automatic = autoMatch(file.headers, settings.type)
+  const changed = settings.mapping.some((m, i) => m !== automatic[i])
+
   function setColumn(column: number, field: string) {
     onChange({ ...settings, mapping: setColumnField(settings.mapping, column, field) })
   }
@@ -72,7 +79,31 @@ export function MatchStep({
           <TableRow>
             <TableHead>Column in your file</TableHead>
             <TableHead>First value</TableHead>
-            <TableHead>Studio Ledger field</TableHead>
+            <TableHead>
+              <div className="flex items-center gap-1">
+                Studio Ledger field
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    {/* aria-disabled rather than disabled, so the tooltip still explains it. */}
+                    <Button
+                      variant="ghost"
+                      size="icon-xs"
+                      aria-label="Reset matching"
+                      aria-disabled={!changed}
+                      className="aria-disabled:opacity-50"
+                      onClick={() => changed && onChange({ ...settings, mapping: automatic })}
+                    >
+                      <RotateCcwIcon />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-60">
+                    {changed
+                      ? 'Undo your changes and go back to the fields Studio Ledger matched automatically.'
+                      : 'Nothing to reset. These are the fields Studio Ledger matched automatically.'}
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

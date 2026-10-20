@@ -93,6 +93,32 @@ describe('CSV import', () => {
     expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Due date')
   })
 
+  it('resets the matching to what was matched automatically', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    await user.upload(fileInput(), csv(invoicesSample))
+    const reset = await screen.findByRole('button', { name: 'Reset matching' })
+    expect(reset).toHaveAttribute('aria-disabled', 'true')
+
+    await user.hover(reset)
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Nothing to reset.')
+
+    await user.click(screen.getByRole('combobox', { name: 'Field for description' }))
+    await user.click(await screen.findByRole('option', { name: "Don't import" }))
+    await user.click(screen.getByRole('combobox', { name: 'Field for issue_date' }))
+    await user.click(await screen.findByRole('option', { name: /^Due date.*due_date$/ }))
+    expect(reset).toHaveAttribute('aria-disabled', 'false')
+
+    await user.hover(reset)
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Undo your changes')
+    await user.click(reset)
+
+    expect(screen.getByRole('combobox', { name: 'Field for issue_date' })).toHaveTextContent('Issue date')
+    expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Due date')
+    expect(screen.getByRole('combobox', { name: 'Field for description' })).toHaveTextContent('Description')
+    expect(reset).toHaveAttribute('aria-disabled', 'true')
+  })
+
   it('reports errors and duplicates, and imports only the valid rows', async () => {
     const user = userEvent.setup()
     renderApp('/import')
