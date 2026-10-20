@@ -21,8 +21,10 @@ export const DATE_FORMATS = ['YYYY-MM-DD', 'DD.MM.YYYY', 'DD/MM/YYYY', 'MM/DD/YY
 export type DateFormat = (typeof DATE_FORMATS)[number]
 export type DecimalSeparator = 'dot' | 'comma'
 
-/** Value in a column mapping for a column that is left out. */
+/** Value in a column mapping for a column that is left out (its Import switch is off). */
 export const DONT_IMPORT = '__skip__'
+/** Value in a column mapping for a column that is imported but has no field chosen yet. */
+export const NO_FIELD = ''
 
 interface FieldSpec {
   key: string
@@ -86,7 +88,7 @@ export function parseCsv(text: string): { file?: ParsedFile; error?: string } {
 
 // ---------- 2. Match columns ----------
 
-/** For each file column: the field key it fills, or DONT_IMPORT. */
+/** For each file column: the field key it fills, DONT_IMPORT, or NO_FIELD. */
 export type ColumnMapping = string[]
 
 const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -115,18 +117,40 @@ export function autoMatch(headers: string[], type: RecordType): ColumnMapping {
 
 /**
  * Sets a column's field. If another column already has that field, the two
- * swap: the other column takes this column's previous field (or Don't import),
- * so a field is never matched twice and nothing goes missing.
+ * swap: the other column takes this column's previous field, so a field is
+ * never matched twice and nothing goes missing. If this column had no field
+ * yet, the other column is switched off instead of being left without one.
  */
 export function setColumnField(mapping: ColumnMapping, column: number, value: string): ColumnMapping {
   const previous = mapping[column]
-  const other = value === DONT_IMPORT ? -1 : mapping.findIndex((m, i) => i !== column && m === value)
-  return mapping.map((m, i) => (i === column ? value : i === other ? previous : m))
+  const isField = value !== DONT_IMPORT && value !== NO_FIELD
+  const other = isField ? mapping.findIndex((m, i) => i !== column && m === value) : -1
+  const handBack = previous === NO_FIELD ? DONT_IMPORT : previous
+  return mapping.map((m, i) => (i === column ? value : i === other ? handBack : m))
+}
+
+/**
+ * Switches a column's import on or off. Switching on restores `restore` (the
+ * field it had before) when no other column has taken it, otherwise leaves the
+ * column waiting for a field.
+ */
+export function setColumnImport(
+  mapping: ColumnMapping,
+  column: number,
+  on: boolean,
+  restore?: string,
+): ColumnMapping {
+  if (!on) return mapping.map((m, i) => (i === column ? DONT_IMPORT : m))
+  const free = restore && restore !== DONT_IMPORT && !mapping.includes(restore)
+  return mapping.map((m, i) => (i === column ? (free ? restore : NO_FIELD) : m))
 }
 
 /** Messages that block the next step: missing required fields, or a field used twice. */
-export function mappingProblems(mapping: ColumnMapping, type: RecordType): string[] {
+export function mappingProblems(mapping: ColumnMapping, type: RecordType, headers: string[] = []): string[] {
   const problems: string[] = []
+  mapping.forEach((m, i) => {
+    if (m === NO_FIELD) problems.push(`Choose a field for ${headers[i] || `column ${i + 1}`}, or switch it off.`)
+  })
   for (const field of FIELDS[type]) {
     const count = mapping.filter((m) => m === field.key).length
     if (field.required && count === 0) problems.push(`Choose a column for ${field.label}.`)
@@ -252,7 +276,7 @@ export function validateRows(file: ParsedFile, settings: ImportSettings, ledger:
     const row = index + 2
     const values: Record<string, string> = {}
     mapping.forEach((key, i) => {
-      if (key !== DONT_IMPORT) values[key] = cells[i] ?? ''
+      if (key !== DONT_IMPORT && key !== NO_FIELD) values[key] = cells[i] ?? ''
     })
     const errors: RowError[] = []
     const fail = (field: FieldSpec, problem: string) =>

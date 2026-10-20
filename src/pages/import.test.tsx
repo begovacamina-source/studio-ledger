@@ -62,13 +62,20 @@ describe('CSV import', () => {
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
     expect(screen.getByRole('button', { name: 'Preview records' })).toBeInTheDocument()
 
+    // Unknown columns start switched off; switching one on asks for its field.
+    expect(screen.getByRole('switch', { name: 'Import When' })).not.toBeChecked()
+    expect(screen.getByRole('combobox', { name: 'Field for When' })).toHaveTextContent('Not imported')
+    await user.click(screen.getByRole('switch', { name: 'Import When' }))
+    expect(screen.getByText('Choose a field for When, or switch it off.')).toBeInTheDocument()
+
     await user.click(screen.getByRole('combobox', { name: 'Field for When' }))
     await user.click(await screen.findByRole('option', { name: 'Date' }))
-    await user.click(screen.getByRole('combobox', { name: 'Field for Cost' }))
-    await user.click(await screen.findByRole('option', { name: 'Amount' }))
-    await user.click(screen.getByRole('combobox', { name: 'Field for Kind' }))
-    await user.click(await screen.findByRole('option', { name: 'Category' }))
-    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
+    for (const [column, field] of [['Cost', 'Amount'], ['Kind', 'Category']]) {
+      await user.click(screen.getByRole('switch', { name: `Import ${column}` }))
+      await user.click(screen.getByRole('combobox', { name: `Field for ${column}` }))
+      await user.click(await screen.findByRole('option', { name: field }))
+    }
+    expect(screen.queryByText(/Choose a (column|field) for/)).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
     expect(screen.getByRole('button', { name: 'Import 1 valid row' })).toBeInTheDocument()
@@ -80,17 +87,32 @@ describe('CSV import', () => {
     await user.upload(fileInput(), csv(invoicesSample))
     await user.click(await screen.findByRole('combobox', { name: 'Field for issue_date' }))
 
-    // The menu says which column already has each field.
-    await user.click(await screen.findByRole('option', { name: /^Due date.*due_date$/ }))
+    // Fields still on their automatic column carry no label.
+    await user.click(await screen.findByRole('option', { name: 'Due date' }))
     expect(screen.getByRole('combobox', { name: 'Field for issue_date' })).toHaveTextContent('Due date')
     expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Issue date')
     expect(screen.queryByText('Before you continue:')).not.toBeInTheDocument()
 
-    // Picking the original field again swaps them back.
+    // A moved field says where it is now; picking it again swaps them back.
     await user.click(screen.getByRole('combobox', { name: 'Field for issue_date' }))
     await user.click(await screen.findByRole('option', { name: /^Issue date.*due_date$/ }))
     expect(screen.getByRole('combobox', { name: 'Field for issue_date' })).toHaveTextContent('Issue date')
     expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Due date')
+  })
+
+  it('the Import switch leaves a column out and brings its field back', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    await user.upload(fileInput(), csv(invoicesSample))
+    const toggle = await screen.findByRole('switch', { name: 'Import paid_date' })
+    expect(toggle).toBeChecked()
+
+    await user.click(toggle)
+    expect(screen.getByRole('combobox', { name: 'Field for paid_date' })).toHaveTextContent('Not imported')
+    expect(screen.getByRole('combobox', { name: 'Field for paid_date' })).toBeDisabled()
+
+    await user.click(toggle)
+    expect(screen.getByRole('combobox', { name: 'Field for paid_date' })).toHaveTextContent('Paid date')
   })
 
   it('resets the matching to what was matched automatically', async () => {
@@ -103,10 +125,9 @@ describe('CSV import', () => {
     await user.hover(reset)
     expect(await screen.findByRole('tooltip')).toHaveTextContent('Nothing to reset.')
 
-    await user.click(screen.getByRole('combobox', { name: 'Field for description' }))
-    await user.click(await screen.findByRole('option', { name: "Don't import" }))
+    await user.click(screen.getByRole('switch', { name: 'Import description' }))
     await user.click(screen.getByRole('combobox', { name: 'Field for issue_date' }))
-    await user.click(await screen.findByRole('option', { name: /^Due date.*due_date$/ }))
+    await user.click(await screen.findByRole('option', { name: 'Due date' }))
     expect(reset).toHaveAttribute('aria-disabled', 'false')
 
     await user.hover(reset)
@@ -116,6 +137,7 @@ describe('CSV import', () => {
     expect(screen.getByRole('combobox', { name: 'Field for issue_date' })).toHaveTextContent('Issue date')
     expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Due date')
     expect(screen.getByRole('combobox', { name: 'Field for description' })).toHaveTextContent('Description')
+    expect(screen.getByRole('switch', { name: 'Import description' })).toBeChecked()
     expect(reset).toHaveAttribute('aria-disabled', 'true')
   })
 

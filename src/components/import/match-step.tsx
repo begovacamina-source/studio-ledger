@@ -6,7 +6,6 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
@@ -18,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { Switch } from '@/components/ui/switch'
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import {
   autoMatch,
@@ -25,12 +25,15 @@ import {
   DONT_IMPORT,
   FIELDS,
   mappingProblems,
+  NO_FIELD,
   setColumnField,
+  setColumnImport,
   type DateFormat,
   type DecimalSeparator,
   type ImportSettings,
   type ParsedFile,
 } from '@/lib/csv-import'
+import { cn } from '@/lib/utils'
 
 export function MatchStep({
   file,
@@ -49,22 +52,33 @@ export function MatchStep({
 }) {
   const problemsRef = useRef<HTMLDivElement>(null)
   const fields = FIELDS[settings.type]
-  const problems = mappingProblems(settings.mapping, settings.type)
+  const problems = mappingProblems(settings.mapping, settings.type, file.headers)
+  // The field each switched-off column had, so switching it back on restores it.
+  const remembered = useRef<Record<number, string>>({})
   const example = (column: number) => file.rows.find((r) => r[column])?.[column] ?? '—'
 
   const name = (column: number) => file.headers[column] || `Column ${column + 1}`
-  /** The other column that already has a field, so the menu can say where it comes from. */
-  const usedBy = (field: string, column: number) => {
-    const other = settings.mapping.findIndex((m, i) => i !== column && m === field)
-    return other === -1 ? undefined : name(other)
-  }
-
   // What was matched when the file was read; the reset button returns to it.
   const automatic = autoMatch(file.headers, settings.type)
   const changed = settings.mapping.some((m, i) => m !== automatic[i])
 
+  /**
+   * The other column a field was moved to, so the menu can say a pick will swap
+   * with it. Fields still on their automatic column need no label.
+   */
+  const movedTo = (field: string, column: number) => {
+    const other = settings.mapping.findIndex((m, i) => i !== column && m === field)
+    return other === -1 || automatic[other] === field ? undefined : name(other)
+  }
+
   function setColumn(column: number, field: string) {
     onChange({ ...settings, mapping: setColumnField(settings.mapping, column, field) })
+  }
+
+  function setImport(column: number, on: boolean) {
+    if (!on) remembered.current[column] = settings.mapping[column]
+    const restore = remembered.current[column] ?? automatic[column]
+    onChange({ ...settings, mapping: setColumnImport(settings.mapping, column, on, restore) })
   }
 
   return (
@@ -74,6 +88,7 @@ export function MatchStep({
           <col />
           <col />
           <col className="w-56" />
+          <col className="w-20" />
         </colgroup>
         <TableHeader>
           <TableRow>
@@ -104,37 +119,52 @@ export function MatchStep({
                 </Tooltip>
               </div>
             </TableHead>
+            <TableHead>Import</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {file.headers.map((_, column) => (
-            <TableRow key={column}>
-              <TableCell className="truncate font-medium">{name(column)}</TableCell>
-              <TableCell className="truncate text-muted-foreground">{example(column)}</TableCell>
-              <TableCell>
-                <Select value={settings.mapping[column]} onValueChange={(v) => setColumn(column, v)}>
-                  <SelectTrigger className="w-full" aria-label={`Field for ${name(column)}`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {fields.map((f) => {
-                      const from = usedBy(f.key, column)
-                      return (
-                        <SelectItem key={f.key} value={f.key}>
-                          {f.label}
-                          {!f.required && <span className="text-muted-foreground">(optional)</span>}
-                          {/* Picking a field another column has swaps the two. */}
-                          {from && <span className="text-muted-foreground"> · {from}</span>}
-                        </SelectItem>
-                      )
-                    })}
-                    <SelectSeparator />
-                    <SelectItem value={DONT_IMPORT}>Don't import</SelectItem>
-                  </SelectContent>
-                </Select>
-              </TableCell>
-            </TableRow>
-          ))}
+          {file.headers.map((_, column) => {
+            const value = settings.mapping[column]
+            const on = value !== DONT_IMPORT
+            return (
+              <TableRow key={column} className={cn(!on && 'text-muted-foreground')}>
+                <TableCell className={cn('truncate', on && 'font-medium')}>{name(column)}</TableCell>
+                <TableCell className="truncate text-muted-foreground">{example(column)}</TableCell>
+                <TableCell>
+                  {/* An empty value shows the placeholder: "Not imported" when off, "Choose a field" when on. */}
+                  <Select disabled={!on} value={on ? value : NO_FIELD} onValueChange={(v) => setColumn(column, v)}>
+                    <SelectTrigger
+                      className="w-full"
+                      aria-label={`Field for ${name(column)}`}
+                      aria-invalid={value === NO_FIELD ? true : undefined}
+                    >
+                      <SelectValue placeholder={on ? 'Choose a field' : 'Not imported'} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {fields.map((f) => {
+                        const from = movedTo(f.key, column)
+                        return (
+                          <SelectItem key={f.key} value={f.key}>
+                            {f.label}
+                            {!f.required && <span className="text-muted-foreground">(optional)</span>}
+                            {/* Picking a field another column has swaps the two. */}
+                            {from && <span className="text-muted-foreground"> · {from}</span>}
+                          </SelectItem>
+                        )
+                      })}
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+                <TableCell>
+                  <Switch
+                    checked={on}
+                    onCheckedChange={(checked) => setImport(column, checked)}
+                    aria-label={`Import ${name(column)}`}
+                  />
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
 

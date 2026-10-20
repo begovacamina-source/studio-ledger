@@ -9,10 +9,12 @@ import {
   checkFile,
   DONT_IMPORT,
   mappingProblems,
+  NO_FIELD,
   parseCsv,
   parseDate,
   parseImportAmount,
   setColumnField,
+  setColumnImport,
   suggestDateFormat,
   suggestDecimalSeparator,
   validateRows,
@@ -117,6 +119,30 @@ describe('setColumnField', () => {
   it("setting Don't import only changes that column", () => {
     expect(setColumnField(mapping, 2, DONT_IMPORT)).toEqual([
       'invoiceNumber', 'client', DONT_IMPORT, 'issueDate', 'dueDate', DONT_IMPORT,
+    ])
+  })
+})
+
+describe('Import switch', () => {
+  const mapping = ['date', 'amount', 'category', DONT_IMPORT]
+
+  it('switching off leaves the column out; switching on restores its field', () => {
+    const off = setColumnImport(mapping, 1, false)
+    expect(off).toEqual(['date', DONT_IMPORT, 'category', DONT_IMPORT])
+    expect(setColumnImport(off, 1, true, 'amount')).toEqual(mapping)
+  })
+
+  it('waits for a field when the old one was taken or there was none', () => {
+    expect(setColumnImport(mapping, 3, true, 'amount')).toEqual(['date', 'amount', 'category', NO_FIELD])
+    expect(setColumnImport(mapping, 3, true, DONT_IMPORT)).toEqual(['date', 'amount', 'category', NO_FIELD])
+    expect(mappingProblems(['date', 'amount', 'category', NO_FIELD], 'expenses', ['Date', 'Amount', 'Category', 'Notes'])).toEqual([
+      'Choose a field for Notes, or switch it off.',
+    ])
+  })
+
+  it('a column with no field that takes a used field switches the other column off', () => {
+    expect(setColumnField(['date', 'amount', 'category', NO_FIELD], 3, 'amount')).toEqual([
+      'date', DONT_IMPORT, 'category', 'amount',
     ])
   })
 })
