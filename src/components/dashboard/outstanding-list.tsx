@@ -1,4 +1,5 @@
-import { Badge } from '@/components/ui/badge'
+import { Link } from 'react-router'
+import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
@@ -12,25 +13,6 @@ import type { OutstandingRow } from '@/lib/calculations'
 import { formatDate } from '@/lib/dates'
 import { formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
-import { cn } from '@/lib/utils'
-
-function StatusBadge({ row }: { row: OutstandingRow }) {
-  const overdue = row.status === 'Overdue'
-  return (
-    <Badge
-      variant="outline"
-      className={cn(
-        overdue
-          ? 'border-status-overdue/30 bg-status-overdue/10 text-status-overdue'
-          : 'border-status-pending/30 bg-status-pending/10 text-status-pending',
-      )}
-    >
-      {overdue
-        ? `Overdue · ${row.daysOverdue} ${row.daysOverdue === 1 ? 'day' : 'days'}`
-        : 'Pending'}
-    </Badge>
-  )
-}
 
 export function OutstandingList({
   rows,
@@ -51,7 +33,12 @@ export function OutstandingList({
             Nothing outstanding. Every invoice is Paid.
           </p>
         ) : (
-          <Table>
+          <Table className="min-w-[26rem] table-fixed">
+            <colgroup>
+              <col />
+              <col className="w-24" />
+              <col className="w-36" />
+            </colgroup>
             <TableHeader>
               <TableRow>
                 <TableHead>Client</TableHead>
@@ -62,8 +49,13 @@ export function OutstandingList({
             <TableBody>
               {rows.map((row) => (
                 <TableRow key={row.invoice.id}>
-                  <TableCell>
-                    <div className="font-medium">{row.client?.name ?? 'Unknown client'}</div>
+                  <TableCell className="truncate">
+                    <Link
+                      to={`/invoices/${row.invoice.invoiceNumber}`}
+                      className="font-medium underline-offset-4 hover:underline"
+                    >
+                      {row.client?.name ?? 'Unknown client'}
+                    </Link>
                     <div className="text-xs text-muted-foreground">{row.invoice.invoiceNumber}</div>
                   </TableCell>
                   <TableCell className="text-right tabular-nums">
@@ -71,7 +63,7 @@ export function OutstandingList({
                   </TableCell>
                   <TableCell>
                     <div className="mb-1">{formatDate(row.invoice.dueDate)}</div>
-                    <StatusBadge row={row} />
+                    <InvoiceStatusBadge status={row.status} daysOverdue={row.daysOverdue} />
                   </TableCell>
                 </TableRow>
               ))}
