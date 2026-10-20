@@ -12,6 +12,7 @@ import {
   parseCsv,
   parseDate,
   parseImportAmount,
+  setColumnField,
   suggestDateFormat,
   suggestDecimalSeparator,
   validateRows,
@@ -82,6 +83,40 @@ describe('mappingProblems', () => {
     expect(mappingProblems(['date', DONT_IMPORT, 'category'], 'expenses')).toEqual(['Choose a column for Amount.'])
     expect(mappingProblems(['date', 'amount', 'amount', 'category'], 'expenses')).toEqual([
       'Amount is matched to 2 columns. Choose one.',
+    ])
+  })
+})
+
+describe('setColumnField', () => {
+  const mapping = ['invoiceNumber', 'client', 'amount', 'issueDate', 'dueDate', DONT_IMPORT]
+
+  it('swaps fields when the chosen one is already used', () => {
+    expect(setColumnField(mapping, 3, 'dueDate')).toEqual([
+      'invoiceNumber', 'client', 'amount', 'dueDate', 'issueDate', DONT_IMPORT,
+    ])
+  })
+
+  it('picking the original field again swaps them back', () => {
+    expect(setColumnField(setColumnField(mapping, 3, 'dueDate'), 3, 'issueDate')).toEqual(mapping)
+  })
+
+  it("moves a field from another column when this one was Don't import", () => {
+    expect(setColumnField(mapping, 5, 'amount')).toEqual([
+      'invoiceNumber', 'client', DONT_IMPORT, 'issueDate', 'dueDate', 'amount',
+    ])
+  })
+
+  it('picking any field never leaves one matched twice or a required field missing', () => {
+    for (let column = 0; column < mapping.length; column++)
+      for (const value of mapping.filter((m) => m !== DONT_IMPORT)) {
+        const next = setColumnField(mapping, column, value)
+        expect(mappingProblems(next, 'invoices')).toEqual([])
+      }
+  })
+
+  it("setting Don't import only changes that column", () => {
+    expect(setColumnField(mapping, 2, DONT_IMPORT)).toEqual([
+      'invoiceNumber', 'client', DONT_IMPORT, 'issueDate', 'dueDate', DONT_IMPORT,
     ])
   })
 })

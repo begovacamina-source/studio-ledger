@@ -22,6 +22,7 @@ import {
   DONT_IMPORT,
   FIELDS,
   mappingProblems,
+  setColumnField,
   type DateFormat,
   type DecimalSeparator,
   type ImportSettings,
@@ -48,8 +49,15 @@ export function MatchStep({
   const problems = mappingProblems(settings.mapping, settings.type)
   const example = (column: number) => file.rows.find((r) => r[column])?.[column] ?? '—'
 
+  const name = (column: number) => file.headers[column] || `Column ${column + 1}`
+  /** The other column that already has a field, so the menu can say where it comes from. */
+  const usedBy = (field: string, column: number) => {
+    const other = settings.mapping.findIndex((m, i) => i !== column && m === field)
+    return other === -1 ? undefined : name(other)
+  }
+
   function setColumn(column: number, field: string) {
-    onChange({ ...settings, mapping: settings.mapping.map((m, i) => (i === column ? field : m)) })
+    onChange({ ...settings, mapping: setColumnField(settings.mapping, column, field) })
   }
 
   return (
@@ -68,22 +76,27 @@ export function MatchStep({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {file.headers.map((header, column) => (
+          {file.headers.map((_, column) => (
             <TableRow key={column}>
-              <TableCell className="truncate font-medium">{header || `Column ${column + 1}`}</TableCell>
+              <TableCell className="truncate font-medium">{name(column)}</TableCell>
               <TableCell className="truncate text-muted-foreground">{example(column)}</TableCell>
               <TableCell>
                 <Select value={settings.mapping[column]} onValueChange={(v) => setColumn(column, v)}>
-                  <SelectTrigger className="w-full" aria-label={`Field for ${header || `column ${column + 1}`}`}>
+                  <SelectTrigger className="w-full" aria-label={`Field for ${name(column)}`}>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {fields.map((f) => (
-                      <SelectItem key={f.key} value={f.key}>
-                        {f.label}
-                        {!f.required && <span className="text-muted-foreground">(optional)</span>}
-                      </SelectItem>
-                    ))}
+                    {fields.map((f) => {
+                      const from = usedBy(f.key, column)
+                      return (
+                        <SelectItem key={f.key} value={f.key}>
+                          {f.label}
+                          {!f.required && <span className="text-muted-foreground">(optional)</span>}
+                          {/* Picking a field another column has swaps the two. */}
+                          {from && <span className="text-muted-foreground"> · {from}</span>}
+                        </SelectItem>
+                      )
+                    })}
                     <SelectSeparator />
                     <SelectItem value={DONT_IMPORT}>Don't import</SelectItem>
                   </SelectContent>

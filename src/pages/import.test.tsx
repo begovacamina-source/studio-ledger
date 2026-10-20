@@ -74,6 +74,25 @@ describe('CSV import', () => {
     expect(screen.getByRole('button', { name: 'Import 1 valid row' })).toBeInTheDocument()
   })
 
+  it('swaps two fields instead of matching one twice', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    await user.upload(fileInput(), csv(invoicesSample))
+    await user.click(await screen.findByRole('combobox', { name: 'Field for issue_date' }))
+
+    // The menu says which column already has each field.
+    await user.click(await screen.findByRole('option', { name: /^Due date.*due_date$/ }))
+    expect(screen.getByRole('combobox', { name: 'Field for issue_date' })).toHaveTextContent('Due date')
+    expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Issue date')
+    expect(screen.queryByText('Before you continue:')).not.toBeInTheDocument()
+
+    // Picking the original field again swaps them back.
+    await user.click(screen.getByRole('combobox', { name: 'Field for issue_date' }))
+    await user.click(await screen.findByRole('option', { name: /^Issue date.*due_date$/ }))
+    expect(screen.getByRole('combobox', { name: 'Field for issue_date' })).toHaveTextContent('Issue date')
+    expect(screen.getByRole('combobox', { name: 'Field for due_date' })).toHaveTextContent('Due date')
+  })
+
   it('reports errors and duplicates, and imports only the valid rows', async () => {
     const user = userEvent.setup()
     renderApp('/import')

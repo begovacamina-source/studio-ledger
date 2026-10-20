@@ -113,6 +113,17 @@ export function autoMatch(headers: string[], type: RecordType): ColumnMapping {
   return mapping
 }
 
+/**
+ * Sets a column's field. If another column already has that field, the two
+ * swap: the other column takes this column's previous field (or Don't import),
+ * so a field is never matched twice and nothing goes missing.
+ */
+export function setColumnField(mapping: ColumnMapping, column: number, value: string): ColumnMapping {
+  const previous = mapping[column]
+  const other = value === DONT_IMPORT ? -1 : mapping.findIndex((m, i) => i !== column && m === value)
+  return mapping.map((m, i) => (i === column ? value : i === other ? previous : m))
+}
+
 /** Messages that block the next step: missing required fields, or a field used twice. */
 export function mappingProblems(mapping: ColumnMapping, type: RecordType): string[] {
   const problems: string[] = []
