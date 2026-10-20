@@ -6,7 +6,18 @@ A personal finance dashboard for freelance creatives. It answers three questions
 2. How much have I spent?
 3. Which clients still owe me money?
 
-> **Status:** Milestone 1 — Product foundation. No application code yet; this repository currently holds the product decisions that the design and build will follow.
+> **Status:** Phase 2 — Rough screens. The app is set up and the Overview dashboard is built roughly with the sample data.
+
+## Run locally
+
+Needs Node.js 22 or later.
+
+```bash
+npm install
+npm run dev
+```
+
+`npm test` runs the unit and component tests, `npm run lint` runs the linter, and `npm run build` makes a production build in `dist/`.
 
 ## Why this project exists
 
