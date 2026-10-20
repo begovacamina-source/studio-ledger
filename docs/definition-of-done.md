@@ -39,13 +39,13 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **PB-20** Must · USD, EUR and BAM format as $1,250.00, €1,250.00 and 1.250,00 KM.
 - [x] **PB-21** Must · Amounts are relabelled, never converted: switching keeps the same digits (for example $47,160.00 → €47,160.00 → 47.160,00 KM).
 - [x] **PB-22** Must · After a switch, no amount on the Overview (cards, chart axis, chart table, Outstanding), Invoices (list, panel) or Expenses (list, total) shows another currency, and the choice survives a reload.
-- [ ] **PB-23** Must · Chart tooltips, forms, dialogs and import screens also show amounts in the chosen currency.
+- [x] **PB-23** Must · Chart tooltips, forms, dialogs and import screens also show amounts in the chosen currency.
 - [x] **PB-24** Must · Chart axis labels fit on one line in every currency, BAM included.
 
 ### Charts
 
 - [x] **PB-25** Must · The numbers behind the Received and Expenses chart are in a table for screen readers (month, Received, Expenses, Net income), and its totals match the summary cards.
-- [ ] **PB-26** Must · Hovering or tapping a month shows its exact Received, Expenses and Net income.
+- [x] **PB-26** Must · Hovering or tapping a month shows its exact Received, Expenses and Net income.
 
 ### Stories
 
@@ -55,9 +55,9 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [x] **UX-1** Must · Status is never shown by colour alone: every badge reads Paid, Pending or "Overdue · N days".
 - [x] **UX-2** Must · A search or filter that matches nothing shows an empty state with a way to clear it, on Invoices and Expenses.
-- [ ] **UX-3** Must · Data views appear straight away with no empty or loading flash: records are read from browser storage before the first render, so no skeletons are needed. If loading ever becomes asynchronous, data views show skeleton rows and cards instead.
+- [x] **UX-3** Must · Data views appear straight away with no empty or loading flash: records are read from browser storage before the first render, so no skeletons are needed. If loading ever becomes asynchronous, data views show skeleton rows and cards instead.
 - [x] **UX-4** Must · Saving, marking as paid and importing each confirm with a toast, with undo where the PRD asks for it.
-- [ ] **UX-5** Must · The UI uses only glossary terms: no screen shows "Unpaid", "revenue", "billed" or accounting jargon.
+- [x] **UX-5** Must · The UI uses only glossary terms: no screen shows "Unpaid", "revenue", "billed" or accounting jargon.
 - [x] **UX-6** Must · Settings is opened from the gear icon at the far right of the top bar, not from a main tab.
 - [ ] **UX-7** Must · Every screen is fully usable at 1280, 768 and 375 px wide with no sideways page scrolling.
 - [x] **UX-8** Must · On mobile, summary cards stack and tables become card lists.
@@ -76,9 +76,9 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [x] **DATA-1** Must · Records and the currency are kept in browser storage and survive a reload.
 - [x] **DATA-2** Must · If saved data can't be read, the app starts empty with a message instead of breaking.
-- [ ] **DATA-3** Must · If the browser refuses to save (for example, storage is full), a message says changes will be lost.
+- [x] **DATA-3** Must · If the browser refuses to save (for example, storage is full), a message says changes will be lost.
 - [x] **DATA-4** Must · Settings says records live in this browser only.
-- [ ] **DATA-7** Must · "Clear all data" keeps the chosen currency.
+- [x] **DATA-7** Must · "Clear all data" keeps the chosen currency.
 - [x] **DATA-5** Must · Every amount is stored and summed as integer cents.
 - [ ] **DATA-6** Must · The app makes no network calls apart from loading its own files.
 
@@ -89,13 +89,13 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **CODE-3** Must · Calculation, form, import and storage logic lives in pure functions in `src/lib/`, covered by unit tests.
 - [x] **CODE-4** Must · Components use theme colour tokens from `src/index.css`; no hard-coded colours.
 - [ ] **CODE-5** Must · No arbitrary pixel or rem values in components: spacing and sizes come from Tailwind's scale or tokens in `src/index.css`.
-- [ ] **CODE-6** Must · Nothing from the out-of-scope list in `AGENTS.md` is in the app.
+- [x] **CODE-6** Must · Nothing from the out-of-scope list in `AGENTS.md` is in the app.
 - [ ] **CODE-7** Nice · The production JavaScript bundle is under 500 kB, with no size warning on build.
 
 ## Testing
 
 - [x] **TEST-1** Must · `npm test` passes with no failures or skipped tests.
-- [ ] **TEST-2** Must · Every calculation and behavior rule in the PRD has a unit test against the sample dataset.
+- [x] **TEST-2** Must · Every calculation and behavior rule in the PRD has a unit test against the sample dataset.
 - [ ] **TEST-3** Must · Playwright tests cover the three core journeys: import records, understand the month, collect an unpaid invoice.
 - [ ] **TEST-4** Must · Tests, lint and build run in CI on every pull request and must pass before merging.
 
@@ -117,8 +117,8 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 ## Deployment
 
 - [x] **DEP-1** Must · `main` deploys to Vercel production and the deployment succeeds.
-- [ ] **DEP-2** Must · The production URL opens without a Vercel login, and the three core journeys pass a smoke test there.
-- [ ] **DEP-3** Must · Direct links such as `/settings` and `/invoices/INV-002` load on production.
+- [x] **DEP-2** Must · The production URL opens without a Vercel login, and the three core journeys pass a smoke test there.
+- [x] **DEP-3** Must · Direct links such as `/settings` and `/invoices/INV-002` load on production.
 - [ ] **DEP-4** Must · Page title, description and favicon identify Studio Ledger.
 
 ## Portfolio/case study

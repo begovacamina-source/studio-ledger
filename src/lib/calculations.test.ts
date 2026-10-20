@@ -168,3 +168,20 @@ describe('periods', () => {
     ])
   })
 })
+
+// PRD behavior rule: an invoice is either Paid or Unpaid; partial payments are not supported.
+describe('Paid or Unpaid, never partly paid', () => {
+  it('every sample invoice is stored as paid (with a paid date) or unpaid (without one)', () => {
+    for (const invoice of ledger.invoices) {
+      expect(['paid', 'unpaid']).toContain(invoice.status)
+      expect(Boolean(invoice.paidDate)).toBe(invoice.status === 'paid')
+    }
+  })
+
+  it('a Paid invoice counts its full amount in Received and nothing in Outstanding', () => {
+    const inv001 = ledger.invoices.find((i) => i.invoiceNumber === 'INV-001')! // $1,200.00, paid 2026-04-14
+    expect(received([inv001], month('2026-04'))).toBe(inv001.amount)
+    expect(outstanding([inv001], TODAY).amount).toBe(0)
+    expect(displayStatus(inv001, TODAY)).toBe('Paid')
+  })
+})
