@@ -30,6 +30,11 @@ Phase 2: Rough screens (1–2 weeks; gate: rough screens reviewed on the Vercel 
 9. ~~Definition of Done~~ Done: the release checklist is `docs/definition-of-done.md` (Must / Nice items with IDs such as PB-12), and its evidence is in `docs/verification-log.md`. Every feature PR checks off what it completes and adds a log entry. Open items found on the baseline: BAM chart axis labels wrap onto two lines (PB-24), and arbitrary pixel and rem values in components (CODE-5).
 10. Build the remaining MVP screens roughly with shadcn/ui components and the sample dataset in `data/`, covering the three core journeys in `docs/PRD.md` and the empty, loading and error states. Layout and flow first; visual polish is Phase 3.
 
+## Phase 3: design polish (started 2026-10-20)
+
+1. ~~First polish PR~~ Done (branch `design/phase-3-polish`): Inter Tight for titles and headings and Inter for body text (self-hosted, tokens `--font-heading` and `--font-sans`); a calm chart, blue Received (`--chart-received`) and dark grey Expenses (`--chart-expenses`), with the legend in bar order and swatches in the tooltip; status hues spread apart (Paid green, Pending amber, Overdue red); a menu button that opens the navigation on phones, so no page scrolls sideways at 375 px; and a minimal design pass (borderless cards with a soft shadow on a tinted page, 24 px card padding, `space-y-8` between sections, lighter table dividers, consistent corners). Before and after screenshots are in `docs/screenshots/before/` and `docs/screenshots/after/`.
+2. Next: card lists for tables on mobile (UX-8), the full design review on the Vercel preview (UX-10), and a full contrast check (A11Y-3).
+
 ## Notes
 
 - **Ready to revisit (US-5.1 is built):** the expense side panel is not in the URL (unlike invoices at `/invoices/<number>`), because expenses have no number to link by and their ids used to change on every reload. Browser storage now keeps ids stable, so `/expenses/<id>` would let a panel be linked and Back close it (decided on #28).

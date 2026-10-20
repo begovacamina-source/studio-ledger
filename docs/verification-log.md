@@ -2,6 +2,30 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Phase 3 design polish: fonts, chart colours, phone top bar, design pass
+
+**Pull request:** the Phase 3 design polish PR (branch `design/phase-3-polish`, four commits: fonts, chart colours, phone top bar, design pass).
+
+**Run on this branch:** `npx vitest run --dir src` (14 files, 148 tests passed, including the new phone menu test), `npm run lint` (no warnings or errors), `npm run build` (passed; same bundle size warning, now 916 kB), and the dev server reviewed in the browser on the sample data at 1280, 768 and 375 px. Before and after screenshots: `docs/screenshots/before/` and `docs/screenshots/after/` (full page, 1280 and 375 px wide, plus `after/menu-phone.png`).
+
+**No checklist items checked.** This PR affects the items below, but none is fully covered yet.
+
+| Items | What was verified | Why it stays open |
+| --- | --- | --- |
+| UX-7 | At 375, 768 and 1280 px, the page's `scrollWidth` equals the viewport width on Overview, Invoices, Expenses, Import and Settings (before: 459 px at 375, caused by the top bar). The phone captures are 375 px wide; the before set was 457–459 px. | Dialogs, panels and import steps 2–4 were not measured at every width, and tables still scroll sideways inside their card on phones (see UX-8). |
+| UX-10 | The design pass ran on every page (spacing, borders, corners, type), and every page was compared with its before screenshot. | The design review itself is a person's call on the Vercel preview. |
+| A11Y-3 | Contrast worked out from the new tokens: Received blue 4.9:1 and Expenses grey 9.2:1 on white (chart elements need 3:1); Paid 4.8:1, Pending 5.0:1 and Overdue 5.3:1 as text on their 10% badge tint. | Only the chart and status colours were checked, not every text and UI element. |
+| A11Y-2 | Phone menu in the browser: Enter on the menu button opens it with focus inside, Escape closes it and focus goes back to the button, and choosing a link navigates and closes it. `settings.test.tsx` "on phones, a menu button opens the main tabs and picking one closes it". | Only the new menu was checked, not every flow. |
+| UX-1, UX-6, CODE-4 | Still true after the change: badges still read Paid, Pending or "Overdue · N days"; the gear is still at the far right (the menu button sits to its left on phones); new colours are tokens in `src/index.css` (`--chart-received`, `--chart-expenses`, status tokens). | Already checked. |
+| DATA-6 | Inter and Inter Tight are self-hosted from `@fontsource-variable` and bundled by Vite, so the fonts need no request to a font service. | The whole app's network use was not audited. |
+
+**Found, not fixed:**
+
+- On phones the Outstanding table and the Invoices and Expenses tables still scroll sideways inside their card, so Outstanding's due date and status are cut off until you scroll. Card lists on mobile are UX-8.
+- On this machine, `npm test` also runs the tests in a stale Claude worktree (`.claude/worktrees/objective-brattain-ce353b`, at ad8c55d): 28 files, 19 failures, all in that copy. The branch's own suite passes with `npx vitest run --dir src`. Removing that worktree, or excluding `.claude/**` in the Vitest config, would fix it.
+
+**Not verified:** the Vercel preview (checked after the PR opened), dark mode (out of scope), widths other than 375, 768 and 1280 px, and the chart tooltip on touch.
+
 ## 2026-10-20 · Chart axis labels on one line (PB-24)
 
 **Pull request:** the one that fixes the BAM axis labels (stacked on the Definition of Done PR).
