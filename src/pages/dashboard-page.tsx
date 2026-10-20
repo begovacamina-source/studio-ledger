@@ -37,8 +37,8 @@ export function DashboardPage() {
 
   if (ledger.invoices.length === 0 && ledger.expenses.length === 0) {
     return (
-      <div className="space-y-6">
-        <h1 className="text-2xl font-semibold">Overview</h1>
+      <div className="space-y-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
         <Card>
           <CardContent>
             <FirstUse title="No records yet">
@@ -55,9 +55,9 @@ export function DashboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Overview</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
         <Select value={periodId} onValueChange={(value) => setPeriodId(value as PeriodId)}>
           <SelectTrigger className="w-44" aria-label="Period">
             <SelectValue />
@@ -75,7 +75,7 @@ export function DashboardPage() {
       <SummaryCards figures={figures} outstanding={snapshot} currency={currency} />
 
       {/* Same gap as the summary cards, so each half lines up with two cards above. */}
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid gap-6 xl:grid-cols-2">
         <div className="min-w-0">
           <IncomeExpensesChart data={months} currency={currency} />
         </div>

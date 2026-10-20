@@ -56,7 +56,7 @@ function InvoiceDetails({
 
   return (
     <>
-      <SheetHeader className="gap-2 border-b pr-12">
+      <SheetHeader className="gap-2 p-6 pr-12">
         <div className="flex items-center gap-2">
           <SheetTitle className="text-xl">{invoice.invoiceNumber}</SheetTitle>
           <InvoiceStatusBadge
@@ -117,7 +117,7 @@ function InvoiceDetails({
         </div>
       </SheetHeader>
 
-      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-4">
+      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-6">
         {details.map(([term, value]) => (
           <div key={term} className="contents">
             <dt className="text-muted-foreground">{term}</dt>
@@ -170,7 +170,7 @@ export function InvoiceSheet({
             <SheetDescription>It may have been deleted.</SheetDescription>
           </SheetHeader>
         )}
-        {footer && <SheetFooter className="border-t">{footer}</SheetFooter>}
+        {footer && <SheetFooter className="p-6">{footer}</SheetFooter>}
       </SheetContent>
     </Sheet>
   )

@@ -80,9 +80,9 @@ export function ExpensesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Expenses</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Expenses</h1>
         <Button onClick={() => setAdding(true)}>
           <PlusIcon /> Add expense
         </Button>

@@ -37,8 +37,8 @@ function Steps({ current }: { current: Step }) {
         >
           <span
             className={cn(
-              'flex size-6 items-center justify-center rounded-full border text-xs tabular-nums',
-              i === index && 'border-primary bg-primary text-primary-foreground',
+              'flex size-6 items-center justify-center rounded-full bg-muted text-xs tabular-nums',
+              i === index && 'bg-primary text-primary-foreground',
             )}
           >
             {i + 1}
@@ -93,15 +93,15 @@ export function ImportPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="space-y-4">
-        <h1 className="text-2xl font-semibold">Import CSV</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Import CSV</h1>
         <Steps current={step} />
       </div>
       <Card>
         <CardContent>
           {file && step !== 'Upload' && step !== 'Done' && (
-            <p className="mb-4 text-sm text-muted-foreground">
+            <p className="mb-6 text-sm text-muted-foreground">
               {file.name} · {file.parsed.rows.length.toLocaleString('en-US')} rows ·{' '}
               {type === 'invoices' ? 'Invoices' : 'Expenses'}
             </p>

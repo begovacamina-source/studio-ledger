@@ -42,7 +42,7 @@ function ExpenseDetails({ expense, onDeleted }: { expense: Expense; onDeleted: (
 
   return (
     <>
-      <SheetHeader className="gap-2 border-b pr-12">
+      <SheetHeader className="gap-2 p-6 pr-12">
         <div className="flex items-center gap-2">
           <SheetTitle className="text-xl">{expenseTitle(expense)}</SheetTitle>
           <Badge variant="secondary">{expense.category}</Badge>
@@ -85,7 +85,7 @@ function ExpenseDetails({ expense, onDeleted }: { expense: Expense; onDeleted: (
         </div>
       </SheetHeader>
 
-      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-4">
+      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-6">
         {details.map(([term, value]) => (
           <div key={term} className="contents">
             <dt className="text-muted-foreground">{term}</dt>

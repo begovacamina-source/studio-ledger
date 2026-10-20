@@ -96,8 +96,8 @@ export default function App() {
     <SettingsProvider>
       <LedgerProvider>
         <TooltipProvider>
-          <div className="min-h-svh bg-muted/40">
-            <header className="border-b bg-background">
+          <div className="min-h-svh bg-muted/60">
+            <header className="bg-background">
               <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
                 <span className="truncate font-heading font-semibold">Studio Ledger</span>
                 <nav aria-label="Main" className="hidden gap-1 md:flex">
@@ -110,7 +110,7 @@ export default function App() {
                 </div>
               </div>
             </header>
-            <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+            <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
               <Routes>
                 <Route index element={<DashboardPage />} />
                 {/* One route, so the list keeps its state while the invoice panel opens and closes. */}

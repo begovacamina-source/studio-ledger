@@ -34,8 +34,8 @@ export function SettingsPage() {
   const empty = !hasRecords(ledger)
 
   return (
-    <div className="max-w-3xl space-y-6">
-      <h1 className="text-2xl font-semibold">Settings</h1>
+    <div className="max-w-3xl space-y-8">
+      <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
 
       <Card>
         <CardHeader>

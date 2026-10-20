@@ -87,9 +87,9 @@ export function InvoicesPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex flex-wrap items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">Invoices</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Invoices</h1>
         <Button onClick={() => setAdding(true)}>
           <PlusIcon /> Add invoice
         </Button>
@@ -129,7 +129,7 @@ export function InvoicesPage() {
               </div>
             </div>
 
-            <TabsContent value={status} className="mt-4">
+            <TabsContent value={status} className="mt-6">
               <Card>
                 <CardContent>
                   {visible.length === 0 ? (
@@ -198,7 +198,7 @@ export function InvoicesPage() {
                                   invoice={row.invoice}
                                   trigger={
                                     <Button
-                                      variant="outline"
+                                      variant="ghost"
                                       size="sm"
                                       aria-label={`Mark ${row.invoice.invoiceNumber} as paid`}
                                     >

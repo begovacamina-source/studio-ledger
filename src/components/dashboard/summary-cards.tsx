@@ -40,7 +40,7 @@ function SummaryCard({
     <Card>
       <CardHeader>
         <CardDescription>{title}</CardDescription>
-        <CardTitle className="text-3xl font-semibold tabular-nums">{value}</CardTitle>
+        <CardTitle className="text-3xl font-semibold tracking-tight tabular-nums">{value}</CardTitle>
       </CardHeader>
       <CardContent className="text-sm text-muted-foreground">{detail}</CardContent>
     </Card>
@@ -58,7 +58,7 @@ export function SummaryCards({
 }) {
   const vsPrevious = (change: number | null) => <ChangeTag change={change} />
   return (
-    <section aria-label="Key figures" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <section aria-label="Key figures" className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
       <SummaryCard
         title="Received"
         value={formatMoney(figures.received.value, currency)}
