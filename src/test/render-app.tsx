@@ -9,6 +9,11 @@ globalThis.ResizeObserver ??= class {
   disconnect() {}
 }
 
+// Radix Select uses pointer capture and scrollIntoView, which jsdom lacks.
+Element.prototype.hasPointerCapture ??= () => false
+Element.prototype.releasePointerCapture ??= () => {}
+Element.prototype.scrollIntoView ??= () => {}
+
 export function renderApp(path = '/') {
   return render(
     <MemoryRouter initialEntries={[path]}>

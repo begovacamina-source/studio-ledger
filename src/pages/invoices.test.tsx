@@ -57,35 +57,49 @@ describe('Invoices', () => {
     const user = userEvent.setup()
     renderApp('/invoices/INV-002')
     await user.click(screen.getByRole('button', { name: 'Mark as paid' }))
-    const input = within(screen.getByRole('dialog')).getByLabelText('Paid date')
+    const dialog = screen.getByRole('dialog', { name: 'Mark INV-002 as paid' })
+    const input = within(dialog).getByLabelText('Paid date')
     await user.clear(input)
     await user.type(input, '2026-04-01')
-    await user.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Mark as paid' }))
+    await user.click(within(dialog).getByRole('button', { name: 'Mark as paid' }))
 
-    expect(screen.getByRole('alert')).toHaveTextContent('Paid date cannot be before the issue date.')
+    expect(within(dialog).getByRole('alert')).toHaveTextContent('Paid date cannot be before the issue date.')
     expect(input).toHaveAttribute('aria-invalid', 'true')
   })
 
-  it('sets a paid invoice back from its detail page', async () => {
+  it('opens a row in the side panel and sets a paid invoice back', async () => {
     const user = userEvent.setup()
-    renderApp('/invoices/INV-001')
-    expect(screen.getByRole('heading', { name: 'INV-001' })).toBeInTheDocument()
-    expect(screen.getByText('Apr 14, 2026')).toBeInTheDocument()
+    renderApp('/invoices')
+    await user.click(within(screen.getByRole('table')).getByRole('link', { name: 'INV-001' }))
+    const panel = screen.getByRole('dialog', { name: 'INV-001' })
+    expect(within(panel).getByText('Apr 14, 2026')).toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Mark as not paid' }))
-    expect(screen.getByText('Overdue · 186 days')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Mark as paid' })).toBeInTheDocument()
+    await user.click(within(panel).getByRole('button', { name: 'Mark as not paid' }))
+    expect(within(panel).getByText('Overdue · 186 days')).toBeInTheDocument()
+    expect(within(panel).getByRole('button', { name: 'Mark as paid' })).toBeInTheDocument()
+  })
+
+  it('opens the panel when the row itself is clicked, keeping the filter', async () => {
+    const user = userEvent.setup()
+    renderApp('/invoices?status=overdue')
+    const row = within(screen.getByRole('table')).getByText('Paper Kite Publishing').closest('tr')!
+    await user.click(row)
+    expect(screen.getByRole('dialog', { name: 'INV-016' })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Close' }))
+    expect(screen.queryByRole('dialog', { name: 'INV-016' })).not.toBeInTheDocument()
+    expect(rowsIn()).toHaveLength(5)
   })
 
   it('shows a not-found state for an unknown invoice', () => {
     renderApp('/invoices/INV-999')
-    expect(screen.getByRole('alert')).toHaveTextContent('Invoice INV-999 was not found.')
+    expect(screen.getByRole('dialog', { name: 'Invoice INV-999 was not found' })).toBeInTheDocument()
   })
 
   it('opens an invoice from the dashboard Outstanding list', async () => {
     const user = userEvent.setup()
     renderApp('/')
     await user.click(screen.getAllByRole('link', { name: 'Lumen Coffee' })[0])
-    expect(screen.getByRole('heading', { name: 'INV-002' })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: 'INV-002' })).toBeInTheDocument()
   })
 })

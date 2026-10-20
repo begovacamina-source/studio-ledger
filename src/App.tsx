@@ -5,7 +5,6 @@ import { loadSampleLedger } from '@/data/sample'
 import type { Ledger } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { DashboardPage } from '@/pages/dashboard-page'
-import { InvoiceDetailPage } from '@/pages/invoice-detail-page'
 import { InvoicesPage } from '@/pages/invoices-page'
 import { LedgerProvider } from '@/state/ledger-provider'
 
@@ -58,13 +57,14 @@ export default function App() {
           <LedgerProvider initial={result.ledger}>
             <Routes>
               <Route index element={<DashboardPage />} />
-              <Route path="invoices" element={<InvoicesPage />} />
-              <Route path="invoices/:invoiceNumber" element={<InvoiceDetailPage />} />
+              {/* One route, so the list keeps its state while the invoice panel opens and closes. */}
+              <Route path="invoices/:invoiceNumber?" element={<InvoicesPage />} />
             </Routes>
           </LedgerProvider>
         )}
       </main>
-      <Toaster />
+      {/* Top centre, so toasts never cover the invoice panel's actions. */}
+      <Toaster position="top-center" />
     </div>
   )
 }

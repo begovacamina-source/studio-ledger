@@ -45,7 +45,10 @@ export function sortByNewest(rows: InvoiceRow[]): InvoiceRow[] {
 }
 
 /** Returns an error message, or null when the paid date is valid. */
-export function validatePaidDate(invoice: Invoice, paidDate: string): string | null {
+export function validatePaidDate(
+  invoice: Pick<Invoice, 'issueDate'>,
+  paidDate: string,
+): string | null {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(paidDate)) return 'Enter the date the invoice was paid.'
   if (paidDate < invoice.issueDate) return 'Paid date cannot be before the issue date.'
   return null
