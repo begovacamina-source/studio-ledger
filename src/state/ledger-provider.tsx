@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { loadSampleLedger } from '@/data/sample'
+import { deleteClient } from '@/lib/clients'
 import { applyImport, type RecordType, type ValidationResult } from '@/lib/csv-import'
 import { deleteExpense, saveExpense, type ValidExpense } from '@/lib/expense-form'
 import { deleteInvoice, saveInvoice, type ValidInvoice } from '@/lib/invoice-form'
@@ -59,6 +60,7 @@ export function LedgerProvider({ children }: { children: ReactNode }) {
       saveExpense: (value: ValidExpense, editingId?: string) =>
         setLedger((current) => saveExpense(current, value, editingId)),
       deleteExpense: (expenseId: string) => setLedger((current) => deleteExpense(current, expenseId)),
+      deleteClient: (clientId: string) => setLedger((current) => deleteClient(current, clientId)),
       loadSampleData: () => {
         try {
           setLedger(loadSampleLedger())
