@@ -22,4 +22,5 @@ Items from `docs/definition-of-done.md` this PR checks off or affects. Check the
 - [ ] Unit tests for any logic; all tests pass.
 - [ ] Keyboard accessible with visible focus; status never shown by colour alone.
 - [ ] No TypeScript errors or lint warnings.
+- [ ] CI is green on the latest commit (check before merging: nothing blocks a red merge on the free plan).
 - [ ] PR description links the issue and includes a screenshot.

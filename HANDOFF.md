@@ -41,7 +41,7 @@ Phase 2: Rough screens (1–2 weeks; gate: rough screens reviewed on the Vercel 
 ## Tests and CI
 
 - `npm test`: Vitest unit and component tests in `src/`. `npm run test:e2e`: Playwright core journeys in `e2e/` against `vite preview`, with the clock fixed at 2026-10-20 (`e2e/fixtures.ts`); locally it uses the installed Chrome.
-- `.github/workflows/ci.yml` runs lint, unit tests, the build and the journeys on every pull request and push to `main`, and keeps the Playwright report as an artifact.
+- `.github/workflows/ci.yml` runs lint, unit tests, the build and the journeys on every pull request and push to `main`, and keeps the Playwright report as an artifact. Merge a pull request only once its CI run is green: branch protection isn't available on the free plan, so nothing blocks a red merge.
 
 ## Notes
 
