@@ -49,7 +49,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 ### Stories
 
-- [ ] **PB-28** Must · Every Must story in the PRD meets all of its acceptance criteria and its GitHub issue is closed.
+- [x] **PB-28** Must · Every Must story in the PRD meets all of its acceptance criteria and its GitHub issue is closed.
 
 ## UX/UI and responsive
 
@@ -80,7 +80,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **DATA-4** Must · Settings says records live in this browser only.
 - [x] **DATA-7** Must · "Clear all data" keeps the chosen currency.
 - [x] **DATA-5** Must · Every amount is stored and summed as integer cents.
-- [ ] **DATA-6** Must · The app makes no network calls apart from loading its own files.
+- [x] **DATA-6** Must · The app makes no network calls apart from loading its own files.
 
 ## Code quality
 

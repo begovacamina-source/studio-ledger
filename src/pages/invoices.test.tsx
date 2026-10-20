@@ -24,6 +24,20 @@ describe('Invoices', () => {
     expect(rowsIn()).toHaveLength(5)
   })
 
+  it('changing the status tab or the search goes back to page 1 (US-2.3)', async () => {
+    const user = userEvent.setup()
+    renderApp('/invoices?page=3')
+    expect(screen.getByText('Showing 21–30 of 41 invoices')).toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'Paid 32' }))
+    expect(screen.getByText('Showing 1–10 of 32 invoices')).toBeInTheDocument()
+
+    await user.click(within(screen.getByRole('navigation', { name: 'Pages of invoices' })).getByRole('link', { name: '2' }))
+    expect(screen.getByText('Showing 11–20 of 32 invoices')).toBeInTheDocument()
+    // Every invoice number starts with INV-0, so the search keeps all 32 and only the page changes.
+    await user.type(screen.getByRole('searchbox', { name: 'Search invoices' }), 'INV-0')
+    expect(screen.getByText('Showing 1–10 of 32 invoices')).toBeInTheDocument()
+  })
+
   it('searches invoice number and client name, with an empty state', async () => {
     const user = userEvent.setup()
     renderApp('/invoices')

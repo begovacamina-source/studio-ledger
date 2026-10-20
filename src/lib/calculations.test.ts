@@ -33,6 +33,8 @@ describe('sample dataset', () => {
     expect(ledger.invoices).toHaveLength(41)
     expect(ledger.expenses).toHaveLength(120)
     expect(ledger.clients).toHaveLength(6)
+    // US-5.1: every sample record is marked as sample.
+    expect([...ledger.invoices, ...ledger.expenses].every((r) => r.source === 'sample')).toBe(true)
   })
 })
 
