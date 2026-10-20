@@ -17,9 +17,9 @@ Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-d
 **Found, not fixed:**
 
 - At 768–1023 px (tablets), the Invoices table (52 rem wide) still scrolls sideways inside its card; card lists only apply below 768 px.
-- On phones the invoice and expense side panels are three quarters of the screen wide, because shadcn's `data-[side=right]:w-3/4` overrides their `w-full`, so the panel's action buttons wrap.
-- `import.test.tsx` "keeps required fields switched on, with a tooltip saying why" failed twice in full runs, and passed in every other run and when run alone. It waits up to 1 s for a tooltip that Radix shows after 700 ms, which leaves little margin under load.
 - The stale worktree `npm test` issue from the entry below is still there.
+
+**Fixed since, on the design polish PR:** the side panels were ¾ of the screen wide on phones, so their buttons wrapped (now full width, with the actions at the bottom). The required-field tooltip test failed now and then in full runs; the cause was hovering right after a click, not a tooltip delay as first noted here (shadcn sets the delay to 0).
 
 **Not verified:** the Vercel preview (checked after the PR opened), a screen reader on the card lists, widths between 375 and 767 px other than those listed.
 
