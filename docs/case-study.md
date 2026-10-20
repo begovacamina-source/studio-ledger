@@ -2,7 +2,7 @@
 
 **Role:** design engineer: product definition, UX, design system, front-end build, testing and validation.
 **Live demo:** [studio-ledger-rho.vercel.app](https://studio-ledger-rho.vercel.app). It opens on a fictional sample, and nothing you enter leaves your browser.
-**Code:** a private GitHub repository; access on request by email (see [Seeing the code](#seeing-the-code)).
+**Code:** [github.com/begovacamina-source/studio-ledger](https://github.com/begovacamina-source/studio-ledger), public (see [Seeing the code](#seeing-the-code)).
 **Stack:** Vite, React, TypeScript (strict), Tailwind CSS v4, shadcn/ui and shadcn charts, Papa Parse, browser storage, Vitest, Testing Library, Playwright with axe-core, GitHub Actions, Vercel.
 
 ![The Overview on desktop: four key figures, a monthly Received and Expenses chart, and the Outstanding list](screenshots/release/overview-desktop.png)
@@ -235,11 +235,11 @@ Planned after v1.0, from the PRD and the future-work list:
 
 ## Seeing the code
 
-The repository is private. To see it, email me at [begovacamina@gmail.com](mailto:begovacamina@gmail.com) with your GitHub username, and I'll give you access.
+The code, the docs and the full history of pull requests are public on GitHub: [github.com/begovacamina-source/studio-ledger](https://github.com/begovacamina-source/studio-ledger).
 
 Places to start in the repository:
-- `docs/PRD.md`: the product definition.
-- `docs/decisions.md`: why things are the way they are.
-- `docs/definition-of-done.md` and `docs/verification-log.md`: the release checklist and its evidence.
-- `src/lib/`: the calculations and import logic, with their tests.
-- `e2e/`: the Playwright tests.
+- [`docs/PRD.md`](https://github.com/begovacamina-source/studio-ledger/blob/main/docs/PRD.md): the product definition.
+- [`docs/decisions.md`](https://github.com/begovacamina-source/studio-ledger/blob/main/docs/decisions.md): why things are the way they are.
+- [`docs/definition-of-done.md`](https://github.com/begovacamina-source/studio-ledger/blob/main/docs/definition-of-done.md) and [`docs/verification-log.md`](https://github.com/begovacamina-source/studio-ledger/blob/main/docs/verification-log.md): the release checklist and its evidence.
+- [`src/lib/`](https://github.com/begovacamina-source/studio-ledger/tree/main/src/lib): the calculations and import logic, with their tests.
+- [`e2e/`](https://github.com/begovacamina-source/studio-ledger/tree/main/e2e): the Playwright tests.

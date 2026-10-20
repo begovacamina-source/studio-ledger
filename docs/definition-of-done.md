@@ -127,7 +127,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [ ] **CASE-2** Must · It shows the process (PRD, rough screens, design polish in code with no Figma, build, validation) with concrete decisions and tradeoffs.
 - [ ] **CASE-4** Must · It says plainly what was validated and what was assumed, including that discovery interviews were skipped.
 - [ ] **CASE-5** Must · Real desktop and mobile screenshots show the released app.
-- [ ] **CASE-6** Must · It links to the live demo and says how reviewers can see the private repository.
+- [ ] **CASE-6** Must · It links to the live demo and to the public repository.
 
 ## Future work
 
