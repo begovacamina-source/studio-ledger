@@ -40,8 +40,8 @@ Phase 2: Rough screens (1–2 weeks; gate: rough screens reviewed on the Vercel 
 6. ~~Release docs~~ Done (branch `release/dep-4-doc-4-doc-5`, DEP-4, DOC-4 and DOC-5 checked): a Studio Ledger favicon (SVG, 32 px PNG and Apple touch icon) and a page description; the README links the live app, states the status and uses `npm ci`; a clean clone runs every README command.
 7. ~~shadcn field borders and 36 px controls~~ Done (branch `design/shadcn-borders-and-sizes`): field borders are shadcn's default again (A11Y-3 reworded; the focus ring stays solid, and radios keep a 3:1 circle); buttons default to `lg` and icon buttons to `icon-lg`, and inputs, selects and the tab bar are 36 px, so controls in a row line up.
 8. ~~Release checks~~ Done (branch `release/data-6-pb-28-git-3`, DATA-6, PB-28 and GIT-3 checked): `e2e/network.spec.ts` shows no request leaves the app; every Must criterion is matched to a passing test in the log; GIT-3 now covers pull requests from #32 on, and every feature pull request since passes.
-9. ~~Screen-reader check, automated half~~ Done (branch `a11y/screen-reader-check`): page titles and a page-change announcement (`src/components/route-announcer.tsx`), section headings, named tables, a live invoice count, and `e2e/screen-reader.spec.ts`. A11Y-4 waits on the VoiceOver pass in `docs/screen-reader-check.md`.
-10. Next, before tagging v1.0.0: the VoiceOver pass for a screen-reader spot check (A11Y-4), the design review (UX-10), and the case study (CASE-1 to CASE-6, including the usability test). Then GIT-4: tag `v1.0.0`.
+9. ~~Screen-reader check, automated half~~ Done (branch `a11y/screen-reader-check`): page titles and a page-change announcement (`src/components/route-announcer.tsx`), section headings, named tables, a live invoice count, and `e2e/screen-reader.spec.ts`. The VoiceOver pass in `docs/screen-reader-check.md` passed all 18 steps, so A11Y-4 is checked.
+10. Next, before tagging v1.0.0: the design review (UX-10), and the case study (CASE-1 to CASE-6, including the usability test). Then GIT-4: tag `v1.0.0`.
 
 ## Tests and CI
 

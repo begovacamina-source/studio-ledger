@@ -69,7 +69,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **A11Y-1** Must · Form fields have visible labels; each error is linked to its field, and submitting with errors moves focus to the first one (invoice and expense forms).
 - [x] **A11Y-2** Must · Every flow works by keyboard alone, with visible focus and no focus traps.
 - [x] **A11Y-3** Must · Text contrast is at least 4.5:1, and UI and chart elements at least 3:1. Field borders (inputs, selects, textareas) follow shadcn's default and rely on visible labels and the focus ring.
-- [ ] **A11Y-4** Must · A screen-reader spot check of each new screen passes: labels, statuses and form errors are announced.
+- [x] **A11Y-4** Must · A screen-reader spot check of each new screen passes: labels, statuses and form errors are announced.
 - [ ] **A11Y-7** Nice · At 200% zoom every action is reachable without clipping.
 
 ## Data and persistence
