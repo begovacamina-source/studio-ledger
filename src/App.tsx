@@ -11,6 +11,7 @@ import {
 import { Toaster } from '@/components/ui/sonner'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
+import { ClientsPage } from '@/pages/clients-page'
 import { DashboardPage } from '@/pages/dashboard-page'
 import { ExpensesPage } from '@/pages/expenses-page'
 import { ImportPage } from '@/pages/import-page'
@@ -22,6 +23,7 @@ import { SettingsProvider } from '@/state/settings-provider'
 const NAV = [
   { to: '/', label: 'Overview', end: true },
   { to: '/invoices', label: 'Invoices', end: false },
+  { to: '/clients', label: 'Clients', end: false },
   { to: '/expenses', label: 'Expenses', end: false },
   { to: '/import', label: 'Import', end: false },
 ]
@@ -133,6 +135,8 @@ export default function App() {
                 <Route index element={<DashboardPage />} />
                 {/* One route, so the list keeps its state while the invoice panel opens and closes. */}
                 <Route path="invoices/:invoiceNumber?" element={<InvoicesPage />} />
+                {/* One route, so the list keeps its state while the client panel opens and closes. */}
+                <Route path="clients/:clientId?" element={<ClientsPage />} />
                 <Route path="expenses" element={<ExpensesPage />} />
                 <Route path="import" element={<ImportPage />} />
                 <Route path="settings" element={<SettingsPage />} />

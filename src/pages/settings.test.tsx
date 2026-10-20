@@ -43,6 +43,7 @@ describe('Settings and first use', () => {
     expect(items.map((item) => item.textContent)).toEqual([
       'Overview',
       'Invoices',
+      'Clients',
       'Expenses',
       'Import',
       'Settings',
@@ -50,7 +51,7 @@ describe('Settings and first use', () => {
     expect(items[0]).toHaveAttribute('aria-current', 'page')
     // Settings sits below a divider, as text only.
     expect(within(menu).getByRole('separator')).toBeInTheDocument()
-    expect(items[4].querySelector('svg')).toBeNull()
+    expect(items[5].querySelector('svg')).toBeNull()
 
     await user.click(within(menu).getByRole('menuitem', { name: 'Settings' }))
     expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()

@@ -2,6 +2,25 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Clients page (US-2.5)
+
+**Pull request:** the US-2.5 Clients PR (branch `feature/us-2-5-clients`).
+
+**Run on this branch:** `npx vitest run --dir src` (18 files, 174 tests passed), `npm run lint` (no warnings or errors), `npm run build` (passed; same bundle-size warning, now 946 kB), and the dev server on the sample data at 1280 and 375 px. Screenshots: `docs/screenshots/us-2-5/`.
+
+No checklist item is newly checked: US-2.5 is a Should story, so PB-28 does not cover it. These already-checked items were re-verified for the new page:
+
+| Items | What was verified |
+| --- | --- |
+| UX-1 | The client panel lists each invoice with a text badge (Paid, Pending, "Overdue · 179 days"); `clients.test.tsx` "opens a client's invoices in a side panel" checks Pending and "Overdue · 178 days" on 2026-10-19. |
+| UX-8 | At 375 px `/clients` renders a card list (6 items, no table) and the page does not scroll sideways (scrollWidth 375). `clients.test.tsx` "lists clients as rows on phones". |
+| CODE-3 | Client totals, the client's invoices and the delete rule are pure functions in `src/lib/clients.ts`; `clients.test.ts` checks them against the owed-by-client table in `data/README.md` (invoice counts, Outstanding, overdue counts) and that Received over all clients is $49,810.00. |
+| TEST-1 | 174 tests pass, none skipped. |
+
+**Also verified (no checklist item):** US-2.5's three criteria. The list shows name, total Received, total Outstanding and invoice count; the panel lists the client's invoices and each links to its invoice panel; "Delete client" on a client with invoices explains instead of deleting ("Lumen Coffee has 6 invoices. Delete them or move them to another client first, then delete the client.", focus on Close, "Show their invoices" opens Invoices searched by the client's name), and a client with no invoices is deleted after a confirmation. Keyboard: the client name opened the panel with Enter and Enter on "Delete client" opened the message.
+
+**Not verified:** 768 px; a screen reader; the Vercel preview; deleting a client in the browser (covered by `clients.test.tsx` only).
+
 ## 2026-10-20 · Card lists on phones (UX-8) and pagination
 
 **Pull request:** the UX-8 PR (branch `feature/ux-8-mobile-card-lists`, stacked on the Phase 3 design polish PR).

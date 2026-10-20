@@ -14,6 +14,8 @@ export interface LedgerContextValue {
   /** Adds a new expense, or updates `editingId`. */
   saveExpense: (value: ValidExpense, editingId?: string) => void
   deleteExpense: (expenseId: string) => void
+  /** Removes a client with no invoices. */
+  deleteClient: (clientId: string) => void
   /** Adds the valid rows of a checked CSV file and reports what happened. */
   importRecords: (type: RecordType, result: ValidationResult) => ImportOutcome
   /** Replaces every record with the sample dataset. Returns an error message if it couldn't be read. */
