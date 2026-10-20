@@ -18,6 +18,8 @@
     --color-sidebar-primary: var(--sidebar-primary);
     --color-sidebar-foreground: var(--sidebar-foreground);
     --color-sidebar: var(--sidebar);
+    --color-chart-received: var(--chart-received);
+    --color-chart-expenses: var(--chart-expenses);
     --color-status-paid: var(--status-paid);
     --color-status-pending: var(--status-pending);
     --color-status-overdue: var(--status-overdue);
@@ -78,10 +80,14 @@
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
     --radius: 0.625rem;
-    /* Studio Ledger: invoice status. Always paired with a text label. */
-    --status-paid: oklch(0.527 0.154 150.069);
-    --status-pending: oklch(0.555 0.163 48.998);
-    --status-overdue: oklch(0.505 0.213 27.518);
+    /* Studio Ledger: chart series. A calm blue and a dark grey, both at least 3:1 on white. */
+    --chart-received: oklch(0.55 0.15 255);
+    --chart-expenses: oklch(0.42 0.01 260);
+    /* Studio Ledger: invoice status. Always paired with a text label. Hues are far
+       apart (green, amber, red) and each is at least 4.5:1 as text on its own tint. */
+    --status-paid: oklch(0.52 0.13 155);
+    --status-pending: oklch(0.53 0.12 70);
+    --status-overdue: oklch(0.53 0.19 25);
     --sidebar: oklch(0.985 0 0);
     --sidebar-foreground: oklch(0.145 0 0);
     --sidebar-primary: oklch(0.205 0 0);

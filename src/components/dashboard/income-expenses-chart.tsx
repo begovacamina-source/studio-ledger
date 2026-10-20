@@ -11,10 +11,11 @@ import type { MonthTotals } from '@/lib/calculations'
 import { formatMonthLong, formatMonthShort } from '@/lib/dates'
 import { formatAxisMoney, formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
 const chartConfig = {
-  received: { label: 'Received', color: 'var(--chart-4)' },
-  expenses: { label: 'Expenses', color: 'var(--chart-2)' },
+  received: { label: 'Received', color: 'var(--chart-received)' },
+  expenses: { label: 'Expenses', color: 'var(--chart-expenses)' },
 } satisfies ChartConfig
 
 function MonthTooltip({
@@ -28,17 +29,21 @@ function MonthTooltip({
 }) {
   const totals = payload?.[0]?.payload
   if (!active || !totals) return null
-  const rows: [string, number][] = [
-    ['Received', totals.received],
-    ['Expenses', totals.expenses],
+  // The swatch matches each series' bar; Net income has no bar.
+  const rows: [string, number, string?][] = [
+    ['Received', totals.received, 'bg-chart-received'],
+    ['Expenses', totals.expenses, 'bg-chart-expenses'],
     ['Net income', totals.netIncome],
   ]
   return (
     <div className="grid min-w-40 gap-1.5 rounded-lg border bg-background px-3 py-2 text-xs shadow-xl">
       <div className="font-medium">{formatMonthLong(totals.month)}</div>
-      {rows.map(([label, value]) => (
+      {rows.map(([label, value, swatch]) => (
         <div key={label} className="flex justify-between gap-4">
-          <span className="text-muted-foreground">{label}</span>
+          <span className="flex items-center gap-1.5 text-muted-foreground">
+            <span className={cn('size-2.5 rounded-xs', swatch)} aria-hidden />
+            {label}
+          </span>
           <span className="font-mono font-medium tabular-nums">{formatMoney(value, currency)}</span>
         </div>
       ))}
@@ -77,7 +82,8 @@ export function IncomeExpensesChart({
               tickFormatter={(cents: number) => formatAxisMoney(cents, currency)}
             />
             <ChartTooltip cursor={{ fill: 'var(--muted)' }} content={<MonthTooltip currency={currency} />} />
-            <ChartLegend content={<ChartLegendContent />} />
+            {/* Unsorted, so the legend follows the bars: Received, then Expenses. */}
+            <ChartLegend content={<ChartLegendContent />} itemSorter={null} />
             <Bar dataKey="received" fill="var(--color-received)" radius={4} />
             <Bar dataKey="expenses" fill="var(--color-expenses)" radius={4} />
           </BarChart>
