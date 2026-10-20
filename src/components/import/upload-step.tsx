@@ -117,8 +117,8 @@ export function UploadStep({
         )}
       </div>
 
-      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-        <span>Not sure about the format?</span>
+      <div className="flex flex-wrap items-center gap-2 text-sm">
+        <span className="text-muted-foreground">Not sure about the format?</span>
         <Button variant="outline" size="sm" asChild>
           <a href={SAMPLES[type]} download>
             <DownloadIcon /> Download a sample {type === 'invoices' ? 'invoices' : 'expenses'} CSV
