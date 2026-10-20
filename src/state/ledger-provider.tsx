@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { applyImport, type RecordType, type ValidationResult } from '@/lib/csv-import'
 import { deleteInvoice, saveInvoice, type ValidInvoice } from '@/lib/invoice-form'
 import { markPaid, markUnpaid } from '@/lib/invoices'
 import type { ISODate, Invoice, Ledger } from '@/lib/types'
@@ -27,6 +28,11 @@ export function LedgerProvider({ initial, children }: { initial: Ledger; childre
       saveInvoice: (value: ValidInvoice, editingId?: string) =>
         setLedger((current) => saveInvoice(current, value, editingId)),
       deleteInvoice: (invoiceId: string) => setLedger((current) => deleteInvoice(current, invoiceId)),
+      importRecords: (type: RecordType, result: ValidationResult) => {
+        const { ledger: next, outcome } = applyImport(ledger, type, result)
+        setLedger(next)
+        return outcome
+      },
     }),
     [ledger, updateInvoice],
   )
