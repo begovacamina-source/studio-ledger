@@ -16,11 +16,12 @@ import { Label } from '@/components/ui/label'
 import { todayLocal } from '@/lib/dates'
 import { validatePaidDate } from '@/lib/invoices'
 import { formatMoney } from '@/lib/money'
-import { APP_CURRENCY } from '@/lib/settings'
 import type { Invoice } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
+import { useCurrency } from '@/state/use-settings'
 
 export function MarkPaidDialog({ invoice, trigger }: { invoice: Invoice; trigger: ReactNode }) {
+  const currency = useCurrency()
   const { markInvoicePaid } = useLedger()
   const [open, setOpen] = useState(false)
   const [paidDate, setPaidDate] = useState('')
@@ -56,7 +57,7 @@ export function MarkPaidDialog({ invoice, trigger }: { invoice: Invoice; trigger
           <DialogHeader>
             <DialogTitle>Mark {invoice.invoiceNumber} as paid</DialogTitle>
             <DialogDescription>
-              {formatMoney(invoice.amount, APP_CURRENCY)} counts as Received on the paid date.
+              {formatMoney(invoice.amount, currency)} counts as Received on the paid date.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-2">

@@ -16,6 +16,10 @@ export interface LedgerContextValue {
   deleteExpense: (expenseId: string) => void
   /** Adds the valid rows of a checked CSV file and reports what happened. */
   importRecords: (type: RecordType, result: ValidationResult) => ImportOutcome
+  /** Replaces every record with the sample dataset. Returns an error message if it couldn't be read. */
+  loadSampleData: () => string | null
+  /** Removes every client, invoice and expense. Settings stay. */
+  clearAllData: () => void
 }
 
 export const LedgerContext = createContext<LedgerContextValue | null>(null)

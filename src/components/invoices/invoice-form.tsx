@@ -22,9 +22,9 @@ import {
   type InvoiceDraft,
   type InvoiceField,
 } from '@/lib/invoice-form'
-import { APP_CURRENCY } from '@/lib/settings'
 import type { Invoice } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
+import { useCurrency } from '@/state/use-settings'
 
 export function InvoiceForm({
   editing,
@@ -36,6 +36,7 @@ export function InvoiceForm({
   onSaved: (invoiceNumber: string) => void
   onCancel: () => void
 }) {
+  const currency = useCurrency()
   const { ledger, saveInvoice } = useLedger()
   const formRef = useRef<HTMLFormElement>(null)
   const [draft, setDraft] = useState<InvoiceDraft>(() =>
@@ -125,7 +126,7 @@ export function InvoiceForm({
         <Input {...props('invoiceNumber')} placeholder="e.g. INV-042" />
       </Field>
 
-      <Field id="amount" label={`Amount (${APP_CURRENCY})`} error={shown('amount')}>
+      <Field id="amount" label={`Amount (${currency})`} error={shown('amount')}>
         <Input {...props('amount')} inputMode="decimal" placeholder="0.00" />
       </Field>
 

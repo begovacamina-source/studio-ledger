@@ -27,9 +27,9 @@ import {
 import { displayStatus } from '@/lib/calculations'
 import { daysBetween, formatDate, todayLocal } from '@/lib/dates'
 import { formatMoney } from '@/lib/money'
-import { APP_CURRENCY } from '@/lib/settings'
 import type { Invoice } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
+import { useCurrency } from '@/state/use-settings'
 
 function InvoiceDetails({
   invoice,
@@ -40,6 +40,7 @@ function InvoiceDetails({
   onNumberChange: (invoiceNumber: string) => void
   onDeleted: () => void
 }) {
+  const currency = useCurrency()
   const { ledger, markInvoiceNotPaid, deleteInvoice } = useLedger()
   const [editing, setEditing] = useState(false)
   const today = todayLocal()
@@ -65,7 +66,7 @@ function InvoiceDetails({
         </div>
         <SheetDescription className="sr-only">Invoice details</SheetDescription>
         <p className="text-2xl font-semibold text-foreground tabular-nums">
-          {formatMoney(invoice.amount, APP_CURRENCY)}
+          {formatMoney(invoice.amount, currency)}
         </p>
         <div className="flex flex-wrap gap-2 pt-2">
           {status === 'Paid' ? (
@@ -94,7 +95,7 @@ function InvoiceDetails({
               <AlertDialogHeader>
                 <AlertDialogTitle>Delete {invoice.invoiceNumber}?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  {formatMoney(invoice.amount, APP_CURRENCY)} for {client?.name ?? 'Unknown client'}{' '}
+                  {formatMoney(invoice.amount, currency)} for {client?.name ?? 'Unknown client'}{' '}
                   is removed from every total. This can't be undone.
                 </AlertDialogDescription>
               </AlertDialogHeader>

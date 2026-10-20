@@ -25,14 +25,15 @@ import {
 import { formatDate } from '@/lib/dates'
 import { expenseTitle } from '@/lib/expense-form'
 import { formatMoney } from '@/lib/money'
-import { APP_CURRENCY } from '@/lib/settings'
 import type { Expense } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
+import { useCurrency } from '@/state/use-settings'
 
 function ExpenseDetails({ expense, onDeleted }: { expense: Expense; onDeleted: () => void }) {
+  const currency = useCurrency()
   const { deleteExpense } = useLedger()
   const [editing, setEditing] = useState(false)
-  const amount = formatMoney(expense.amount, APP_CURRENCY)
+  const amount = formatMoney(expense.amount, currency)
   const details: [string, string][] = [
     ['Date', formatDate(expense.date)],
     ['Category', expense.category],
