@@ -31,6 +31,8 @@ Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-d
 | Form dialog buttons stacked on phones | Add invoice at 375 px: "Add invoice" above "Cancel", both 311 px wide. The confirm dialogs already stacked (shadcn footers). |
 | Sample CSV link no longer looks disabled | Its text computes to the foreground colour instead of muted grey. |
 | No hover underline | `text-decoration-line` on a hovered invoice number is `none`; the Button and Badge link variants dropped `hover:underline`. |
+| Panel actions at the bottom; panels full width on phones | Chromium, invoice INV-038 (unpaid), INV-037 (paid), INV-002 from the Overview, and an expense: the footer sits at the bottom of the panel, with Mark as paid or Mark as not paid at full width, then Edit and Delete side by side, then Go to Invoices on the Overview. The panel is 375 px wide at 375 px (was ¾ of the screen, so buttons wrapped) and 448 px at 1280 px. |
+| Required-field tooltip test | Made reliable by hovering before clicking (Radix closes a tooltip on click). Eight full `npx vitest run --dir src` runs passed in a row. |
 
 **Found and fixed in this PR:** the import preview's counts (Valid rows, Rows with errors, Duplicates) had shrunk to small text, because the design pass gave their tiles the `sm` card size, whose title style overrides `text-3xl`. They use the default size again; checked in the browser at 1280 px (30 px figures).
 
