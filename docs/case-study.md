@@ -1,7 +1,5 @@
 # Studio Ledger: a finance dashboard for freelance creatives
 
-> **Draft.** Facts here come from `docs/PRD.md`, `docs/decisions.md`, `docs/verification-log.md` and the pull requests. Sections marked **✍️ To fill in** need your own words; nothing in them has been made up. Remove this note when the case study is final.
-
 **Role:** design engineer: product definition, UX, design system, front-end build, testing and validation.
 **Live demo:** [studio-ledger-rho.vercel.app](https://studio-ledger-rho.vercel.app). It opens on a fictional sample, and nothing you enter leaves your browser.
 **Code:** a private GitHub repository; access on request by email (see [Seeing the code](#seeing-the-code)).
