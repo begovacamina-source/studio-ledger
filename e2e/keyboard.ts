@@ -76,12 +76,17 @@ export async function pick(page: Page, select: Locator, option: string | RegExp)
   await tabTo(page, select)
   await page.keyboard.press('Enter')
   const wanted = page.getByRole('option', { name: option, exact: typeof option === 'string' })
-  await expect(page.getByRole('listbox')).toBeVisible()
-  // Radix moves focus to the chosen option a moment after opening.
-  await expect(page.locator('[role="option"]:focus')).toHaveCount(1)
+  const focused = page.locator('[role="option"]:focus')
+  const focusedText = () => focused.textContent()
+  // Radix moves focus to the chosen option a moment after opening; wait for that before moving.
+  const chosen = page.getByRole('option', { selected: true })
+  await expect(await chosen.count() ? chosen : focused).toBeFocused()
   await page.keyboard.press('Home')
+  await expect(page.getByRole('option').first()).toBeFocused()
   for (let i = 0; i < 30 && !(await wanted.evaluate((n) => n === document.activeElement)); i++) {
+    const before = await focusedText()
     await arrow(page, 'ArrowDown')
+    await expect.poll(focusedText).not.toBe(before)
   }
   await expect(wanted).toBeFocused()
   expect(await focusProblem(page)).toBeNull()

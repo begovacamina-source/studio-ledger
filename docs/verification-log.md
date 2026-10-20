@@ -2,6 +2,20 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Page identity (DEP-4), README (DOC-4) and a clean clone (DOC-5)
+
+**Pull request:** the release docs PR (branch `release/dep-4-doc-4-doc-5`).
+
+| Items | What was verified |
+| --- | --- |
+| DEP-4 (newly checked) | The favicon was still Vite's logo. It is now a Studio Ledger icon (`public/favicon.svg`: ledger rows on the app's blue, with the title "Studio Ledger"), with `favicon-32.png` and `apple-touch-icon.png` rendered from it. `index.html` has the title "Studio Ledger" and a description (plus `og:title` and `og:description`). `e2e/page-identity.spec.ts`: the title and description are there, and all three icons load with the right type. The 32 px icon was checked by eye. |
+| DOC-4 (newly checked) | The README starts with the live app link (https://studio-ledger-rho.vercel.app, answered 200) and a status line that matches HANDOFF: Phase 3, every MVP screen built, and what's left before v1.0.0. The scope table now has the Clients page and Settings. |
+| DOC-5 (newly checked) | A fresh `git clone` of commit 3d34956 into an empty folder (no `node_modules`), Node 24.21.0, running the README's commands in order: `npm ci` (exit 0), `npm test` (25 files, 219 passed), `npm run lint` (exit 0, no warnings), `npm run build` (built, `dist/` has the page, icons and samples), and `npm run dev` (served the page; in a new browser tab with no saved data it opened on the sample, Received $47,160.00 and Outstanding $14,620.00). The README now says `npm ci` instead of `npm install`, and that the dev server uses the next free port when 5173 is taken, which happened here. |
+
+**Not verified:** the README commands on Windows or Linux (macOS only), or on Node 22 (the stated minimum); the new icon on the production site until this is merged.
+
+**Found, not fixed:** the build warns that the main JavaScript chunk is 948 kB (289 kB gzipped), which is over 500 kB; that's CODE-7 (Nice). `npm ci` notes that `fsevents` has install scripts that weren't approved; it's an optional macOS file watcher, and nothing failed. One full Playwright run had the `/clients` text-contrast test fail once at 1280 px. It didn't come back in 4 repeats of the contrast file and 2 full runs, and its message wasn't kept, so the cause is unknown. The keyboard test's select helper also failed 2 times in 5 (it pressed Home before Radix had moved focus to the chosen option); it now waits for each focus move, and passed 5 out of 5.
+
 ## 2026-10-20 · Keyboard (A11Y-2), contrast (A11Y-3) and sizes (CODE-5)
 
 **Pull request:** the accessibility PR (branch `a11y/keyboard-contrast-and-sizes`).

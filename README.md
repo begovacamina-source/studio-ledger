@@ -19,7 +19,7 @@ npm ci
 npm run dev
 ```
 
-`npm ci` installs the exact versions in `package-lock.json`. `npm run dev` serves the app at http://localhost:5173 with the sample data. `npm test` runs the unit and component tests, `npm run lint` runs the linter, and `npm run build` makes a production build in `dist/`.
+`npm ci` installs the exact versions in `package-lock.json`. `npm run dev` serves the app at the address it prints (http://localhost:5173, or the next free port), opening on the sample data. `npm test` runs the unit and component tests, `npm run lint` runs the linter, and `npm run build` makes a production build in `dist/`.
 
 `npm run test:e2e` runs Playwright against a production build: the three core journeys, keyboard-only flows, and text and non-text contrast checks. Locally it uses your installed Google Chrome; without Chrome, run `npx playwright install chromium` once and remove `channel` in `playwright.config.ts`. CI (`.github/workflows/ci.yml`) runs lint, the unit tests, the build and the journeys on every pull request.
 
