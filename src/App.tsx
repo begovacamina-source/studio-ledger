@@ -6,6 +6,7 @@ import { loadSampleLedger } from '@/data/sample'
 import type { Ledger } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { DashboardPage } from '@/pages/dashboard-page'
+import { ExpensesPage } from '@/pages/expenses-page'
 import { ImportPage } from '@/pages/import-page'
 import { InvoicesPage } from '@/pages/invoices-page'
 import { LedgerProvider } from '@/state/ledger-provider'
@@ -21,6 +22,7 @@ function loadLedger(): { ledger: Ledger } | { error: string } {
 const NAV = [
   { to: '/', label: 'Overview', end: true },
   { to: '/invoices', label: 'Invoices', end: false },
+  { to: '/expenses', label: 'Expenses', end: false },
   { to: '/import', label: 'Import', end: false },
 ]
 
@@ -63,6 +65,7 @@ export default function App() {
                 <Route index element={<DashboardPage />} />
                 {/* One route, so the list keeps its state while the invoice panel opens and closes. */}
                 <Route path="invoices/:invoiceNumber?" element={<InvoicesPage />} />
+                <Route path="expenses" element={<ExpensesPage />} />
                 <Route path="import" element={<ImportPage />} />
               </Routes>
             </LedgerProvider>

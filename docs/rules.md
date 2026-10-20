@@ -33,7 +33,7 @@ The Outstanding card shows a count instead of a change, e.g. "3 invoices · 1 ov
 
 ## Periods
 
-Periods are whole calendar months, and "Last 3 months" and "Last 6 months" include the current month. The dashboard opens on Last 6 months.
+Periods are whole calendar months, and "Last 3 months" and "Last 6 months" include the current month. The dashboard opens on Last 6 months. The Expenses list also offers All time and opens on it.
 
 | Period | Months covered | Example on 2026-10-20 |
 | --- | --- | --- |

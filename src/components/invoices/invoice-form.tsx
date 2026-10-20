@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type FormEvent, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type FormEvent } from 'react'
 import { toast } from 'sonner'
+import { Field } from '@/components/form-field'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -25,39 +25,6 @@ import {
 import { APP_CURRENCY } from '@/lib/settings'
 import type { Invoice } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
-
-function Field({
-  id,
-  label,
-  error,
-  optional,
-  className,
-  children,
-}: {
-  id: string
-  label: string
-  error?: string
-  optional?: boolean
-  className?: string
-  children: ReactNode
-}) {
-  return (
-    <div className={className}>
-      <div className="grid gap-2">
-        <Label htmlFor={id}>
-          {label}
-          {optional && <span className="font-normal text-muted-foreground">(optional)</span>}
-        </Label>
-        {children}
-        {error && (
-          <p id={`${id}-error`} className="text-sm text-destructive">
-            {error}
-          </p>
-        )}
-      </div>
-    </div>
-  )
-}
 
 export function InvoiceForm({
   editing,
