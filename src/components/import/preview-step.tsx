@@ -29,7 +29,7 @@ const COLUMN_WIDTH: Record<string, string | undefined> = {
 
 function RowStatus({ row }: { row: ValidatedRow }) {
   if (row.status === 'valid') return <Badge variant="secondary">Valid</Badge>
-  if (row.status === 'duplicate') return <Badge variant="outline">Duplicate</Badge>
+  if (row.status === 'duplicate') return <Badge variant="secondary">Duplicate</Badge>
   return <Badge variant="destructive">Error</Badge>
 }
 

@@ -44,7 +44,7 @@ function ExpenseDetails({ expense, onDeleted }: { expense: Expense; onDeleted: (
       <SheetHeader className="gap-2 border-b pr-12">
         <div className="flex items-center gap-2">
           <SheetTitle className="text-xl">{expenseTitle(expense)}</SheetTitle>
-          <Badge variant="outline">{expense.category}</Badge>
+          <Badge variant="secondary">{expense.category}</Badge>
         </div>
         <SheetDescription className="sr-only">Expense details</SheetDescription>
         <p className="text-2xl font-semibold text-foreground tabular-nums">{amount}</p>
