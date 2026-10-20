@@ -25,7 +25,9 @@ describe('CSV import', () => {
 
     await user.upload(fileInput(), csv(invoicesSample, 'october.csv'))
     expect(await screen.findByText('october.csv · 4 rows · Invoices')).toBeInTheDocument()
-    expect(screen.getByRole('combobox', { name: 'Field for paid_date' })).toHaveTextContent('Paid date')
+    // Every column matched, so the field choices stay hidden.
+    expect(screen.getByText('All columns matched.')).toBeInTheDocument()
+    expect(screen.queryByRole('columnheader', { name: 'Studio Ledger field' })).not.toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: 'Date format' })).toHaveTextContent('YYYY-MM-DD')
 
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
@@ -72,6 +74,29 @@ describe('CSV import', () => {
 
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
     expect(screen.getByRole('button', { name: 'Import 1 valid row' })).toBeInTheDocument()
+  })
+
+  it('shows the field choices on request, and picking a used field moves it', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    await user.upload(fileInput(), csv(invoicesSample))
+    await user.click(await screen.findByRole('button', { name: 'Change matching' }))
+    expect(screen.getByRole('columnheader', { name: 'Studio Ledger field' })).toBeInTheDocument()
+
+    // Give "description" the Client field: client loses it instead of matching twice.
+    await user.click(screen.getByRole('combobox', { name: 'Field for description' }))
+    await user.click(await screen.findByRole('option', { name: 'Client' }))
+    expect(screen.getByRole('combobox', { name: 'Field for client' })).toHaveTextContent("Don't import")
+    expect(screen.queryByText(/matched to 2 columns/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
+  })
+
+  it('names the columns that will be left out', async () => {
+    const user = userEvent.setup()
+    renderApp('/import')
+    // An extra header with no values in the rows.
+    await user.upload(fileInput(), csv(invoicesSample.replace('description', 'description,VAT')))
+    expect(await screen.findByText(/VAT won't be imported./)).toBeInTheDocument()
   })
 
   it('reports errors and duplicates, and imports only the valid rows', async () => {

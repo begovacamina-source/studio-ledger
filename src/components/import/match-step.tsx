@@ -1,4 +1,5 @@
-import { useRef } from 'react'
+import { CircleCheckIcon } from 'lucide-react'
+import { useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import {
@@ -46,10 +47,18 @@ export function MatchStep({
   const problemsRef = useRef<HTMLDivElement>(null)
   const fields = FIELDS[settings.type]
   const problems = mappingProblems(settings.mapping, settings.type)
+  // Field choices only appear when auto-matching left something to fix, or on request.
+  const [showFields, setShowFields] = useState(problems.length > 0)
   const example = (column: number) => file.rows.find((r) => r[column])?.[column] ?? '—'
+  const skipped = file.headers.filter((_, i) => settings.mapping[i] === DONT_IMPORT)
 
+  /** Picking a field another column uses moves it there, so a field is never matched twice. */
   function setColumn(column: number, field: string) {
-    onChange({ ...settings, mapping: settings.mapping.map((m, i) => (i === column ? field : m)) })
+    const mapping = settings.mapping.map((m, i) => {
+      if (i === column) return field
+      return field !== DONT_IMPORT && m === field ? DONT_IMPORT : m
+    })
+    onChange({ ...settings, mapping })
   }
 
   return (
@@ -58,13 +67,13 @@ export function MatchStep({
         <colgroup>
           <col />
           <col />
-          <col className="w-56" />
+          {showFields && <col className="w-56" />}
         </colgroup>
         <TableHeader>
           <TableRow>
             <TableHead>Column in your file</TableHead>
             <TableHead>First value</TableHead>
-            <TableHead>Studio Ledger field</TableHead>
+            {showFields && <TableHead>Studio Ledger field</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -72,27 +81,47 @@ export function MatchStep({
             <TableRow key={column}>
               <TableCell className="truncate font-medium">{header || `Column ${column + 1}`}</TableCell>
               <TableCell className="truncate text-muted-foreground">{example(column)}</TableCell>
-              <TableCell>
-                <Select value={settings.mapping[column]} onValueChange={(v) => setColumn(column, v)}>
-                  <SelectTrigger className="w-full" aria-label={`Field for ${header || `column ${column + 1}`}`}>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {fields.map((f) => (
-                      <SelectItem key={f.key} value={f.key}>
-                        {f.label}
-                        {!f.required && <span className="text-muted-foreground">(optional)</span>}
-                      </SelectItem>
-                    ))}
-                    <SelectSeparator />
-                    <SelectItem value={DONT_IMPORT}>Don't import</SelectItem>
-                  </SelectContent>
-                </Select>
-              </TableCell>
+              {showFields && (
+                <TableCell>
+                  <Select value={settings.mapping[column]} onValueChange={(v) => setColumn(column, v)}>
+                    <SelectTrigger className="w-full" aria-label={`Field for ${header || `column ${column + 1}`}`}>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {fields.map((f) => (
+                        <SelectItem key={f.key} value={f.key}>
+                          {f.label}
+                          {!f.required && <span className="text-muted-foreground">(optional)</span>}
+                        </SelectItem>
+                      ))}
+                      <SelectSeparator />
+                      <SelectItem value={DONT_IMPORT}>Don't import</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
       </Table>
+
+      {!showFields && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm">
+          <CircleCheckIcon className="size-4 text-status-paid" aria-hidden />
+          <span>
+            All columns matched.
+            {skipped.length > 0 && (
+              <span className="text-muted-foreground">
+                {' '}
+                {skipped.join(', ')} won't be imported.
+              </span>
+            )}
+          </span>
+          <Button variant="outline" size="sm" onClick={() => setShowFields(true)}>
+            Change matching
+          </Button>
+        </div>
+      )}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="grid gap-2">
