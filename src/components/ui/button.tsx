@@ -35,7 +35,8 @@ const buttonVariants = cva(
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      // Studio Ledger: 36 px buttons by default, the same height as inputs and selects.
+      size: "lg",
     },
   }
 )
@@ -43,7 +44,7 @@ const buttonVariants = cva(
 function Button({
   className,
   variant = "default",
-  size = "default",
+  size = "lg",
   asChild = false,
   ...props
 }: React.ComponentProps<"button"> &

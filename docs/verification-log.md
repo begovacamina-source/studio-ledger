@@ -2,6 +2,22 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · shadcn field borders and 36 px controls (A11Y-3 reworded)
+
+**Pull request:** the borders and sizes PR (branch `design/shadcn-borders-and-sizes`).
+
+**Run on this branch:** `npm run test:e2e` (47 passed, twice), `npx playwright test e2e/keyboard.spec.ts --repeat-each=3` (45 passed), `npm test` (25 files, 219 passed), `npm run lint` (no warnings or errors), `npm run build`. Screenshots: `docs/screenshots/sizes/` (before and after).
+
+| Items | What was verified |
+| --- | --- |
+| A11Y-3 (stays checked, reworded) | Reworded because field borders now follow shadcn's default, as decided on this PR (see `docs/decisions.md`). `--input` is back to `oklch(0.922 0 0)`, so an empty field's edge is about 1.2:1; the field-border check is removed from `e2e/non-text-contrast.spec.ts`. Still checked, and passing: text contrast with axe on every page and panel at 1280 and 375 px (24 tests), radios (now `border-muted-foreground`, since they shared the field colour and fell to 1.26:1), switches, focus rings, chart bars, the selected tab and the current page. Every Tab stop in the keyboard suite still has a focus indicator of at least 3:1. |
+| A11Y-1, A11Y-2 (already checked) | Every field still has a visible label. The keyboard suite passes with the 36 px controls. |
+| UX-7 (already checked) | At 1280, 768 and 375 px, on `/`, `/invoices`, `/invoices/INV-002`, `/clients`, `/expenses`, `/import` and `/settings`: no page scrolls sideways and no button, field or link sticks out past the window. Buttons, inputs, selects and the tab bar measure 36 px; the explicit `sm` buttons stay 28 px. |
+
+**Not verified:** Firefox and Safari; the Vercel preview (check it before merging).
+
+**Found, not fixed:** the chart-bar contrast check sometimes read a bar colour as empty while Recharts was still drawing; it now waits until both colours resolve (10 of 10 runs passed). One keyboard run of 3 had 2 failures while the whole run took 1.4 minutes instead of about 26 seconds; a rerun passed 45 of 45, so it looks like a slow machine, not the app.
+
 ## 2026-10-20 · Page identity (DEP-4), README (DOC-4) and a clean clone (DOC-5)
 
 **Pull request:** the release docs PR (branch `release/dep-4-doc-4-doc-5`).

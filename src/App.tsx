@@ -68,7 +68,7 @@ function PhoneMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="-ml-2 md:hidden" aria-label="Open menu">
+        <Button variant="ghost" size="icon-lg" className="-ml-2 md:hidden" aria-label="Open menu">
           <MenuIcon />
         </Button>
       </DropdownMenuTrigger>
@@ -97,7 +97,7 @@ function SettingsLink() {
           aria-label="Settings"
           aria-current={active ? 'page' : undefined}
           className={cn(
-            'flex size-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none',
+            'flex size-9 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none',
             active && 'bg-muted text-foreground',
           )}
         >
