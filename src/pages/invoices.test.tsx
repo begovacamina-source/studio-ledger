@@ -96,10 +96,15 @@ describe('Invoices', () => {
     expect(screen.getByRole('dialog', { name: 'Invoice INV-999 was not found' })).toBeInTheDocument()
   })
 
-  it('opens an invoice from the dashboard Outstanding list', async () => {
+  it('opens an invoice from the dashboard Outstanding list in a panel on the Overview', async () => {
     const user = userEvent.setup()
     renderApp('/')
-    await user.click(screen.getAllByRole('link', { name: 'Lumen Coffee' })[0])
-    expect(screen.getByRole('dialog', { name: 'INV-002' })).toBeInTheDocument()
+    const row = screen.getAllByRole('button', { name: 'Lumen Coffee' })[0].closest('tr')!
+    await user.click(within(row).getByText('INV-002'))
+    const panel = screen.getByRole('dialog', { name: 'INV-002' })
+    expect(screen.getByRole('heading', { name: 'Overview', hidden: true })).toBeInTheDocument()
+
+    await user.click(within(panel).getByRole('link', { name: 'Go to Invoices' }))
+    expect(screen.getByRole('heading', { name: 'Invoices' })).toBeInTheDocument()
   })
 })

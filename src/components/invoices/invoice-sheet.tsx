@@ -1,5 +1,5 @@
 import { PencilIcon, Trash2Icon } from 'lucide-react'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { toast } from 'sonner'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { InvoiceFormDialog } from '@/components/invoices/invoice-form-dialog'
@@ -20,6 +20,7 @@ import {
   Sheet,
   SheetContent,
   SheetDescription,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet'
@@ -141,11 +142,14 @@ export function InvoiceSheet({
   invoiceNumber,
   onClose,
   onNumberChange,
+  footer,
 }: {
   /** The open invoice, or undefined when the panel is closed. */
   invoiceNumber: string | undefined
   onClose: () => void
   onNumberChange: (invoiceNumber: string) => void
+  /** Shown at the bottom of the panel, e.g. a link to the invoice list. */
+  footer?: ReactNode
 }) {
   const { ledger } = useLedger()
   const invoice = ledger.invoices.find((i) => i.invoiceNumber === invoiceNumber)
@@ -165,6 +169,7 @@ export function InvoiceSheet({
             <SheetDescription>It may have been deleted.</SheetDescription>
           </SheetHeader>
         )}
+        {footer && <SheetFooter className="border-t">{footer}</SheetFooter>}
       </SheetContent>
     </Sheet>
   )
