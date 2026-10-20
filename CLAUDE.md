@@ -18,5 +18,7 @@ The product source of truth is `docs/PRD.md`, and only that file: change it thro
 ## Git workflow
 
 - Always work on a new branch, never on `main`.
+- Never stack pull requests. Always branch from an up-to-date `main` (`git checkout main && git pull`), never from another feature branch, and always target `main`.
+- Wait for the previous pull request to merge before starting the next one. If one is still open, say so and wait rather than building on it.
 - When done, open a pull request with a screenshot (for docs-only changes, say so in place of the screenshot).
 - Explain each git step in one sentence.
