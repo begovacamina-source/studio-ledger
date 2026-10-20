@@ -21,9 +21,9 @@ import {
 } from '@/lib/expense-form'
 import { DESCRIPTION_MAX } from '@/lib/invoice-form'
 import { formatMoney } from '@/lib/money'
-import { APP_CURRENCY } from '@/lib/settings'
 import { EXPENSE_CATEGORIES, type Expense } from '@/lib/types'
 import { useLedger } from '@/state/use-ledger'
+import { useCurrency } from '@/state/use-settings'
 
 export function ExpenseForm({
   editing,
@@ -34,6 +34,7 @@ export function ExpenseForm({
   onSaved: () => void
   onCancel: () => void
 }) {
+  const currency = useCurrency()
   const { saveExpense } = useLedger()
   const formRef = useRef<HTMLFormElement>(null)
   const [draft, setDraft] = useState<ExpenseDraft>(() =>
@@ -66,7 +67,7 @@ export function ExpenseForm({
       return
     }
     saveExpense(value, editing?.id)
-    toast.success(`${formatMoney(value.amount, APP_CURRENCY)} expense ${editing ? 'saved' : 'added'}`)
+    toast.success(`${formatMoney(value.amount, currency)} expense ${editing ? 'saved' : 'added'}`)
     onSaved()
   }
 
@@ -76,7 +77,7 @@ export function ExpenseForm({
         <Input {...props('date')} type="date" />
       </Field>
 
-      <Field id="amount" label={`Amount (${APP_CURRENCY})`} error={shown('amount')}>
+      <Field id="amount" label={`Amount (${currency})`} error={shown('amount')}>
         <Input {...props('amount')} inputMode="decimal" placeholder="0.00" />
       </Field>
 

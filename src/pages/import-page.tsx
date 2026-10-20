@@ -15,9 +15,9 @@ import {
   type ParsedFile,
   type RecordType,
 } from '@/lib/csv-import'
-import { APP_CURRENCY } from '@/lib/settings'
 import { cn } from '@/lib/utils'
 import { useLedger } from '@/state/use-ledger'
+import { useCurrency } from '@/state/use-settings'
 
 const STEPS = ['Upload', 'Match columns', 'Preview', 'Done'] as const
 type Step = (typeof STEPS)[number]
@@ -51,6 +51,7 @@ function Steps({ current }: { current: Step }) {
 }
 
 export function ImportPage() {
+  const currency = useCurrency()
   const { ledger, importRecords } = useLedger()
   const [step, setStep] = useState<Step>('Upload')
   const [type, setType] = useState<RecordType>('invoices')
@@ -67,7 +68,7 @@ export function ImportPage() {
   function handleFileRead(parsed: ParsedFile, name: string) {
     const mapping = autoMatch(parsed.headers, type)
     const guess = {
-      dateFormat: suggestDateFormat(parsed, mapping, type, APP_CURRENCY),
+      dateFormat: suggestDateFormat(parsed, mapping, type, currency),
       decimal: suggestDecimalSeparator(parsed, mapping, type),
     }
     setFile({ parsed, name })

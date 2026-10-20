@@ -1,17 +1,36 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { toast } from 'sonner'
+import { loadSampleLedger } from '@/data/sample'
 import { applyImport, type RecordType, type ValidationResult } from '@/lib/csv-import'
 import { deleteExpense, saveExpense, type ValidExpense } from '@/lib/expense-form'
 import { deleteInvoice, saveInvoice, type ValidInvoice } from '@/lib/invoice-form'
 import { markPaid, markUnpaid } from '@/lib/invoices'
-import type { ISODate, Invoice, Ledger } from '@/lib/types'
+import { EMPTY_LEDGER, readLedger, writeLedger } from '@/lib/storage'
+import type { ISODate, Invoice } from '@/lib/types'
 import { LedgerContext } from './ledger-context'
 
 /**
- * Holds the ledger in memory. Changes are lost on reload until browser
- * storage arrives with US-5.1.
+ * Holds the records and keeps them in browser storage, so they survive a
+ * reload. First use starts empty.
  */
-export function LedgerProvider({ initial, children }: { initial: Ledger; children: ReactNode }) {
-  const [ledger, setLedger] = useState(initial)
+export function LedgerProvider({ children }: { children: ReactNode }) {
+  const [initial] = useState(readLedger)
+  const [ledger, setLedger] = useState(initial.ledger)
+
+  // Tell the user once if saved data couldn't be read.
+  useEffect(() => {
+    if (initial.error) toast.error(initial.error)
+  }, [initial.error])
+
+  // Save every change; warn once if the browser refuses.
+  const warned = useRef(false)
+  useEffect(() => {
+    const error = writeLedger(ledger)
+    if (error && !warned.current) {
+      warned.current = true
+      toast.error(error)
+    }
+  }, [ledger])
 
   const updateInvoice = useCallback((invoiceId: string, update: (invoice: Invoice) => Invoice) => {
     setLedger((current) => ({
@@ -32,6 +51,15 @@ export function LedgerProvider({ initial, children }: { initial: Ledger; childre
       saveExpense: (value: ValidExpense, editingId?: string) =>
         setLedger((current) => saveExpense(current, value, editingId)),
       deleteExpense: (expenseId: string) => setLedger((current) => deleteExpense(current, expenseId)),
+      loadSampleData: () => {
+        try {
+          setLedger(loadSampleLedger())
+          return null
+        } catch (error) {
+          return error instanceof Error ? error.message : 'The sample data could not be loaded.'
+        }
+      },
+      clearAllData: () => setLedger(EMPTY_LEDGER),
       importRecords: (type: RecordType, result: ValidationResult) => {
         const { ledger: next, outcome } = applyImport(ledger, type, result)
         setLedger(next)
