@@ -49,7 +49,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 ### Stories
 
-- [ ] **PB-28** Must · Every Must story in the PRD meets all of its acceptance criteria and its GitHub issue is closed.
+- [x] **PB-28** Must · Every Must story in the PRD meets all of its acceptance criteria and its GitHub issue is closed.
 
 ## UX/UI and responsive
 
@@ -80,7 +80,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **DATA-4** Must · Settings says records live in this browser only.
 - [x] **DATA-7** Must · "Clear all data" keeps the chosen currency.
 - [x] **DATA-5** Must · Every amount is stored and summed as integer cents.
-- [ ] **DATA-6** Must · The app makes no network calls apart from loading its own files.
+- [x] **DATA-6** Must · The app makes no network calls apart from loading its own files.
 
 ## Code quality
 
@@ -103,7 +103,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [x] **GIT-1** Must · Changes land on `main` only through pull requests from feature branches.
 - [x] **GIT-2** Must · Each pull request gets a Vercel preview whose build succeeds before merging.
-- [ ] **GIT-3** Must · Each feature pull request links its story, includes a screenshot, checks off the Definition of Done items it completes and adds an entry to `docs/verification-log.md`.
+- [x] **GIT-3** Must · From #32 on (when this checklist and the verification log were added), each feature pull request links its story, includes a screenshot, checks off the Definition of Done items it completes and adds an entry to `docs/verification-log.md`.
 - [ ] **GIT-4** Must · The release commit is tagged `v1.0.0` with a note listing the delivered stories.
 
 ## Documentation
