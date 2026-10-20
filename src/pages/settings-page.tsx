@@ -59,7 +59,7 @@ export function SettingsPage() {
               <Label
                 key={c.value}
                 htmlFor={`currency-${c.value}`}
-                className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 font-normal has-data-[state=checked]:border-primary"
+                className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 font-normal has-data-[state=checked]:border-action"
               >
                 <RadioGroupItem id={`currency-${c.value}`} value={c.value} className="mt-0.5" />
                 <span className="grid gap-1">

@@ -66,7 +66,7 @@ export function UploadStep({
             <Label
               key={t.value}
               htmlFor={`type-${t.value}`}
-              className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 font-normal has-data-[state=checked]:border-primary"
+              className="flex cursor-pointer items-start gap-3 rounded-lg border p-4 font-normal has-data-[state=checked]:border-action"
             >
               <RadioGroupItem id={`type-${t.value}`} value={t.value} className="mt-0.5" />
               <span className="grid gap-1">
