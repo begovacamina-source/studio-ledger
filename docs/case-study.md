@@ -4,7 +4,7 @@
 
 **Role:** design engineer: product definition, UX, design system, front-end build, testing and validation.
 **Live demo:** [studio-ledger-rho.vercel.app](https://studio-ledger-rho.vercel.app). It opens on a fictional sample, and nothing you enter leaves your browser.
-**Code:** a private GitHub repository. See [Seeing the code](#seeing-the-code).
+**Code:** a private GitHub repository; access on request by email (see [Seeing the code](#seeing-the-code)).
 **Stack:** Vite, React, TypeScript (strict), Tailwind CSS v4, shadcn/ui and shadcn charts, Papa Parse, browser storage, Vitest, Testing Library, Playwright with axe-core, GitHub Actions, Vercel.
 
 ![The Overview on desktop: four key figures, a monthly Received and Expenses chart, and the Outstanding list](screenshots/release/overview-desktop.png)
@@ -237,9 +237,7 @@ Planned after v1.0, from the PRD and the future-work list:
 
 ## Seeing the code
 
-The repository is private. To see it:
-
-> **✍️ To fill in:** how reviewers can ask for access. For example, "email [your address] with your GitHub username and I'll add you as a read-only collaborator", or a link to a public mirror.
+The repository is private. To see it, email me at [begovacamina@gmail.com](mailto:begovacamina@gmail.com) with your GitHub username, and I'll give you access.
 
 Places to start in the repository:
 - `docs/PRD.md`: the product definition.

@@ -2,6 +2,18 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-21 · Design review (UX-10)
+
+**Pull request:** the UX-10 and repository access PR (branch `docs/ux-10-and-repo-access`).
+
+| Items | What was verified |
+| --- | --- |
+| UX-10 (newly checked) | The project owner did the Phase 3 design review on production (https://studio-ledger-rho.vercel.app), with #54 merged, and reported being happy with it: type, spacing, component states, charts and responsive layouts are portfolio quality. The release screenshots in `docs/screenshots/release/` (1280 and 375 px, taken on production for #53) show the reviewed design; nothing changed in the app after them. |
+
+**Not verified:** the owner's review notes weren't recorded, so the log doesn't say which screens or widths were looked at.
+
+**Found, not fixed:** none. Separately, CI on `main` after #54 failed with an uncaught `window is not defined` from Sonner's toast timer after `src/pages/undo-paid.test.tsx` finished (all 223 tests passed). #54 had been merged while its own CI run was still in progress. `src/test/setup.ts` now waits out Sonner's 200 ms unmount delay at the end of each test file. The failure didn't reproduce locally (three runs passed before and after the change), so this PR's CI run is the check.
+
 ## 2026-10-21 · VoiceOver pass (A11Y-4)
 
 **Pull request:** the A11Y-4 docs PR (branch `docs/a11y-4-voiceover`), after #51.

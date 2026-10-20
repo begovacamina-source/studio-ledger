@@ -62,7 +62,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **UX-7** Must · Every screen is fully usable at 1280, 768 and 375 px wide with no sideways page scrolling.
 - [x] **UX-8** Must · On mobile, summary cards stack and tables become card lists.
 - [x] **UX-9** Must · Each screen has at most one primary action.
-- [ ] **UX-10** Must · The Phase 3 design review is passed: type, spacing, component states, charts and responsive layouts are portfolio quality.
+- [x] **UX-10** Must · The Phase 3 design review is passed: type, spacing, component states, charts and responsive layouts are portfolio quality.
 
 ## Accessibility
 
