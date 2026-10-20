@@ -19,9 +19,10 @@ Work so far was done in a Claude.ai chat, then in Claude Code. This file tells t
 
 Phase 2: Rough screens (1–2 weeks; gate: rough screens reviewed on the Vercel preview).
 
-1. Set up the app: Vite + React + TypeScript (strict), Tailwind and shadcn/ui, with the theme tokens (including the status tokens) in `src/index.css`.
-2. Connect the repository to Vercel: production from `main`, a preview link on every pull request.
-3. Build every MVP screen roughly with shadcn/ui components and the sample dataset in `data/`, covering the three core journeys in `docs/PRD.md` and the empty, loading and error states. Layout and flow first; visual polish is Phase 3.
+1. ~~Set up the app~~ Done: Vite + React + TypeScript (strict), Tailwind v4 and shadcn/ui (Nova preset, Radix), theme tokens including `--status-paid`, `--status-pending` and `--status-overdue` in `src/index.css`. Calculations live in `src/lib/` with unit tests against `data/README.md`.
+2. Connect the repository to Vercel (needs the account owner): import the GitHub repository in Vercel, framework preset Vite. Production deploys from `main`, and every pull request gets a preview link.
+3. ~~Rough Overview dashboard~~ Done (US-1.1, US-1.2, US-1.3): summary cards, period selector, Received and Expenses chart with a screen-reader table, Outstanding list. The sample data is read straight from `data/` until US-5.1 adds browser storage. Not yet: opening an invoice from the Outstanding list (needs the invoice screen), card lists on mobile, and recent activity (US-1.4, Should).
+4. Build the remaining MVP screens roughly with shadcn/ui components and the sample dataset in `data/`, covering the three core journeys in `docs/PRD.md` and the empty, loading and error states. Layout and flow first; visual polish is Phase 3.
 
 ## Notes
 
