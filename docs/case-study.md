@@ -77,22 +77,29 @@ Studio Ledger is not accounting software. The PRD made this list binding, and ev
 
 ## 4. Process
 
-Five phases, each with a gate:
+**Planned:** the PRD set out five phases in sequence, each starting only when the previous gate was met, over 8–12 weeks: foundation, rough screens, design polish, build, validation.
 
-| Phase | What happened | Gate |
-| --- | --- | --- |
-| 1. Foundation | PRD, glossary and calculation rules, data model, journeys, a fictional dataset, GitHub issues per story | PRD approved |
-| 2. Rough screens | Every screen built in React with shadcn/ui on the sample data, layout and flow first | Reviewed on the Vercel preview |
-| 3. Design polish | Type, colour, spacing, component states, chart, phone and tablet layouts, accessibility | Design review (UX-10) |
-| 4. Build | Remaining stories, calculations, import, storage, tests and CI | Every Must story meets the Definition of Done |
-| 5. Validate | Usability test with 2–3 people | This case study |
+**What actually happened:** the work took two days, 19–20 October 2026, because an AI agent wrote the code (see [Working method](#working-method)). Only the foundation ran as a separate phase. The rough screens were working features from the start, because the agent built the logic along with the layout. Polish and build then ran side by side, with polish pull requests landing between feature pull requests. Validation hasn't happened yet.
+
+| Stage | When | Pull requests | What happened |
+| --- | --- | --- | --- |
+| Foundation | 19 Oct | #18–#21 | PRD, glossary and calculation rules, data model, journeys, the fictional dataset, a GitHub issue per story. Gate: PRD approved (#21). |
+| Setup and rough screens | 20 Oct, morning | #22–#31 | shadcn/ui and Vercel previews (#22), then every Must screen as a working feature on the sample data: Overview, invoices, CSV import, expenses, settings and storage. Each was reviewed on its preview. Two small design fixes (#29, #30) landed between features. |
+| Release checklist | 20 Oct, early afternoon | #32, #34, #35 | The Definition of Done and the verification log (#32), and "before" screenshots of every page (#35). From here on, each pull request ticked items only with evidence. |
+| Polish and build, overlapping | 20 Oct, afternoon | #33, #36–#40 | Polish: chart axis labels on one line in every currency (#33); fonts, chart colours, the phone menu and a design pass (#36); card lists on phones and pagination (#37). Build, between them: the Clients page (#39) and the 5-second undo (#40). |
+| Quality and polish, overlapping | 20 Oct, evening | #42–#51 | Release scope decisions (#42); CI and Playwright (#45); keyboard and contrast, with darker tokens and stronger focus rings (#47); page identity and a clean-clone check (#48). Then more polish — shadcn's field borders and 36 px controls (#49) — followed by checking every Must criterion against a test (#50) and screen-reader fixes (#51). |
+| Validation | Not yet | — | The design review (UX-10) and the usability test with 2–3 people. Their results go in [section 8](#8-usability-test). |
+
+The phase gates still did their job as checkpoints: every app change was reviewed on its Vercel preview, and from #45 on, nothing merged without green CI. What the gates no longer did was hold one phase back until another finished. For example, a polish change to field borders (#49) came after the contrast work it partly undid (#47). Because both were reviewed and logged, that reversal is visible in `docs/decisions.md`, not hidden.
 
 **Designed in code, with no Figma.** The design system is shadcn/ui's components and theme tokens, kept in one file (`src/index.css`). Every pull request got a Vercel preview, and each screen was reviewed there, in the browser, at real sizes and with real data. Where a design decision changed, it was made in the code that ships, and recorded in `docs/decisions.md`.
 
-**Working method.** The code was written with an AI coding agent (Claude Code), one user story per branch and pull request. I acted as product owner, designer and reviewer. The PRD was the single source of truth. A release checklist (`docs/definition-of-done.md`) was ticked only with evidence: a passing test, a reviewed preview, or a check in the browser. A dated verification log records what was checked and what wasn't.
+### Working method
+
+The code was written with an AI coding agent (Claude Code), one user story per branch and pull request. I acted as product owner, designer and reviewer. The PRD was the single source of truth. A release checklist (`docs/definition-of-done.md`) was ticked only with evidence: a passing test, a reviewed preview, or a check in the browser. A dated verification log records what was checked and what wasn't.
 
 **In numbers:**
-- 33 merged pull requests, each with CI.
+- 34 merged pull requests up to this draft (#18–#53), with CI on every one from #45 on.
 - 223 unit and component tests.
 - 60 Playwright tests: the three core journeys, keyboard-only flows, text and non-text contrast, the screen-reader checks, and a check that the app makes no network calls.
 
