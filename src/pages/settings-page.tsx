@@ -39,7 +39,9 @@ export function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Currency</CardTitle>
+          <CardTitle role="heading" aria-level={2}>
+          Currency
+        </CardTitle>
           <CardDescription>
             One currency for the whole app. Switching only changes how amounts look; nothing is
             converted.
@@ -76,7 +78,9 @@ export function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Sample data</CardTitle>
+          <CardTitle role="heading" aria-level={2}>
+          Sample data
+        </CardTitle>
           <CardDescription>
             Fictional records for trying Studio Ledger: 6 clients, 41 invoices and 120 expenses from
             April to September 2026, including overdue invoices and a month with no income.
@@ -89,7 +93,9 @@ export function SettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Your data</CardTitle>
+          <CardTitle role="heading" aria-level={2}>
+          Your data
+        </CardTitle>
           <CardDescription>
             Records are kept in this browser only, so clearing site data or using another browser
             won't show them. You have {describeRecords(ledger)}.

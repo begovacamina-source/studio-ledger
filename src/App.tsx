@@ -20,6 +20,7 @@ import { SettingsPage } from '@/pages/settings-page'
 import { LedgerProvider } from '@/state/ledger-provider'
 import { SettingsProvider } from '@/state/settings-provider'
 import { UndoProvider } from '@/state/undo-provider'
+import { RouteAnnouncer } from '@/components/route-announcer'
 
 const NAV = [
   { to: '/', label: 'Overview', end: true },
@@ -116,6 +117,7 @@ export default function App() {
         <UndoProvider>
           <TooltipProvider>
             <div className="min-h-svh bg-muted/60">
+              <RouteAnnouncer />
               <header className="bg-background">
                 <div className="mx-auto flex h-14 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 md:grid md:grid-cols-[1fr_auto_1fr]">
                   <div className="flex min-w-0 items-center gap-1">

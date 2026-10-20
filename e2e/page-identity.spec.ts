@@ -3,7 +3,8 @@ import { expect, test } from './fixtures.ts'
 // DEP-4: the page title, description and icons identify Studio Ledger.
 test('title, description and icons identify Studio Ledger', async ({ page, request }) => {
   await page.goto('/')
-  await expect(page).toHaveTitle('Studio Ledger')
+  // Each page is named first, then the app (see the screen-reader tests).
+  await expect(page).toHaveTitle('Overview · Studio Ledger')
   await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /^Studio Ledger is a finance dashboard/)
 
   for (const [selector, type] of [

@@ -64,7 +64,9 @@ export function IncomeExpensesChart({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Received and Expenses</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          Received and Expenses
+        </CardTitle>
         <CardDescription>Per month for the selected period</CardDescription>
       </CardHeader>
       <CardContent>

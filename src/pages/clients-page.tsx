@@ -105,7 +105,7 @@ export function ClientsPage() {
                 ))}
               </CardList>
             ) : (
-              <Table className="min-w-160 table-fixed">
+              <Table aria-label="Clients" className="min-w-160 table-fixed">
                 <colgroup>
                   <col />
                   <col className="w-40" />

@@ -2,6 +2,21 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-21 · Screen-reader check, automated half (A11Y-4 not yet checked)
+
+**Pull request:** the screen-reader PR (branch `a11y/screen-reader-check`).
+
+**Run on this branch:** `npm run test:e2e` (60 passed, twice), `npm test` (26 files, 223 passed), `npm run lint` (no warnings or errors), `npm run build`.
+
+| Items | What was verified |
+| --- | --- |
+| A11Y-4 (not checked) | **Read through:** the accessibility tree (what a screen reader reads) of every page, the invoice and client panels, both forms with errors, Mark as paid, and the import's upload, match and preview steps. **Found and fixed:** every page had the title "Studio Ledger" and moving to another page announced nothing; the section titles (Received and Expenses, Outstanding, Currency, Sample data, Your data) weren't headings; the Outstanding, Invoices, Clients and Expenses tables had no names; the import steps list had no name; and a search or status tab on Invoices gave no feedback. **Now tested** in `e2e/screen-reader.spec.ts`: each page's title and level-1 heading, its section headings, a name on every table, and axe's naming and ARIA rules (button, link, field, select, switch and command names, valid ARIA, lists, title, language, one main landmark, one level-1 heading) with no violations on all six pages; "Invoices page" is announced after moving there; statuses read as words in Outstanding, Invoices and the panel; form errors make the field invalid and describe it, with focus on the first one, and Mark as paid's error is an alert; and live updates for the invoice count ("41 invoices" → "6 invoices"), "INV-002 marked as Paid" in the panel and the toasts, and the current import step. `src/lib/pages.test.ts` covers page names. **Still to do:** the VoiceOver pass in `docs/screen-reader-check.md`, which needs a person; A11Y-4 is checked only after it. |
+| DEP-4 (already checked) | The title now names the page first ("Overview · Studio Ledger"), so it still identifies Studio Ledger; `e2e/page-identity.spec.ts` is updated to match. |
+
+**Not verified:** a real screen reader (VoiceOver or NVDA); the accessibility tree is what they read, but not how they say it.
+
+**Found, not fixed:** none.
+
 ## 2026-10-20 · No network calls (DATA-6), every Must story (PB-28), and the PR audit (GIT-3)
 
 **Pull request:** the release checks PR (branch `release/data-6-pb-28-git-3`).

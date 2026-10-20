@@ -36,7 +36,9 @@ export function OutstandingList({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Outstanding</CardTitle>
+        <CardTitle role="heading" aria-level={2}>
+          Outstanding
+        </CardTitle>
         <CardDescription>Who still owes you money</CardDescription>
       </CardHeader>
       <CardContent>
@@ -75,7 +77,7 @@ export function OutstandingList({
             ))}
           </CardList>
         ) : (
-          <Table className="min-w-104 table-fixed">
+          <Table aria-label="Outstanding invoices" className="min-w-104 table-fixed">
             <colgroup>
               <col />
               <col className="w-24" />
