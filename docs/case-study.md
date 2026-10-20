@@ -1,6 +1,6 @@
 # Studio Ledger: a finance dashboard for freelance creatives
 
-> **Draft.** Facts here come from `docs/PRD.md`, `docs/decisions.md`, `docs/verification-log.md` and the pull requests. Sections marked **✍️ To fill in** need the usability test results or your own words; nothing in them has been made up. Remove this note when the case study is final.
+> **Draft.** Facts here come from `docs/PRD.md`, `docs/decisions.md`, `docs/verification-log.md` and the pull requests. Sections marked **✍️ To fill in** need your own words; nothing in them has been made up. Remove this note when the case study is final.
 
 **Role:** design engineer: product definition, UX, design system, front-end build, testing and validation.
 **Live demo:** [studio-ledger-rho.vercel.app](https://studio-ledger-rho.vercel.app). It opens on a fictional sample, and nothing you enter leaves your browser.
@@ -88,7 +88,7 @@ Studio Ledger is not accounting software. The PRD made this list binding, and ev
 | Release checklist | 20 Oct, early afternoon | #32, #34, #35 | The Definition of Done and the verification log (#32), and "before" screenshots of every page (#35). From here on, each pull request ticked items only with evidence. |
 | Polish and build, overlapping | 20 Oct, afternoon | #33, #36–#40 | Polish: chart axis labels on one line in every currency (#33); fonts, chart colours, the phone menu and a design pass (#36); card lists on phones and pagination (#37). Build, between them: the Clients page (#39) and the 5-second undo (#40). |
 | Quality and polish, overlapping | 20 Oct, evening | #42–#51 | Release scope decisions (#42); CI and Playwright (#45); keyboard and contrast, with darker tokens and stronger focus rings (#47); page identity and a clean-clone check (#48). Then more polish — shadcn's field borders and 36 px controls (#49) — followed by checking every Must criterion against a test (#50) and screen-reader fixes (#51). |
-| Validation | Not yet | — | The design review (UX-10) and the usability test with 2–3 people. Their results go in [section 8](#8-usability-test). |
+| Validation | After v1.0 | — | The usability test couldn't be run in time and moved to after the release; its plan is in [section 8](#8-usability-test-not-done-yet). The design review (UX-10) comes before the release. |
 
 The phase gates still did their job as checkpoints: every app change was reviewed on its Vercel preview, and from #45 on, nothing merged without green CI. What the gates no longer did was hold one phase back until another finished. For example, a polish change to field borders (#49) came after the contrast work it partly undid (#47). Because both were reviewed and logged, that reversal is visible in `docs/decisions.md`, not hidden.
 
@@ -140,7 +140,7 @@ The decisions that shaped the product, from `docs/decisions.md` and the pull req
 
 **shadcn's look, with stronger focus.** For contrast, four text colours were darkened, and the focus ring is solid at 4.5:1 or more on every Tab stop. Field borders were first darkened to 3:1, then put back to shadcn's light default by choice. Fields are found by their visible labels and the focus ring. That one trade-off is written into the accessibility checklist (A11Y-3). All controls are 36 px tall, so buttons, fields and tabs line up.
 
-**Scope cuts.** Table sorting moved to future work; filtering and search already answer "where is that invoice?". The usability test shrank from 5–8 people to 2–3, and its results are reported as directional.
+**Scope cuts.** Table sorting moved to future work; filtering and search already answer "where is that invoice?". The usability test shrank from 5–8 people to 2–3, then moved to after the release, because it couldn't be run in time (see section 8).
 
 ## 6. Accessibility and quality
 
@@ -155,41 +155,47 @@ The decisions that shaped the product, from `docs/decisions.md` and the pull req
 
 ## 7. What was validated, and what was assumed
 
-**Discovery interviews were skipped** for time (decided 2026-10-19). The persona, the jobs to be done and the competitor notes are assumptions. The usability test is the first contact with real users.
+**Discovery interviews were skipped** for time (decided 2026-10-19). The persona, the jobs to be done and the competitor notes are assumptions. No user has been observed using the app yet; the test planned in [section 8](#8-usability-test-not-done-yet) will be the first contact with real users.
 
 | Claim | Status |
 | --- | --- |
 | Figures follow the calculation rules exactly | **Validated** by automated tests on a hand-worked dataset |
 | Every flow works by keyboard and with VoiceOver | **Validated** by tests and a VoiceOver pass |
-| Tracking who owes money is the most painful job | **Assumed**; checked in the usability test ✍️ |
-| Freelancers keep records they can export as CSV | **Assumed**; checked in the usability test ✍️ |
-| They'd rather import a CSV than type records | **Assumed; the biggest open bet** ✍️ |
-| Cash received is more useful than billed revenue | **Assumed**; checked in the usability test ✍️ |
-| A monthly view is the right default (the app opens on Last 6 months) | **Assumed**; checked in the usability test ✍️ |
+| Tracking who owes money is the most painful job | **Assumed**, not tested yet |
+| Freelancers keep records they can export as CSV | **Assumed**, not tested yet |
+| They'd rather import a CSV than type records | **Assumed**, not tested yet; the biggest open bet |
+| Cash received is more useful than billed revenue | **Assumed**, not tested yet |
+| A monthly view is the right default (the app opens on Last 6 months) | **Assumed**, not tested yet |
 
-## 8. Usability test
+## 8. Usability test: not done yet
 
-> **✍️ To fill in after the test (CASE-3).** Keep it to what was actually observed.
->
-> **Setup:** number of participants (2–3), who they were (role, how they track money today), remote or in person, device, and the date. Did they use the live demo or a preview?
->
-> **Tasks and results** against the PRD's targets:
->
-> | Task | Target | P1 | P2 | P3 | Met? |
-> | --- | --- | --- | --- | --- | --- |
-> | Find total received this month | ≥ 90% success, under 10 s | | | | |
-> | Identify which clients owe money | ≥ 90% success, under 15 s | | | | |
-> | Mark an invoice as paid | ≥ 90% success, under 20 s | | | | |
-> | Complete a CSV import with a sample file | ≥ 80% success without help | | | | |
-> | Ease rating (SEQ, 1–7) per task | Average ≥ 5.5 | | | | |
->
-> **CSV import or typing?** What each participant preferred, and why. This is the PRD's biggest open bet, so state plainly whether it held.
->
-> **The assumptions in section 7:** what you learned about each.
->
-> **What went wrong:** the problems you saw, how serious each was, and what you changed (or plan to).
->
-> **Caveat:** with 2–3 people, these results are directional, not statistically meaningful.
+**Studio Ledger hasn't been tested with users yet.** The usability test was planned for before the release (CASE-3), but it couldn't be run in time, so it moved to after v1.0 (decided 21 October 2026). No user outside the project has been observed using it. Everything in [section 7](#7-what-was-validated-and-what-was-assumed) marked "assumed" is still a guess, including the biggest one: that freelancers would rather import a CSV than type their records. What *is* checked is that the app works as specified: its figures, its flows, and its accessibility, by automated tests and a VoiceOver pass.
+
+### Test plan for later
+
+| | |
+| --- | --- |
+| **Who** | 2–3 freelance creatives who match the persona: several clients, tracking money themselves, ideally with an invoice spreadsheet they could export. Not people who worked on the project. |
+| **Setup** | 30 minutes each, remote or in person, on the live demo with the sample data, on their own laptop. Think-aloud, with screen and audio recorded with consent. The moderator doesn't help unless someone is stuck for 2 minutes. |
+| **Before** | How do you track invoices and expenses today? Who owes you money right now, and how do you know? |
+| **Tasks** | 1. How much have you received this month? 2. Which clients still owe you money? 3. Lumen Coffee has just paid invoice INV-002; record it. 4. Import this CSV of invoices (the sample file). 5. Add one expense by hand. |
+| **After each task** | Ease rating (SEQ, 1–7). |
+| **After all tasks** | Would you rather import a CSV or type your records, and why? Rank the three questions (received, spent, who owes you) by how much they matter. Does "Received" mean what you expected? Is the default period right for you? |
+
+**Targets,** from the PRD:
+
+| Task | Target |
+| --- | --- |
+| Find total received this month | ≥ 90% success, under 10 s |
+| Identify which clients owe money | ≥ 90% success, under 15 s |
+| Mark an invoice as paid | ≥ 90% success, under 20 s |
+| Complete a CSV import with a sample file | ≥ 80% success without help |
+| Ease rating (SEQ, 1–7) | Average ≥ 5.5 per task |
+
+**Reporting:**
+- Results replace this section: success, time and SEQ per task and participant, the CSV-or-typing answer, what each assumption in section 7 turned out to be, and the problems seen, ranked by severity.
+- With 2–3 people, the results are directional, not statistically meaningful, and the write-up will say so.
+- The fixes that follow become pull requests, like everything else.
 
 ## 9. Release screens
 
@@ -211,6 +217,7 @@ Full-page Overview: [desktop](screenshots/release/overview-full-desktop.png), [p
 ## 10. What's next
 
 Planned after v1.0, from the PRD and the future-work list:
+- **First, the usability test** in [section 8](#8-usability-test-not-done-yet), and fixes for what it finds. Its results may reorder everything below.
 - Export (v1.1).
 - Read-only Google Sheets sync (v1.1 at the earliest).
 - Reminder emails (v1.1).
@@ -220,12 +227,10 @@ Planned after v1.0, from the PRD and the future-work list:
 - Recent activity on the Overview (US-1.4).
 - A full screen-reader review, and axe scans on every screen.
 
-> **✍️ To fill in after the test:** what the usability test changes about this list.
-
 ## 11. Reflection
 
 > **✍️ To fill in: your own reflections.** Some prompts:
-> - What would you do differently: skipping discovery, the size of the test, phase gates?
+> - What would you do differently: skipping discovery, releasing before a usability test, phase gates?
 > - What did designing in code with no Figma give you, and what did it cost?
 > - Which decision are you proudest of, and which one are you least sure about?
 > - What did you learn about directing an AI coding agent with a PRD and a Definition of Done?

@@ -125,7 +125,6 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [ ] **CASE-1** Must · The case study explains the problem, the user, the MVP scope and the non-goals, matching the PRD.
 - [ ] **CASE-2** Must · It shows the process (PRD, rough screens, design polish in code with no Figma, build, validation) with concrete decisions and tradeoffs.
-- [ ] **CASE-3** Must · A usability test with 2–3 participants is run against the PRD success metrics, and the results are reported, including whether people preferred CSV import over typing records.
 - [ ] **CASE-4** Must · It says plainly what was validated and what was assumed, including that discovery interviews were skipped.
 - [ ] **CASE-5** Must · Real desktop and mobile screenshots show the released app.
 - [ ] **CASE-6** Must · It links to the live demo and says how reviewers can see the private repository.
@@ -141,3 +140,4 @@ Not part of the MVP release (decided 2026-10-20, see `docs/decisions.md`). Forme
 - [ ] **TEST-5** · The core journeys pass in Chromium, Firefox and WebKit.
 - [ ] **DEP-5** · Production Lighthouse scores are 90+ for performance and 95+ for accessibility, with the test conditions recorded.
 - [ ] **CASE-7** · A short walkthrough video shows the three core journeys.
+- [ ] **CASE-3** · A usability test with 2–3 participants is run against the PRD success metrics, and the results are reported, including whether people preferred CSV import over typing records. Moved here on 2026-10-21: it couldn't be run before the release. The plan is in `docs/case-study.md`, section 8.
