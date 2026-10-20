@@ -2,6 +2,27 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Card lists on phones (UX-8) and pagination
+
+**Pull request:** the UX-8 PR (branch `feature/ux-8-mobile-card-lists`, stacked on the Phase 3 design polish PR).
+
+**Run on this branch:** `npx vitest run --dir src` (16 files, 160 tests passed, run four times in a row), `npm run lint` (no warnings or errors), `npm run build` (passed; bundle warning, now 938 kB), and Chromium (Playwright, headless) on the sample data at 375, 767, 768 and 1280 px. Screenshots: `docs/screenshots/ux-8/`.
+
+| Items | What was verified |
+| --- | --- |
+| UX-8 | **Summary cards stack:** at 375 px the four cards are one column (`ux-8/overview-phone.png`). **Tables become card lists:** at 375 and 767 px, Overview Outstanding, Invoices and Expenses render a card list and no data table (the Overview keeps only the chart's screen-reader table); at 768 and 1280 px they render tables again. Import match and preview steps render lists at 375 px (`ux-8/import-match-phone.png`, `ux-8/import-preview-phone.png`). Every page's `scrollWidth` is 375 at 375 px. `phone-lists.test.tsx` checks each list's rows and actions: Outstanding opens the invoice, Invoices has Mark as paid only on unpaid invoices and the number opens the panel, Expenses opens the expense, the import columns keep their field menu and switch, and preview rows show their status. |
+| PB-28 (affected, stays open) | New acceptance criteria in `docs/PRD.md`: US-1.3 (at most 10 in Outstanding), US-2.3 and US-3.2 (10 per page, page in the URL), US-4.3 (every row, 10 per page, instead of the first 20). Verified: `pagination.test.ts` (page from the URL, pages of the sample, short last page, out-of-range page, page buttons with gaps); `invoices.test.tsx` and `expenses.test.tsx` (10 rows, "Showing 1–10 of 41 invoices", `?page=5` and `?page=3` open on that page, Next, page links with real `href`s, a filter goes back to page 1, the count and total cover every expense); `import.test.tsx` (12-row file previews 10 then 2; Outstanding shows 10 of 12 with a link to Invoices). Chromium: page links change the URL without reloading, Back returns to the previous page, the Paid tab goes back to page 1, and the pagination is 308 px wide on Expenses page 6 at 375 px. |
+| UX-7 (affected, stays open) | No page scrolls sideways at 375, 767, 768 or 1280 px. Dialogs and panels were checked at 375 px only. |
+
+**Found, not fixed:**
+
+- At 768–1023 px (tablets), the Invoices table (52 rem wide) still scrolls sideways inside its card; card lists only apply below 768 px.
+- On phones the invoice and expense side panels are three quarters of the screen wide, because shadcn's `data-[side=right]:w-3/4` overrides their `w-full`, so the panel's action buttons wrap.
+- `import.test.tsx` "keeps required fields switched on, with a tooltip saying why" failed twice in full runs, and passed in every other run and when run alone. It waits up to 1 s for a tooltip that Radix shows after 700 ms, which leaves little margin under load.
+- The stale worktree `npm test` issue from the entry below is still there.
+
+**Not verified:** the Vercel preview (checked after the PR opened), a screen reader on the card lists, widths between 375 and 767 px other than those listed.
+
 ## 2026-10-20 · Phase 3 design polish: fonts, chart colours, phone top bar, design pass
 
 **Pull request:** the Phase 3 design polish PR (branch `design/phase-3-polish`, four commits: fonts, chart colours, phone top bar, design pass).

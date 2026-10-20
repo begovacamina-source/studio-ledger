@@ -475,6 +475,7 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 **US-1.3 · Must** — As a freelancer, I want to see who owes me money, so I can follow up.
 
 - [ ] The Outstanding list shows unpaid invoices, Overdue first, then by due date.
+- [ ] It shows at most 10 invoices (the most urgent); when there are more, it says how many and links to Invoices.
 - [ ] Each row shows client, amount, due date and status (Pending, or Overdue with days overdue).
 - [ ] Clicking a row opens that invoice.
 
@@ -504,6 +505,7 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 
 - [ ] Status filter tabs: All, Paid, Pending, Overdue, each with a count.
 - [ ] Search matches invoice number and client name.
+- [ ] The list shows 10 invoices per page, with pagination, on desktop and mobile. The page is kept in the URL, and changing a filter or the search goes back to page 1.
 - [ ] (Should) The table can be sorted by due date, amount and client.
 
 **US-2.4 · Must** — As a freelancer, I want to edit or delete an invoice, so I can fix mistakes.
@@ -531,6 +533,7 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 
 - [ ] Filter by period and category. The period filter offers All time plus the dashboard periods, and opens on All time so new and imported expenses are always visible.
 - [ ] The list shows how many expenses match the filters and their total (e.g. "24 expenses · $2,084.56").
+- [ ] The list shows 10 expenses per page, with pagination, on desktop and mobile. The page is kept in the URL, and changing a filter goes back to page 1. The count and total cover every matching expense, not just the page.
 - [ ] Delete requires confirmation.
 
 ---
@@ -553,7 +556,7 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 
 **US-4.3 · Must** — As a freelancer, I want to preview and validate records before importing, so bad data doesn't break my numbers.
 
-- [ ] Preview shows the first 20 rows and a summary: valid rows, rows with errors, duplicates.
+- [ ] Preview shows every row of the file, 10 per page, and a summary: valid rows, rows with errors, duplicates.
 - [ ] Each error names the row, field and problem (e.g. "Row 14: amount is not a number").
 - [ ] User can import valid rows only, or cancel and fix the file.
 - [ ] Duplicates are skipped and reported: invoices by invoice number; expenses by identical date, amount and description.
