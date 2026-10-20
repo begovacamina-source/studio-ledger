@@ -23,6 +23,8 @@ export type DecimalSeparator = 'dot' | 'comma'
 
 /** Value in a column mapping for a column that is left out. */
 export const DONT_IMPORT = '__skip__'
+/** Value in a column mapping for a column that is imported but has no field chosen yet. */
+export const NO_FIELD = ''
 
 interface FieldSpec {
   key: string
@@ -86,7 +88,7 @@ export function parseCsv(text: string): { file?: ParsedFile; error?: string } {
 
 // ---------- 2. Match columns ----------
 
-/** For each file column: the field key it fills, or DONT_IMPORT. */
+/** For each file column: the field key it fills, DONT_IMPORT, or NO_FIELD. */
 export type ColumnMapping = string[]
 
 const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
@@ -113,9 +115,24 @@ export function autoMatch(headers: string[], type: RecordType): ColumnMapping {
   return mapping
 }
 
-/** Messages that block the next step: missing required fields, or a field used twice. */
+/** Each required field and whether a column fills it. */
+export function requiredFields(mapping: ColumnMapping, type: RecordType) {
+  return FIELDS[type]
+    .filter((f) => f.required)
+    .map((f) => ({ key: f.key, label: f.label, matched: mapping.includes(f.key) }))
+}
+
+/**
+ * Messages that block the next step: a missing required field, a field used
+ * twice, or an imported column with no field.
+ */
 export function mappingProblems(mapping: ColumnMapping, type: RecordType): string[] {
   const problems: string[] = []
+  const unassigned = mapping.filter((m) => m === NO_FIELD).length
+  if (unassigned > 0)
+    problems.push(
+      `Choose a field for ${unassigned === 1 ? 'the column' : `${unassigned} columns`} you're importing, or turn ${unassigned === 1 ? 'it' : 'them'} off.`,
+    )
   for (const field of FIELDS[type]) {
     const count = mapping.filter((m) => m === field.key).length
     if (field.required && count === 0) problems.push(`Choose a column for ${field.label}.`)
@@ -241,7 +258,7 @@ export function validateRows(file: ParsedFile, settings: ImportSettings, ledger:
     const row = index + 2
     const values: Record<string, string> = {}
     mapping.forEach((key, i) => {
-      if (key !== DONT_IMPORT) values[key] = cells[i] ?? ''
+      if (key !== DONT_IMPORT && key !== NO_FIELD) values[key] = cells[i] ?? ''
     })
     const errors: RowError[] = []
     const fail = (field: FieldSpec, problem: string) =>

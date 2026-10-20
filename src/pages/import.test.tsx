@@ -25,9 +25,10 @@ describe('CSV import', () => {
 
     await user.upload(fileInput(), csv(invoicesSample, 'october.csv'))
     expect(await screen.findByText('october.csv · 4 rows · Invoices')).toBeInTheDocument()
-    // Every column matched, so the field choices stay hidden.
-    expect(screen.getByText('All columns matched.')).toBeInTheDocument()
-    expect(screen.queryByRole('columnheader', { name: 'Studio Ledger field' })).not.toBeInTheDocument()
+    // Every column is switched on and matched, and no required field is missing.
+    expect(screen.getByRole('switch', { name: 'Import paid_date' })).toBeChecked()
+    expect(screen.getByRole('combobox', { name: 'Field for paid_date' })).toHaveTextContent('Paid date')
+    expect(screen.queryByText(/missing/)).not.toBeInTheDocument()
     expect(screen.getByRole('combobox', { name: 'Date format' })).toHaveTextContent('YYYY-MM-DD')
 
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
@@ -53,50 +54,54 @@ describe('CSV import', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent('Choose a .csv file.')
   })
 
-  it('blocks the next step until required fields are matched', async () => {
+  it('shows missing required fields above the table and fixes them row by row', async () => {
     const user = userEvent.setup()
     renderApp('/import')
     await user.click(screen.getByRole('radio', { name: /Expenses/ }))
     await user.upload(fileInput(), csv('When,Cost,Kind\n2026-10-01,5.00,Office\n'))
 
-    expect(await screen.findByText('Choose a column for Date.')).toBeInTheDocument()
-    expect(screen.getByText('Choose a column for Amount.')).toBeInTheDocument()
+    // Nothing matched: every column is off and each required field is marked missing.
+    expect(await screen.findByRole('switch', { name: 'Import When' })).not.toBeChecked()
+    expect(screen.getAllByText('· missing')).toHaveLength(3)
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
     expect(screen.getByRole('button', { name: 'Preview records' })).toBeInTheDocument()
 
+    // Switching a column on asks for its field right there.
+    await user.click(screen.getByRole('switch', { name: 'Import When' }))
+    expect(screen.getByText('Choose a field, or turn this column off.')).toBeInTheDocument()
     await user.click(screen.getByRole('combobox', { name: 'Field for When' }))
     await user.click(await screen.findByRole('option', { name: 'Date' }))
-    await user.click(screen.getByRole('combobox', { name: 'Field for Cost' }))
-    await user.click(await screen.findByRole('option', { name: 'Amount' }))
-    await user.click(screen.getByRole('combobox', { name: 'Field for Kind' }))
-    await user.click(await screen.findByRole('option', { name: 'Category' }))
-    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
+    expect(screen.queryByText('Choose a field, or turn this column off.')).not.toBeInTheDocument()
+
+    for (const [column, field] of [['Cost', 'Amount'], ['Kind', 'Category']]) {
+      await user.click(screen.getByRole('switch', { name: `Import ${column}` }))
+      await user.click(screen.getByRole('combobox', { name: `Field for ${column}` }))
+      await user.click(await screen.findByRole('option', { name: field }))
+    }
+    expect(screen.queryByText('· missing')).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Preview records' }))
     expect(screen.getByRole('button', { name: 'Import 1 valid row' })).toBeInTheDocument()
   })
 
-  it('shows the field choices on request, and picking a used field moves it', async () => {
+  it('picking a field another column uses moves it and turns that column off', async () => {
     const user = userEvent.setup()
     renderApp('/import')
     await user.upload(fileInput(), csv(invoicesSample))
-    await user.click(await screen.findByRole('button', { name: 'Change matching' }))
-    expect(screen.getByRole('columnheader', { name: 'Studio Ledger field' })).toBeInTheDocument()
-
-    // Give "description" the Client field: client loses it instead of matching twice.
-    await user.click(screen.getByRole('combobox', { name: 'Field for description' }))
+    await user.click(await screen.findByRole('combobox', { name: 'Field for description' }))
     await user.click(await screen.findByRole('option', { name: 'Client' }))
-    expect(screen.getByRole('combobox', { name: 'Field for client' })).toHaveTextContent("Don't import")
-    expect(screen.queryByText(/matched to 2 columns/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/Choose a column for/)).not.toBeInTheDocument()
+
+    expect(screen.getByRole('switch', { name: 'Import client' })).not.toBeChecked()
+    expect(screen.queryByText(/missing|Choose a field/)).not.toBeInTheDocument()
   })
 
-  it('names the columns that will be left out', async () => {
+  it('leaves unknown columns off', async () => {
     const user = userEvent.setup()
     renderApp('/import')
     // An extra header with no values in the rows.
     await user.upload(fileInput(), csv(invoicesSample.replace('description', 'description,VAT')))
-    expect(await screen.findByText(/VAT won't be imported./)).toBeInTheDocument()
+    expect(await screen.findByRole('switch', { name: 'Import VAT' })).not.toBeChecked()
+    expect(screen.getByText('Not imported')).toBeInTheDocument()
   })
 
   it('reports errors and duplicates, and imports only the valid rows', async () => {
