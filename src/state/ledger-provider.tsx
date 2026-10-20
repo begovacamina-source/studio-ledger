@@ -5,7 +5,7 @@ import { applyImport, type RecordType, type ValidationResult } from '@/lib/csv-i
 import { deleteExpense, saveExpense, type ValidExpense } from '@/lib/expense-form'
 import { deleteInvoice, saveInvoice, type ValidInvoice } from '@/lib/invoice-form'
 import { markPaid, markUnpaid } from '@/lib/invoices'
-import { clearSampleData, EMPTY_LEDGER, readLedger, writeLedger } from '@/lib/storage'
+import { EMPTY_LEDGER, readLedger, writeLedger } from '@/lib/storage'
 import type { ISODate, Invoice } from '@/lib/types'
 import { LedgerContext } from './ledger-context'
 
@@ -68,7 +68,6 @@ export function LedgerProvider({ children }: { children: ReactNode }) {
         }
       },
       clearAllData: () => setLedger(EMPTY_LEDGER),
-      clearSampleData: () => setLedger((current) => clearSampleData(current)),
       importRecords: (type: RecordType, result: ValidationResult) => {
         const { ledger: next, outcome } = applyImport(ledger, type, result)
         setLedger(next)

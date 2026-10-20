@@ -299,7 +299,7 @@ Every rule in this table must have a unit test against the sample dataset before
 - Clients (list, detail)
 - Expenses (list, create/edit)
 - Import (upload, map, preview, result)
-- Settings (currency, load sample data, clear all data)
+- Settings (currency, load sample data, clear all data), reached from an icon at the far right of the top bar rather than a main tab
 
 **Design principles**
 
@@ -571,7 +571,6 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 
 - [ ] Settings has "Load sample data", which loads `data/sample-invoices.csv` and `data/sample-expenses.csv` (6 months, 6 clients, 41 invoices, 120 expenses, including overdue invoices and an empty month) with source = sample.
 - [ ] A first visit (nothing saved in this browser yet) loads the sample data automatically, so the dashboard is never empty at first.
-- [ ] While sample records are in use, a small banner says "You're viewing sample data" with a "Clear it" button. Clearing asks for confirmation, removes only the sample records (and the sample clients left without invoices), and keeps anything the user added or imported.
 - [ ] If records already exist, "Load sample data" asks for confirmation first, then replaces all records with the sample.
 - [ ] Settings has "Clear all data", which removes all clients, invoices and expenses after a confirmation that names what will be deleted.
 - [ ] Records and settings are kept in browser storage. After clearing, the app stays empty on later visits; the empty states offer "Load sample data" as one of their actions.

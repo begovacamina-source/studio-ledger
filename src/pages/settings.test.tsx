@@ -14,39 +14,31 @@ describe('Settings and first use', () => {
 
   const keyFigures = () => screen.getByRole('region', { name: 'Key figures' })
 
-  it('a first visit opens on the sample data, with a banner', () => {
+  it('a first visit opens on the sample data, with no banner', () => {
     renderApp('/', { firstVisit: true })
     expect(within(keyFigures()).getByText('$47,160.00')).toBeInTheDocument()
-    expect(screen.getByRole('status')).toHaveTextContent("You're viewing sample data")
+    expect(screen.queryByText(/sample data/i)).not.toBeInTheDocument()
   })
 
-  it('"Clear it" removes only the sample and keeps own records', async () => {
+  it('Settings is an icon on the right of the top bar, not a main tab', async () => {
     const user = userEvent.setup()
-    renderApp('/expenses')
-    await user.click(screen.getByRole('button', { name: 'Add expense' }))
-    const form = screen.getByRole('dialog', { name: 'Add expense' })
-    await user.type(within(form).getByLabelText('Amount (USD)'), '12')
-    await user.click(within(form).getByRole('combobox', { name: 'Category' }))
-    await user.click(await screen.findByRole('option', { name: 'Office' }))
-    await user.click(within(form).getByRole('button', { name: 'Add expense' }))
+    renderApp('/')
+    const nav = screen.getByRole('navigation', { name: 'Main' })
+    expect(within(nav).queryByRole('link', { name: 'Settings' })).not.toBeInTheDocument()
 
-    await user.click(screen.getByRole('button', { name: 'Clear it' }))
-    const confirm = screen.getByRole('alertdialog')
-    expect(confirm).toHaveTextContent(
-      "This deletes the sample's 6 clients, 41 invoices and 120 expenses. Records you added or imported stay.",
-    )
-    await user.click(within(confirm).getByRole('button', { name: 'Clear sample data' }))
-
-    expect(screen.queryByText("You're viewing sample data")).not.toBeInTheDocument()
-    expect(screen.getByText('1 expense · $12.00')).toBeInTheDocument()
+    const settings = screen.getByRole('link', { name: 'Settings' })
+    await user.hover(settings)
+    expect(await screen.findByRole('tooltip')).toHaveTextContent('Settings')
+    await user.click(settings)
+    expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
+    expect(settings).toHaveAttribute('aria-current', 'page')
   })
 
-  it('after clearing, a later visit stays empty', async () => {
+  it('after clearing all data, a later visit stays empty', async () => {
     const user = userEvent.setup()
-    const { unmount } = renderApp('/')
-    await user.click(screen.getByRole('button', { name: 'Clear it' }))
-    await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Clear sample data' }))
-    expect(screen.getByRole('heading', { name: 'No records yet' })).toBeInTheDocument()
+    const { unmount } = renderApp('/settings')
+    await user.click(screen.getByRole('button', { name: 'Clear all data' }))
+    await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Delete everything' }))
 
     unmount()
     render(
@@ -55,7 +47,6 @@ describe('Settings and first use', () => {
       </MemoryRouter>,
     )
     expect(screen.getByRole('heading', { name: 'No records yet' })).toBeInTheDocument()
-    expect(screen.queryByRole('status')).not.toBeInTheDocument()
   })
 
   it('after clearing, the empty state offers Load sample data and the dashboard fills straight away', async () => {

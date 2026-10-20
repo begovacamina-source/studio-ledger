@@ -1,7 +1,7 @@
-import { NavLink, Route, Routes } from 'react-router'
-import { SampleBanner } from '@/components/sample-banner'
+import { SettingsIcon } from 'lucide-react'
+import { Link, NavLink, Route, Routes, useMatch } from 'react-router'
 import { Toaster } from '@/components/ui/sonner'
-import { TooltipProvider } from '@/components/ui/tooltip'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 import { DashboardPage } from '@/pages/dashboard-page'
 import { ExpensesPage } from '@/pages/expenses-page'
@@ -16,8 +16,33 @@ const NAV = [
   { to: '/invoices', label: 'Invoices', end: false },
   { to: '/expenses', label: 'Expenses', end: false },
   { to: '/import', label: 'Import', end: false },
-  { to: '/settings', label: 'Settings', end: false },
 ]
+
+/**
+ * The gear at the far right of the top bar. The active style is worked out
+ * here because the tooltip trigger would drop NavLink's className function.
+ */
+function SettingsLink() {
+  const active = useMatch('/settings')
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Link
+          to="/settings"
+          aria-label="Settings"
+          aria-current={active ? 'page' : undefined}
+          className={cn(
+            'flex size-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none',
+            active && 'bg-muted text-foreground',
+          )}
+        >
+          <SettingsIcon className="size-4" aria-hidden />
+        </Link>
+      </TooltipTrigger>
+      <TooltipContent>Settings</TooltipContent>
+    </Tooltip>
+  )
+}
 
 export default function App() {
   return (
@@ -45,9 +70,12 @@ export default function App() {
                     </NavLink>
                   ))}
                 </nav>
+                {/* Settings sits apart from the main tabs, as an icon on the far right. */}
+                <div className="flex justify-end">
+                  <SettingsLink />
+                </div>
               </div>
             </header>
-            <SampleBanner />
             <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
               <Routes>
                 <Route index element={<DashboardPage />} />

@@ -20,8 +20,6 @@ export interface LedgerContextValue {
   loadSampleData: () => string | null
   /** Removes every client, invoice and expense. Settings stay. */
   clearAllData: () => void
-  /** Removes only the sample records; the user's own records stay. */
-  clearSampleData: () => void
 }
 
 export const LedgerContext = createContext<LedgerContextValue | null>(null)

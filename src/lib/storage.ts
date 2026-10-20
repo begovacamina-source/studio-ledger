@@ -87,35 +87,5 @@ export function describeRecords(ledger: Ledger): string {
   return `${named.slice(0, -1).join(', ')} and ${named.at(-1)}`
 }
 
-/** True while any sample invoice or expense is in the ledger. */
-export const usesSampleData = (ledger: Ledger) =>
-  ledger.invoices.some((i) => i.source === 'sample') || ledger.expenses.some((e) => e.source === 'sample')
-
-/**
- * Removes the sample invoices and expenses, and the clients left with no
- * invoices because of it. Records the user added or imported stay.
- */
-export function clearSampleData(ledger: Ledger): Ledger {
-  const invoices = ledger.invoices.filter((i) => i.source !== 'sample')
-  const sampleClients = new Set(ledger.invoices.filter((i) => i.source === 'sample').map((i) => i.clientId))
-  const stillUsed = new Set(invoices.map((i) => i.clientId))
-  return {
-    clients: ledger.clients.filter((c) => !sampleClients.has(c.id) || stillUsed.has(c.id)),
-    invoices,
-    expenses: ledger.expenses.filter((e) => e.source !== 'sample'),
-  }
-}
-
-/** What clearing the sample would remove, for the confirmation. */
-export function sampleRecords(ledger: Ledger): Ledger {
-  const kept = clearSampleData(ledger)
-  const keptClients = new Set(kept.clients.map((c) => c.id))
-  return {
-    clients: ledger.clients.filter((c) => !keptClients.has(c.id)),
-    invoices: ledger.invoices.filter((i) => i.source === 'sample'),
-    expenses: ledger.expenses.filter((e) => e.source === 'sample'),
-  }
-}
-
 export const hasRecords = (ledger: Ledger) =>
   ledger.clients.length + ledger.invoices.length + ledger.expenses.length > 0
