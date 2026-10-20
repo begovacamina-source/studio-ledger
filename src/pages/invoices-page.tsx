@@ -32,6 +32,7 @@ import {
   type StatusFilter,
 } from '@/lib/invoices'
 import { invoicePath } from '@/lib/invoice-form'
+import { plural } from '@/lib/format'
 import { formatMoney } from '@/lib/money'
 import { paginate } from '@/lib/pagination'
 import { useLedger } from '@/state/use-ledger'
@@ -142,6 +143,10 @@ export function InvoicesPage() {
                   }}
                 />
               </div>
+              {/* Says how many invoices a search or status tab leaves, as the list changes. */}
+              <p className="sr-only" aria-live="polite">
+                {plural(visible.length, 'invoice')}
+              </p>
             </div>
 
             <TabsContent value={status} className="mt-6">
@@ -210,7 +215,7 @@ export function InvoicesPage() {
                       ))}
                     </CardList>
                   ) : (
-                    <Table className="min-w-208 table-fixed">
+                    <Table aria-label="Invoices" className="min-w-208 table-fixed">
                       {/* Fixed column widths keep every column in the same place on every tab. */}
                       <colgroup>
                         <col className="w-28" />

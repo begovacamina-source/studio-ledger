@@ -188,7 +188,7 @@ export function ExpensesPage() {
                   ))}
                 </CardList>
               ) : (
-                <Table className="min-w-160 table-fixed">
+                <Table aria-label="Expenses" className="min-w-160 table-fixed">
                   <colgroup>
                     <col className="w-36" />
                     <col className="w-36" />

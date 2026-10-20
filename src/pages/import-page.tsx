@@ -26,7 +26,7 @@ function Steps({ current }: { current: Step }) {
   const index = STEPS.indexOf(current)
   return (
     // One line at every width: on phones only the current step shows its label.
-    <ol className="flex gap-x-4 text-sm md:gap-x-6">
+    <ol aria-label="Import steps" className="flex gap-x-4 text-sm md:gap-x-6">
       {STEPS.map((step, i) => (
         <li
           key={step}
