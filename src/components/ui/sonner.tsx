@@ -37,7 +37,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }
       toastOptions={{
         classNames: {
-          toast: "cn-toast",
+          // A11Y-2: Sonner's own focus shadow is too faint; important beats its styles.
+          toast: "cn-toast focus-visible:ring-3! focus-visible:ring-ring!",
         },
       }}
       {...props}

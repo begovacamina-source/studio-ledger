@@ -206,7 +206,7 @@ export function MatchStep({
           </CardList>
         </div>
       ) : (
-        <Table className="min-w-[36rem] table-fixed">
+        <Table className="min-w-144 table-fixed">
           <colgroup>
             <col />
             <col />

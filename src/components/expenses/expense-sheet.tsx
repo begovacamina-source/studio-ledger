@@ -52,7 +52,7 @@ function ExpenseDetails({ expense, onDeleted }: { expense: Expense; onDeleted: (
         <p className="text-2xl font-semibold text-foreground tabular-nums">{amount}</p>
       </SheetHeader>
 
-      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-6">
+      <dl className="grid grid-cols-(--details-columns) gap-x-4 gap-y-3 px-6">
         {details.map(([term, value]) => (
           <div key={term} className="contents">
             <dt className="text-muted-foreground">{term}</dt>

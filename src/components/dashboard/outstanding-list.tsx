@@ -57,7 +57,8 @@ export function OutstandingList({
                   {/* The whole row opens the invoice; this button makes it reachable by keyboard. */}
                   <button
                     type="button"
-                    className="min-w-0 truncate rounded-sm text-left font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                    data-invoice-opener={row.invoice.invoiceNumber}
+                    className="min-w-0 truncate rounded-sm text-left font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
                   >
                     {row.client?.name ?? 'Unknown client'}
                   </button>
@@ -74,7 +75,7 @@ export function OutstandingList({
             ))}
           </CardList>
         ) : (
-          <Table className="min-w-[26rem] table-fixed">
+          <Table className="min-w-104 table-fixed">
             <colgroup>
               <col />
               <col className="w-24" />
@@ -99,7 +100,8 @@ export function OutstandingList({
                     {/* The whole row opens the invoice; this button makes it reachable by keyboard. */}
                     <button
                       type="button"
-                      className="max-w-full truncate rounded-sm text-left font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                      data-invoice-opener={row.invoice.invoiceNumber}
+                      className="max-w-full truncate rounded-sm text-left font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none"
                     >
                       {row.client?.name ?? 'Unknown client'}
                     </button>

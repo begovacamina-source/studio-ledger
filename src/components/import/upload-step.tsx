@@ -88,7 +88,7 @@ export function UploadStep({
           onDragLeave={() => setDragging(false)}
           onDrop={handleDrop}
           className={cn(
-            'flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed p-10 text-center transition-colors hover:bg-muted/50 has-focus-visible:ring-[3px] has-focus-visible:ring-ring/50',
+            'flex cursor-pointer flex-col items-center gap-2 rounded-lg border border-dashed p-10 text-center transition-colors hover:bg-muted/50 has-focus-visible:ring-3 has-focus-visible:ring-ring',
             dragging && 'border-primary bg-muted/50',
             error && 'border-destructive',
           )}

@@ -55,7 +55,7 @@ export function ClientsPage() {
   const nameLink = (id: string, name: string, className = '') => (
     <Link
       to={clientPath(id) + search}
-      className={`rounded-sm font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none ${className}`}
+      className={`rounded-sm font-medium focus-visible:ring-3 focus-visible:ring-ring focus-visible:outline-none ${className}`}
     >
       {name}
     </Link>
@@ -105,7 +105,7 @@ export function ClientsPage() {
                 ))}
               </CardList>
             ) : (
-              <Table className="min-w-[40rem] table-fixed">
+              <Table className="min-w-160 table-fixed">
                 <colgroup>
                   <col />
                   <col className="w-40" />

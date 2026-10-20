@@ -85,7 +85,7 @@ function InvoiceDetails({
         </p>
       </SheetHeader>
 
-      <dl className="grid grid-cols-[7rem_1fr] gap-x-4 gap-y-3 px-6">
+      <dl className="grid grid-cols-(--details-columns) gap-x-4 gap-y-3 px-6">
         {details.map(([term, value]) => (
           <div key={term} className="contents">
             <dt className="text-muted-foreground">{term}</dt>
@@ -190,11 +190,29 @@ export function InvoiceSheet({
   const [lastShown, setLastShown] = useState(invoice)
   if (invoice && invoice !== lastShown) setLastShown(invoice)
   const shown = invoice ?? (invoiceNumber === undefined ? lastShown : undefined)
+  // What had focus when the panel opened, so closing can return to it (A11Y-2).
+  const opener = useRef<Element | null>(null)
 
   return (
     <Sheet open={invoiceNumber !== undefined} onOpenChange={(open) => !open && onClose()}>
       {/* Full width on phones. The side-scoped classes replace shadcn's ¾ width and narrower cap. */}
-      <SheetContent className="gap-4 data-[side=right]:w-full data-[side=right]:sm:max-w-md">
+      <SheetContent
+        className="gap-4 data-[side=right]:w-full data-[side=right]:sm:max-w-md"
+        onOpenAutoFocus={() => {
+          opener.current = document.activeElement
+        }}
+        onCloseAutoFocus={(event) => {
+          // Marking paid and undoing redraws an Outstanding row, so its button is a new one.
+          if (opener.current?.isConnected || !shown) return
+          const replacement = document.querySelector<HTMLElement>(
+            `[data-invoice-opener="${CSS.escape(shown.invoiceNumber)}"]`,
+          )
+          if (replacement) {
+            event.preventDefault()
+            replacement.focus()
+          }
+        }}
+      >
         {shown ? (
           <InvoiceDetails invoice={shown} onNumberChange={onNumberChange} onDeleted={onClose} footer={footer} />
         ) : (
