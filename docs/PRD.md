@@ -247,7 +247,7 @@ date,amount,category,description
 
 **Periods**
 
-Periods are whole calendar months, and "Last 3 months" and "Last 6 months" include the current month. The dashboard opens on Last 6 months.
+Periods are whole calendar months, and "Last 3 months" and "Last 6 months" include the current month. The dashboard opens on Last 6 months. The Expenses list also offers All time and opens on it.
 
 | Period | Months covered | Example on 2026-10-20 |
 | --- | --- | --- |
@@ -529,7 +529,8 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 
 **US-3.2 · Must** — As a freelancer, I want to view, filter, edit and delete expenses, so I keep my records clean.
 
-- [ ] Filter by period and category.
+- [ ] Filter by period and category. The period filter offers All time plus the dashboard periods, and opens on All time so new and imported expenses are always visible.
+- [ ] The list shows how many expenses match the filters and their total (e.g. "24 expenses · $2,084.56").
 - [ ] Delete requires confirmation.
 
 ---

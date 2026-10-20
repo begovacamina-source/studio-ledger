@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/table'
 import { formatDate, todayLocal } from '@/lib/dates'
 import { ALL_CATEGORIES, expenseTitle, filterExpenses, type ExpensePeriod } from '@/lib/expense-form'
+import { plural } from '@/lib/format'
 import { formatMoney } from '@/lib/money'
 import { PERIOD_OPTIONS } from '@/lib/periods'
 import { APP_CURRENCY } from '@/lib/settings'
@@ -50,6 +51,7 @@ export function ExpensesPage() {
     () => filterExpenses(ledger.expenses, { period, category }, today),
     [ledger.expenses, period, category, today],
   )
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0)
 
   // Filters live in the URL so they survive Back and can be bookmarked.
   function update(next: { period?: ExpensePeriod; category?: CategoryFilter }) {
@@ -77,7 +79,7 @@ export function ExpensesPage() {
         </Button>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-center gap-3">
         <Select value={period} onValueChange={(v) => update({ period: v as ExpensePeriod })}>
           <SelectTrigger className="w-44" aria-label="Period">
             <SelectValue />
@@ -106,6 +108,10 @@ export function ExpensesPage() {
             ))}
           </SelectContent>
         </Select>
+        {/* Announced when a filter changes, so the count and total aren't only visual. */}
+        <p aria-live="polite" className="ml-auto text-sm text-muted-foreground tabular-nums">
+          {plural(expenses.length, 'expense')} · {formatMoney(total, APP_CURRENCY)}
+        </p>
       </div>
 
       <Card>

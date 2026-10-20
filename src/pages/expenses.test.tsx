@@ -34,6 +34,19 @@ describe('Expenses', () => {
     expect(rows()).toHaveLength(120)
   })
 
+  it('shows how many expenses match and their total', async () => {
+    const user = userEvent.setup()
+    renderApp('/expenses')
+    // All time is the default: every sample expense, April to September.
+    expect(screen.getByText('120 expenses · $11,770.14')).toBeInTheDocument()
+
+    await choose(user, 'Period', 'Last month')
+    expect(screen.getByText(`${rows().length} expenses · $2,084.56`)).toBeInTheDocument()
+
+    await choose(user, 'Period', 'This month')
+    expect(screen.getByText('0 expenses · $0.00')).toBeInTheDocument()
+  })
+
   it('adds an expense in a modal and the dashboard Expenses update', async () => {
     const user = userEvent.setup()
     renderApp('/expenses')
