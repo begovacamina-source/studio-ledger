@@ -321,7 +321,7 @@ The design is made in code: screens are built and reviewed in the browser, not i
 
 | State | Example |
 | --- | --- |
-| Empty (first use) | "No invoices yet" + Add invoice, Import CSV, Load sample data |
+| Empty (after clearing) | "No invoices yet" + Add invoice, Import CSV, Load sample data (a first visit opens on the sample data instead) |
 | Empty (filter) | "No overdue invoices" + Clear filters |
 | Loading | Skeleton rows and cards |
 | Error | Clear message + retry; import errors listed per row |
@@ -570,10 +570,12 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 **US-5.1 · Must** — As a freelancer, I want to load sample data and clear all data, so I can try the app with realistic records and then start fresh.
 
 - [ ] Settings has "Load sample data", which loads `data/sample-invoices.csv` and `data/sample-expenses.csv` (6 months, 6 clients, 41 invoices, 120 expenses, including overdue invoices and an empty month) with source = sample.
-- [ ] If records already exist, loading asks for confirmation first.
+- [ ] A first visit (nothing saved in this browser yet) loads the sample data automatically, so the dashboard is never empty at first.
+- [ ] While sample records are in use, a small banner says "You're viewing sample data" with a "Clear it" button. Clearing asks for confirmation, removes only the sample records (and the sample clients left without invoices), and keeps anything the user added or imported.
+- [ ] If records already exist, "Load sample data" asks for confirmation first, then replaces all records with the sample.
 - [ ] Settings has "Clear all data", which removes all clients, invoices and expenses after a confirmation that names what will be deleted.
-- [ ] First-use empty states offer "Load sample data" as one of their actions.
-- [ ] After either action, the dashboard updates immediately.
+- [ ] Records and settings are kept in browser storage. After clearing, the app stays empty on later visits; the empty states offer "Load sample data" as one of their actions.
+- [ ] After any of these actions, the dashboard updates immediately.
 
 **US-5.2 · Must** — As a freelancer, I want to choose the app currency, so amounts show in the currency I work in.
 

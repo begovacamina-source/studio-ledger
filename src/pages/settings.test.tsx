@@ -14,7 +14,51 @@ describe('Settings and first use', () => {
 
   const keyFigures = () => screen.getByRole('region', { name: 'Key figures' })
 
-  it('starts empty, offers Load sample data, and the dashboard fills straight away', async () => {
+  it('a first visit opens on the sample data, with a banner', () => {
+    renderApp('/', { firstVisit: true })
+    expect(within(keyFigures()).getByText('$47,160.00')).toBeInTheDocument()
+    expect(screen.getByRole('status')).toHaveTextContent("You're viewing sample data")
+  })
+
+  it('"Clear it" removes only the sample and keeps own records', async () => {
+    const user = userEvent.setup()
+    renderApp('/expenses')
+    await user.click(screen.getByRole('button', { name: 'Add expense' }))
+    const form = screen.getByRole('dialog', { name: 'Add expense' })
+    await user.type(within(form).getByLabelText('Amount (USD)'), '12')
+    await user.click(within(form).getByRole('combobox', { name: 'Category' }))
+    await user.click(await screen.findByRole('option', { name: 'Office' }))
+    await user.click(within(form).getByRole('button', { name: 'Add expense' }))
+
+    await user.click(screen.getByRole('button', { name: 'Clear it' }))
+    const confirm = screen.getByRole('alertdialog')
+    expect(confirm).toHaveTextContent(
+      "This deletes the sample's 6 clients, 41 invoices and 120 expenses. Records you added or imported stay.",
+    )
+    await user.click(within(confirm).getByRole('button', { name: 'Clear sample data' }))
+
+    expect(screen.queryByText("You're viewing sample data")).not.toBeInTheDocument()
+    expect(screen.getByText('1 expense · $12.00')).toBeInTheDocument()
+  })
+
+  it('after clearing, a later visit stays empty', async () => {
+    const user = userEvent.setup()
+    const { unmount } = renderApp('/')
+    await user.click(screen.getByRole('button', { name: 'Clear it' }))
+    await user.click(within(screen.getByRole('alertdialog')).getByRole('button', { name: 'Clear sample data' }))
+    expect(screen.getByRole('heading', { name: 'No records yet' })).toBeInTheDocument()
+
+    unmount()
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>,
+    )
+    expect(screen.getByRole('heading', { name: 'No records yet' })).toBeInTheDocument()
+    expect(screen.queryByRole('status')).not.toBeInTheDocument()
+  })
+
+  it('after clearing, the empty state offers Load sample data and the dashboard fills straight away', async () => {
     const user = userEvent.setup()
     renderApp('/', { empty: true })
     expect(screen.getByRole('heading', { name: 'No records yet' })).toBeInTheDocument()

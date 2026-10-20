@@ -5,17 +5,25 @@ import { applyImport, type RecordType, type ValidationResult } from '@/lib/csv-i
 import { deleteExpense, saveExpense, type ValidExpense } from '@/lib/expense-form'
 import { deleteInvoice, saveInvoice, type ValidInvoice } from '@/lib/invoice-form'
 import { markPaid, markUnpaid } from '@/lib/invoices'
-import { EMPTY_LEDGER, readLedger, writeLedger } from '@/lib/storage'
+import { clearSampleData, EMPTY_LEDGER, readLedger, writeLedger } from '@/lib/storage'
 import type { ISODate, Invoice } from '@/lib/types'
 import { LedgerContext } from './ledger-context'
 
 /**
  * Holds the records and keeps them in browser storage, so they survive a
- * reload. First use starts empty.
+ * reload. A first visit starts with the sample data.
  */
 export function LedgerProvider({ children }: { children: ReactNode }) {
   const [initial] = useState(readLedger)
-  const [ledger, setLedger] = useState(initial.ledger)
+  // A first visit opens on the sample data, so the dashboard is never empty at first.
+  const [ledger, setLedger] = useState(() => {
+    if (!initial.firstVisit) return initial.ledger
+    try {
+      return loadSampleLedger()
+    } catch {
+      return EMPTY_LEDGER
+    }
+  })
 
   // Tell the user once if saved data couldn't be read.
   useEffect(() => {
@@ -60,6 +68,7 @@ export function LedgerProvider({ children }: { children: ReactNode }) {
         }
       },
       clearAllData: () => setLedger(EMPTY_LEDGER),
+      clearSampleData: () => setLedger((current) => clearSampleData(current)),
       importRecords: (type: RecordType, result: ValidationResult) => {
         const { ledger: next, outcome } = applyImport(ledger, type, result)
         setLedger(next)

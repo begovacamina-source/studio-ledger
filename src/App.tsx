@@ -1,4 +1,5 @@
 import { NavLink, Route, Routes } from 'react-router'
+import { SampleBanner } from '@/components/sample-banner'
 import { Toaster } from '@/components/ui/sonner'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
@@ -46,6 +47,7 @@ export default function App() {
                 </nav>
               </div>
             </header>
+            <SampleBanner />
             <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
               <Routes>
                 <Route index element={<DashboardPage />} />
