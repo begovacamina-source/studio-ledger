@@ -120,7 +120,7 @@ export function OutstandingList({
         {rows.length > shown.length && (
           <p className="mt-4 text-sm text-muted-foreground">
             The {shown.length} most urgent of {rows.length}.{' '}
-            <Link to="/invoices" className="font-medium text-foreground underline-offset-4 hover:underline">
+            <Link to="/invoices" className="font-medium text-foreground">
               See all in Invoices
             </Link>
           </p>

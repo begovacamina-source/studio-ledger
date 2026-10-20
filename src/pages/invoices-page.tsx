@@ -164,7 +164,7 @@ export function InvoicesPage() {
                             <span className="flex min-w-0 items-baseline gap-2">
                               <Link
                                 to={invoicePath(row.invoice.invoiceNumber) + search}
-                                className="shrink-0 font-medium underline-offset-4 hover:underline"
+                                className="shrink-0 font-medium"
                               >
                                 {row.invoice.invoiceNumber}
                               </Link>
