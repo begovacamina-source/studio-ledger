@@ -13,11 +13,11 @@ function ChangeTag({ change }: { change: number | null }) {
   return (
     <span className="flex flex-wrap items-center gap-1.5">
       <Badge
-        variant="outline"
+        variant="secondary"
         className={cn(
           'tabular-nums',
-          text.startsWith('+') && 'border-status-paid/30 bg-status-paid/10 text-status-paid',
-          text.startsWith('-') && 'border-status-overdue/30 bg-status-overdue/10 text-status-overdue',
+          text.startsWith('+') && 'bg-status-paid/10 text-status-paid',
+          text.startsWith('-') && 'bg-status-overdue/10 text-status-overdue',
         )}
       >
         {text}
