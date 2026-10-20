@@ -1,6 +1,7 @@
 import { PlusIcon } from 'lucide-react'
 import { useEffect, useMemo, useState, type MouseEvent } from 'react'
 import { useSearchParams } from 'react-router'
+import { CardList, CardListItem, CardListLine } from '@/components/card-list'
 import { ExpenseFormDialog } from '@/components/expenses/expense-form-dialog'
 import { ExpenseSheet } from '@/components/expenses/expense-sheet'
 import { FirstUse } from '@/components/first-use'
@@ -22,6 +23,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useIsMobile } from '@/hooks/use-mobile'
 import { formatDate, todayLocal } from '@/lib/dates'
 import { ALL_CATEGORIES, expenseTitle, filterExpenses, type ExpensePeriod } from '@/lib/expense-form'
 import { plural } from '@/lib/format'
@@ -40,6 +42,7 @@ const parseCategory = (value: string | null): CategoryFilter =>
 
 export function ExpensesPage() {
   const currency = useCurrency()
+  const phone = useIsMobile()
   const { ledger } = useLedger()
   const [params, setParams] = useSearchParams()
   // ?add=1 (from the dashboard's first-use state) opens the add form straight away.
@@ -72,7 +75,7 @@ export function ExpensesPage() {
     setParams(query, { replace: true })
   }
 
-  function handleRowClick(event: MouseEvent<HTMLTableRowElement>, id: string) {
+  function handleRowClick(event: MouseEvent<HTMLElement>, id: string) {
     // The row's own button handles keyboard users; ignore clicks from inside dialogs.
     const target = event.target as HTMLElement
     if (!event.currentTarget.contains(target) || target.closest('button')) return
@@ -102,7 +105,7 @@ export function ExpensesPage() {
         <>
           <div className="flex flex-wrap items-center gap-3">
             <Select value={period} onValueChange={(v) => update({ period: v as ExpensePeriod })}>
-              <SelectTrigger className="w-44" aria-label="Period">
+              <SelectTrigger className="min-w-0 flex-1 sm:w-44 sm:flex-none" aria-label="Period">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -116,7 +119,7 @@ export function ExpensesPage() {
               </SelectContent>
             </Select>
             <Select value={category} onValueChange={(v) => update({ category: v as CategoryFilter })}>
-              <SelectTrigger className="w-44" aria-label="Category">
+              <SelectTrigger className="min-w-0 flex-1 sm:w-44 sm:flex-none" aria-label="Category">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -152,6 +155,32 @@ export function ExpensesPage() {
                     </Button>
                   )}
                 </div>
+              ) : phone ? (
+                // On phones each expense is two lines: what and how much, then when and its category.
+                <CardList aria-label="Expenses">
+                  {expenses.map((expense) => (
+                    <CardListItem
+                      key={expense.id}
+                      selected={expense.id === openId}
+                      onClick={(e) => handleRowClick(e, expense.id)}
+                    >
+                      <CardListLine>
+                        <button
+                          type="button"
+                          className="min-w-0 truncate rounded-sm text-left font-medium focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none"
+                          aria-label={`Open ${expenseTitle(expense)}, ${formatDate(expense.date)}`}
+                          onClick={() => setOpenId(expense.id)}
+                        >
+                          {expense.description ?? expense.category}
+                        </button>
+                        <span className="shrink-0 tabular-nums">{formatMoney(expense.amount, currency)}</span>
+                      </CardListLine>
+                      <div className="truncate text-muted-foreground">
+                        {formatDate(expense.date)} · {expense.category}
+                      </div>
+                    </CardListItem>
+                  ))}
+                </CardList>
               ) : (
                 <Table className="min-w-[40rem] table-fixed">
                   <colgroup>

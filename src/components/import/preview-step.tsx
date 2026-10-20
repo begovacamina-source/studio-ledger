@@ -1,3 +1,4 @@
+import { CardList, CardListItem, CardListLine } from '@/components/card-list'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -17,6 +18,7 @@ import {
   type ValidationResult,
 } from '@/lib/csv-import'
 import { plural } from '@/lib/format'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 
 // Short, predictable values get fixed widths; client and description share the rest.
@@ -46,6 +48,7 @@ export function PreviewStep({
   onCancel: () => void
   onImport: () => void
 }) {
+  const phone = useIsMobile()
   const fields = FIELDS[settings.type].filter((f) => settings.mapping.includes(f.key))
   const summary: [string, number][] = [
     ['Valid rows', result.valid],
@@ -70,39 +73,63 @@ export function PreviewStep({
         <h2 className="text-sm font-medium">
           First {Math.min(PREVIEW_ROWS, result.rows.length)} of {plural(result.rows.length, 'row')}
         </h2>
-        <Table className="min-w-[48rem] table-fixed">
-          <colgroup>
-            <col className="w-14" />
-            {fields.map((f) => (
-              <col key={f.key} className={COLUMN_WIDTH[f.kind === 'text' ? f.key : f.kind]} />
-            ))}
-            <col className="w-28" />
-          </colgroup>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Row</TableHead>
-              {fields.map((f) => (
-                <TableHead key={f.key}>{f.label}</TableHead>
-              ))}
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
+        {phone ? (
+          // On phones each file row is a short list of its fields, with its status on top.
+          <CardList aria-label="Preview rows">
             {result.rows.slice(0, PREVIEW_ROWS).map((row) => (
-              <TableRow key={row.row}>
-                <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
-                {fields.map((f) => (
-                  <TableCell key={f.key} className="truncate" title={row.values[f.key] || undefined}>
-                    {row.values[f.key] || <span className="text-muted-foreground">—</span>}
-                  </TableCell>
-                ))}
-                <TableCell>
+              <CardListItem key={row.row}>
+                <CardListLine>
+                  <span className="font-medium tabular-nums">Row {row.row}</span>
                   <RowStatus row={row} />
-                </TableCell>
-              </TableRow>
+                </CardListLine>
+                <dl className="grid grid-cols-3 gap-x-4 gap-y-1">
+                  {fields.map((f) => (
+                    <div key={f.key} className="col-span-3 grid grid-cols-subgrid">
+                      <dt className="text-muted-foreground">{f.label}</dt>
+                      <dd className="col-span-2 truncate">
+                        {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </CardListItem>
             ))}
-          </TableBody>
-        </Table>
+          </CardList>
+        ) : (
+          <Table className="min-w-[48rem] table-fixed">
+            <colgroup>
+              <col className="w-14" />
+              {fields.map((f) => (
+                <col key={f.key} className={COLUMN_WIDTH[f.kind === 'text' ? f.key : f.kind]} />
+              ))}
+              <col className="w-28" />
+            </colgroup>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Row</TableHead>
+                {fields.map((f) => (
+                  <TableHead key={f.key}>{f.label}</TableHead>
+                ))}
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {result.rows.slice(0, PREVIEW_ROWS).map((row) => (
+                <TableRow key={row.row}>
+                  <TableCell className="text-muted-foreground tabular-nums">{row.row}</TableCell>
+                  {fields.map((f) => (
+                    <TableCell key={f.key} className="truncate" title={row.values[f.key] || undefined}>
+                      {row.values[f.key] || <span className="text-muted-foreground">—</span>}
+                    </TableCell>
+                  ))}
+                  <TableCell>
+                    <RowStatus row={row} />
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
 
       {result.errors.length > 0 && (
