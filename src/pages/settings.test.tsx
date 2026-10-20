@@ -34,6 +34,19 @@ describe('Settings and first use', () => {
     expect(settings).toHaveAttribute('aria-current', 'page')
   })
 
+  it('on phones, a menu button opens the main tabs and picking one closes it', async () => {
+    const user = userEvent.setup()
+    renderApp('/')
+    await user.click(screen.getByRole('button', { name: 'Open menu' }))
+    const menu = screen.getByRole('dialog', { name: 'Studio Ledger' })
+    const links = within(within(menu).getByRole('navigation', { name: 'Main' })).getAllByRole('link')
+    expect(links.map((link) => link.textContent)).toEqual(['Overview', 'Invoices', 'Expenses', 'Import'])
+
+    await user.click(within(menu).getByRole('link', { name: 'Invoices' }))
+    expect(screen.getByRole('heading', { name: 'Invoices' })).toBeInTheDocument()
+    expect(screen.queryByRole('dialog', { name: 'Studio Ledger' })).not.toBeInTheDocument()
+  })
+
   it('after clearing all data, a later visit stays empty', async () => {
     const user = userEvent.setup()
     const { unmount } = renderApp('/settings')
