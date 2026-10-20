@@ -54,17 +54,64 @@ function InvoiceDetails({
 
   return (
     <>
-      <SheetHeader className="gap-3 border-b pr-12">
-        <SheetTitle className="text-xl">{invoice.invoiceNumber}</SheetTitle>
-        <SheetDescription className="sr-only">Invoice details</SheetDescription>
-        <div className="flex items-center justify-between gap-4">
+      <SheetHeader className="gap-2 border-b pr-12">
+        <div className="flex items-center gap-2">
+          <SheetTitle className="text-xl">{invoice.invoiceNumber}</SheetTitle>
           <InvoiceStatusBadge
             status={status}
             daysOverdue={status === 'Overdue' ? daysBetween(invoice.dueDate, today) : undefined}
           />
-          <p className="text-2xl font-semibold tabular-nums">
-            {formatMoney(invoice.amount, APP_CURRENCY)}
-          </p>
+        </div>
+        <SheetDescription className="sr-only">Invoice details</SheetDescription>
+        <p className="text-2xl font-semibold text-foreground tabular-nums">
+          {formatMoney(invoice.amount, APP_CURRENCY)}
+        </p>
+        <div className="flex flex-wrap gap-2 pt-2">
+          {status === 'Paid' ? (
+            <Button
+              variant="outline"
+              onClick={() => {
+                markInvoiceNotPaid(invoice.id)
+                toast.success(`${invoice.invoiceNumber} is no longer Paid`)
+              }}
+            >
+              Mark as not paid
+            </Button>
+          ) : (
+            <MarkPaidDialog invoice={invoice} trigger={<Button>Mark as paid</Button>} />
+          )}
+          <Button variant="outline" onClick={() => setEditing(true)}>
+            <PencilIcon /> Edit
+          </Button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant="outline">
+                <Trash2Icon /> Delete
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete {invoice.invoiceNumber}?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {formatMoney(invoice.amount, APP_CURRENCY)} for {client?.name ?? 'Unknown client'}{' '}
+                  is removed from every total. This can't be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  variant="destructive"
+                  onClick={() => {
+                    deleteInvoice(invoice.id)
+                    toast.success(`${invoice.invoiceNumber} deleted`)
+                    onDeleted()
+                  }}
+                >
+                  Delete invoice
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </SheetHeader>
 
@@ -76,54 +123,6 @@ function InvoiceDetails({
           </div>
         ))}
       </dl>
-
-      <div className="mt-auto flex flex-wrap gap-3 border-t p-4">
-        {status === 'Paid' ? (
-          <Button
-            variant="outline"
-            onClick={() => {
-              markInvoiceNotPaid(invoice.id)
-              toast.success(`${invoice.invoiceNumber} is no longer Paid`)
-            }}
-          >
-            Mark as not paid
-          </Button>
-        ) : (
-          <MarkPaidDialog invoice={invoice} trigger={<Button>Mark as paid</Button>} />
-        )}
-        <Button variant="outline" onClick={() => setEditing(true)}>
-          <PencilIcon /> Edit
-        </Button>
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline">
-              <Trash2Icon /> Delete
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete {invoice.invoiceNumber}?</AlertDialogTitle>
-              <AlertDialogDescription>
-                {formatMoney(invoice.amount, APP_CURRENCY)} for {client?.name ?? 'Unknown client'}{' '}
-                is removed from every total. This can't be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                variant="destructive"
-                onClick={() => {
-                  deleteInvoice(invoice.id)
-                  toast.success(`${invoice.invoiceNumber} deleted`)
-                  onDeleted()
-                }}
-              >
-                Delete invoice
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-      </div>
 
       <InvoiceFormDialog
         open={editing}
@@ -157,7 +156,7 @@ export function InvoiceSheet({
 
   return (
     <Sheet open={invoiceNumber !== undefined} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent className="w-full gap-6 sm:max-w-md">
+      <SheetContent className="w-full gap-4 sm:max-w-md">
         {shown ? (
           <InvoiceDetails invoice={shown} onNumberChange={onNumberChange} onDeleted={onClose} />
         ) : (
