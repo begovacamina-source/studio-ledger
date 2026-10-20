@@ -2,6 +2,18 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-21 · VoiceOver pass (A11Y-4)
+
+**Pull request:** the A11Y-4 docs PR (branch `docs/a11y-4-voiceover`), after #51.
+
+| Items | What was verified |
+| --- | --- |
+| A11Y-4 (newly checked) | **Listening:** the 18-step VoiceOver pass in `docs/screen-reader-check.md` was done by the project owner in Safari, on the preview for #51, with the sample data. Reported: all 18 steps passed. That covers page titles and the page-change announcement, headings on the Overview and Settings, the Period menu, the key figures, Outstanding rows and the invoice panel with statuses in words, Mark as paid with its announcement and Undo, Escape returning focus, the invoice search count, status tabs, the add-invoice form's errors read with each field, the expenses count and total, the import steps and file field, and the currency radios. **In code:** `e2e/screen-reader.spec.ts` (merged in #51) checks the same on every page, and passes in CI. |
+
+**Not verified:** NVDA or JAWS on Windows, and VoiceOver on iOS. The macOS and Safari versions weren't recorded. The result is the owner's report; there's no recording of the session.
+
+**Found, not fixed:** none.
+
 ## 2026-10-21 · Screen-reader check, automated half (A11Y-4 not yet checked)
 
 **Pull request:** the screen-reader PR (branch `a11y/screen-reader-check`).
