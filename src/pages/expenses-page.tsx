@@ -105,7 +105,7 @@ export function ExpensesPage() {
         <>
           <div className="flex flex-wrap items-center gap-3">
             <Select value={period} onValueChange={(v) => update({ period: v as ExpensePeriod })}>
-              <SelectTrigger className="min-w-0 flex-1 sm:w-44 sm:flex-none" aria-label="Period">
+              <SelectTrigger className="w-full md:w-44" aria-label="Period">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -119,7 +119,7 @@ export function ExpensesPage() {
               </SelectContent>
             </Select>
             <Select value={category} onValueChange={(v) => update({ category: v as CategoryFilter })}>
-              <SelectTrigger className="min-w-0 flex-1 sm:w-44 sm:flex-none" aria-label="Category">
+              <SelectTrigger className="w-full md:w-44" aria-label="Category">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -133,7 +133,7 @@ export function ExpensesPage() {
               </SelectContent>
             </Select>
             {/* Announced when a filter changes, so the count and total aren't only visual. */}
-            <p aria-live="polite" className="ml-auto text-sm text-muted-foreground tabular-nums">
+            <p aria-live="polite" className="w-full text-sm text-muted-foreground tabular-nums md:ml-auto md:w-auto">
               {plural(expenses.length, 'expense')} · {formatMoney(total, currency)}
             </p>
           </div>
