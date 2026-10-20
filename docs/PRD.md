@@ -12,9 +12,9 @@ Studio Ledger is a personal finance dashboard that shows freelance creatives wha
 
 | Release | Platform | Context |
 | --- | --- | --- |
-| MVP (v1.0) | Responsive web app (React + TypeScript) | Portfolio project: strategy, UX, design system, build, case study |
+| MVP (v1.0) | Responsive web app (Vite, React, TypeScript, Tailwind, shadcn/ui) | Design engineer portfolio project: strategy, UX, design system, build, case study |
 
-> **Source of truth.** This PRD is the reference for Figma designs, Codex tasks, GitHub issues and the case study. A feature not described here is out of scope until this document is updated.
+> **Source of truth.** This PRD is the reference for the screens, Codex tasks, GitHub issues and the case study. A feature not described here is out of scope until this document is updated.
 
 ---
 
@@ -224,7 +224,7 @@ date,amount,category,description
 
 > **The golden rule.** Income counts only when cash is received: a paid invoice counts in the period of its paid date, never its issue date. Billed revenue is never shown as income.
 
-**Glossary.** These terms are used everywhere: in this PRD, in Figma and in code. No synonyms in the UI.
+**Glossary.** These terms are used everywhere: in this PRD, in the UI and in code. No synonyms in the UI.
 
 | Term | Meaning |
 | --- | --- |
@@ -293,11 +293,14 @@ Every rule in this table must have a unit test against the sample dataset before
 3. One primary action per screen (for example "Add invoice" or "Import").
 4. Plain language: only glossary terms such as Received, Outstanding and Expenses, never accounting jargon.
 
-**Design system (Figma)**
+**Design system (shadcn/ui, no Figma)**
 
-- Semantic colour tokens (e.g. `color.status.paid`, `color.status.overdue`, `color.text.muted`), with light mode in MVP.
-- Type scale, 4 px spacing grid, radius and elevation tokens.
-- Components with all states (default, hover, focus, disabled, error, loading): button, input, select, date field, tabs, table, status badge, summary card, chart, modal, toast, file dropzone.
+The design is made in code: screens are built and reviewed in the browser, not in Figma.
+
+- Design tokens are shadcn/ui's theme colours and Tailwind's spacing, kept in one place: the theme CSS variables in `src/index.css`.
+- Colour tokens are shadcn's semantic variables (e.g. `--background`, `--foreground`, `--primary`, `--muted-foreground`, `--destructive`, `--border`, `--ring`, `--chart-1` to `--chart-5`). Status tokens (`--status-paid`, `--status-pending`, `--status-overdue`) are added in the same file. Light mode only in MVP.
+- Spacing uses Tailwind's 4 px spacing scale; radius comes from shadcn's `--radius`. Components use theme tokens through Tailwind classes, never hard-coded colours or pixel values.
+- Components are shadcn/ui components with all states (default, hover, focus, disabled, error, loading): Button, Input, Select, date field (Calendar + Popover), Tabs, Table, status badge (Badge), summary card (Card), chart (shadcn charts), modal (Dialog), toast (Sonner). The file dropzone has no shadcn component and is composed from shadcn parts and tokens.
 
 **Required states for every data view**
 
@@ -325,24 +328,26 @@ Every rule in this table must have a unit test against the sample dataset before
 
 ## Technical requirements
 
-The MVP is a client-side React + TypeScript app with data stored in the browser, deployed as a public demo with no accounts or backend.
+The MVP is a client-side Vite + React + TypeScript app with data stored in the browser, deployed as a public demo with no accounts or backend.
 
 | Area | Decision |
 | --- | --- |
 | Framework | React + TypeScript (Vite) |
-| Styling | Design tokens from Figma exported as CSS variables |
-| Charts | One library, e.g. Recharts |
+| Styling | Tailwind CSS with shadcn/ui as the design system; tokens are shadcn's theme CSS variables in one file |
+| Components | shadcn/ui |
+| Charts | shadcn charts (built on Recharts) |
 | CSV parsing | Papa Parse |
 | Storage | Browser storage (IndexedDB or localStorage); no backend in MVP |
 | Testing | Vitest for calculations, Testing Library for components, Playwright for the 3 core journeys |
 | Repo | One GitHub repository; product docs in `docs/` |
-| Deployment | Vercel or Netlify, auto-deploy from `main` |
+| Deployment | Vercel: production deploys from `main`, and every pull request gets a preview link |
 | Workflow | Feature branches + pull requests; Codex tasks scoped to one user story each |
 
 **Definition of Done (per pull request)**
 
 - [ ] Implements one user story and meets all its acceptance criteria.
-- [ ] Matches the Figma design and uses design tokens, not hard-coded values.
+- [ ] Reviewed on the Vercel preview, with a screenshot in the pull request.
+- [ ] Uses shadcn/ui components and theme tokens, not hard-coded values.
 - [ ] Empty, loading and error states are handled.
 - [ ] Calculation logic is covered by unit tests; all tests pass in CI.
 - [ ] Keyboard and screen-reader checks pass for new UI.
@@ -410,11 +415,14 @@ The work runs in five phases, and each one starts only when the previous gate is
 
 ```mermaid
 flowchart LR
-  P1["1. Foundation<br/>~1 week"] -->|PRD approved| P2["2. UX flows<br/>1–2 weeks"]
-  P2 -->|Wireframes reviewed| P3["3. Design system<br/>2–3 weeks"]
-  P3 -->|Hi-fi designs done| P4["4. Build<br/>3–4 weeks"]
+  P1["1. Foundation<br/>~1 week"] -->|PRD approved| P2["2. Rough screens<br/>1–2 weeks"]
+  P2 -->|Rough screens reviewed on Vercel| P3["3. Design polish<br/>2–3 weeks"]
+  P3 -->|Design polished| P4["4. Build<br/>3–4 weeks"]
   P4 -->|All stories meet DoD| P5["5. Validate<br/>1–2 weeks"]
 ```
+
+- **2. Rough screens:** every MVP screen built in React with shadcn/ui and the sample dataset, including empty, loading and error states. Layout and flow first, visual detail later. Gate: the screens are reviewed on the Vercel preview.
+- **3. Design polish:** the theme tokens, type, spacing, component states, charts and responsive layouts are refined until the screens are portfolio quality. Gate: the design is polished and every screen passes the accessibility checks above.
 
 **Milestone 1: Product foundation (approved)**
 

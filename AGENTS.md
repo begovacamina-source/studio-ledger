@@ -10,8 +10,11 @@ Read this file before every task. The product documents in `docs/` are the sourc
 
 ## Stack
 
-- React + TypeScript (strict mode), built with Vite.
-- Charts: Recharts. CSV parsing: Papa Parse.
+- Vite + React + TypeScript (strict mode).
+- Styling: Tailwind CSS. Design system: shadcn/ui. Use a shadcn/ui component whenever one exists; add new ones with the shadcn CLI.
+- Charts: shadcn charts (built on Recharts). CSV parsing: Papa Parse.
+- Design tokens are shadcn's theme colours and Tailwind's spacing scale, kept in one place: the theme CSS variables in `src/index.css`. Add any new token there; never hard-code colours or pixel values in components.
+- Deployment: Vercel. `main` deploys to production and every pull request gets a preview link.
 - Storage: browser storage only (IndexedDB or localStorage). No backend, no network calls.
 - Tests: Vitest for logic, Testing Library for components, Playwright for the three core journeys.
 
@@ -39,7 +42,7 @@ Use only the glossary terms in `docs/rules.md`: Received, Outstanding, Pending, 
 ## Definition of Done
 
 - Meets every acceptance criterion of the story.
-- Matches the Figma design and uses design tokens (CSS variables), no hard-coded values.
+- Reviewed on the Vercel preview, screenshot in the pull request, uses shadcn/ui components and theme tokens (no hard-coded values).
 - Handles empty, loading and error states.
 - Unit tests for any logic; all tests pass.
 - Keyboard accessible with visible focus; status never shown by colour alone.

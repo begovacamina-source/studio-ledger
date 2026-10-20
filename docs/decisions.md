@@ -4,6 +4,7 @@ Newest first. Each entry: what was decided, why, and what it rules out.
 
 | Date | Decision | Reason | Consequence |
 | --- | --- | --- | --- |
+| 2026-10-20 | Design in code with shadcn/ui, no Figma; deploy on Vercel | Design engineer portfolio project: the design system lives in the code that ships | Tokens are shadcn's theme colours and Tailwind's spacing in one file; Phases 2–3 become rough screens, then design polish; every pull request is reviewed on its Vercel preview |
 | 2026-10-20 | PRD approved; gate 1 passed | Every Milestone 1 checklist item is done | Phase 2 (UX flows) starts |
 | 2026-10-20 | PRD moved to the repo as source of truth (`docs/PRD.md`) | Two editable copies drifted (US-5.1, US-5.2) | The Claude Doc is a retired snapshot; PRD changes go through pull requests |
 | 2026-10-19 | Currency choice gets its own story (US-5.2) | Currency rules existed with no story, so no issue would build Settings | Settings ships as a Must story in the Settings area |
