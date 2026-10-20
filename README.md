@@ -10,7 +10,7 @@ A personal finance dashboard for freelance creatives. It answers three questions
 
 ## Why this project exists
 
-Freelancers track invoices, clients, income and expenses across spreadsheets and tools, so understanding their finances takes manual calculation. Studio Ledger turns those records into a few clear numbers and lists. It is also an end-to-end UX/UI portfolio case study: strategy → UX flows → design system → build → validation.
+Freelancers track invoices, clients, income and expenses across spreadsheets and tools, so understanding their finances takes manual calculation. Studio Ledger turns those records into a few clear numbers and lists. It is also a design engineer portfolio project, designed in code with no Figma: strategy → rough screens → design polish → build → validation.
 
 ## MVP scope
 
@@ -39,15 +39,15 @@ Everything else is out of scope until the PRD changes. See [docs/PRD.md](docs/PR
 
 ## Planned tech stack
 
-React + TypeScript (Vite) · Recharts · Papa Parse · browser storage (no backend) · Vitest, Testing Library, Playwright · deployed on Vercel or Netlify.
+Vite · React · TypeScript · Tailwind CSS · shadcn/ui (design system, including shadcn charts) · Papa Parse · browser storage (no backend) · Vitest, Testing Library, Playwright · deployed on Vercel, with a preview link for every pull request.
 
 ## Roadmap
 
 | Phase | Output | Estimate |
 | --- | --- | --- |
 | 1. Foundation | PRD, rules, journeys, this repo | ~1 week |
-| 2. UX flows | Sitemap, user flows, wireframes, empty/error states | 1–2 weeks |
-| 3. Design system | Figma tokens, components, hi-fi screens | 2–3 weeks |
+| 2. Rough screens | Every screen built with shadcn/ui and the sample data, including empty/loading/error states | 1–2 weeks |
+| 3. Design polish | Theme tokens, type, spacing, component states, charts and responsive layouts refined | 2–3 weeks |
 | 4. Build | React app, calculations, CSV import, deployed demo | 3–4 weeks |
 | 5. Validate | Usability tests, iterations, case study | 1–2 weeks |
 
@@ -55,4 +55,5 @@ React + TypeScript (Vite) · Recharts · Papa Parse · browser storage (no backe
 
 - One user story per branch and pull request (`feature/us-2-2-mark-paid`).
 - Every pull request meets the Definition of Done in the PR template.
-- Design tokens come from Figma; no hard-coded colours or spacing.
+- Design tokens are shadcn's theme colours and spacing, kept in one place (`src/index.css`); no hard-coded colours or spacing.
+- Every pull request is reviewed on its Vercel preview link.

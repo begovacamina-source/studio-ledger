@@ -7,7 +7,7 @@ Closes #
 ## Definition of Done
 
 - [ ] Meets every acceptance criterion of the story.
-- [ ] Matches the Figma design and uses design tokens (CSS variables), no hard-coded values.
+- [ ] Reviewed on the Vercel preview, screenshot in the pull request, uses shadcn/ui components and theme tokens (no hard-coded values).
 - [ ] Handles empty, loading and error states.
 - [ ] Unit tests for any logic; all tests pass.
 - [ ] Keyboard accessible with visible focus; status never shown by colour alone.
