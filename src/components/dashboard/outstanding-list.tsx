@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table'
 import type { OutstandingRow } from '@/lib/calculations'
 import { formatDate } from '@/lib/dates'
+import { invoicePath } from '@/lib/invoice-form'
 import { formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
 
@@ -51,7 +52,7 @@ export function OutstandingList({
                 <TableRow key={row.invoice.id}>
                   <TableCell className="truncate">
                     <Link
-                      to={`/invoices/${row.invoice.invoiceNumber}`}
+                      to={invoicePath(row.invoice.invoiceNumber)}
                       className="font-medium underline-offset-4 hover:underline"
                     >
                       {row.client?.name ?? 'Unknown client'}

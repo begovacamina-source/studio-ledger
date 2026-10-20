@@ -1,12 +1,24 @@
-import { ArrowLeftIcon } from 'lucide-react'
-import { Link, useParams } from 'react-router'
+import { ArrowLeftIcon, PencilIcon, Trash2Icon } from 'lucide-react'
+import { Link, useNavigate, useParams } from 'react-router'
 import { toast } from 'sonner'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
 import { MarkPaidDialog } from '@/components/invoices/mark-paid-dialog'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { displayStatus } from '@/lib/calculations'
 import { daysBetween, formatDate, todayLocal } from '@/lib/dates'
+import { invoicePath } from '@/lib/invoice-form'
 import { formatMoney } from '@/lib/money'
 import { APP_CURRENCY } from '@/lib/settings'
 import { useLedger } from '@/state/use-ledger'
@@ -23,7 +35,8 @@ function BackLink() {
 
 export function InvoiceDetailPage() {
   const { invoiceNumber } = useParams()
-  const { ledger, markInvoiceNotPaid } = useLedger()
+  const { ledger, markInvoiceNotPaid, deleteInvoice } = useLedger()
+  const navigate = useNavigate()
   const invoice = ledger.invoices.find((i) => i.invoiceNumber === invoiceNumber)
 
   if (!invoice) {
@@ -76,7 +89,7 @@ export function InvoiceDetailPage() {
               </div>
             ))}
           </dl>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             {status === 'Paid' ? (
               <Button
                 variant="outline"
@@ -90,6 +103,41 @@ export function InvoiceDetailPage() {
             ) : (
               <MarkPaidDialog invoice={invoice} trigger={<Button>Mark as paid</Button>} />
             )}
+            <Button variant="outline" asChild>
+              <Link to={`${invoicePath(invoice.invoiceNumber)}/edit`}>
+                <PencilIcon /> Edit
+              </Link>
+            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline">
+                  <Trash2Icon /> Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Delete {invoice.invoiceNumber}?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {formatMoney(invoice.amount, APP_CURRENCY)} for{' '}
+                    {client?.name ?? 'Unknown client'} is removed from every total. This can't be
+                    undone.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    variant="destructive"
+                    onClick={() => {
+                      deleteInvoice(invoice.id)
+                      toast.success(`${invoice.invoiceNumber} deleted`)
+                      navigate('/invoices', { replace: true })
+                    }}
+                  >
+                    Delete invoice
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </CardContent>
       </Card>

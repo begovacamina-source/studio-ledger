@@ -1,4 +1,4 @@
-import { SearchIcon } from 'lucide-react'
+import { PlusIcon, SearchIcon } from 'lucide-react'
 import { useMemo } from 'react'
 import { Link, useSearchParams } from 'react-router'
 import { InvoiceStatusBadge } from '@/components/invoice-status-badge'
@@ -24,6 +24,7 @@ import {
   statusCounts,
   type StatusFilter,
 } from '@/lib/invoices'
+import { invoicePath } from '@/lib/invoice-form'
 import { formatMoney } from '@/lib/money'
 import { APP_CURRENCY } from '@/lib/settings'
 import { useLedger } from '@/state/use-ledger'
@@ -61,7 +62,14 @@ export function InvoicesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-semibold">Invoices</h1>
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <h1 className="text-2xl font-semibold">Invoices</h1>
+        <Button asChild>
+          <Link to="/invoices/new">
+            <PlusIcon /> Add invoice
+          </Link>
+        </Button>
+      </div>
 
       <Tabs value={status} onValueChange={(value) => update({ status: value as StatusFilter })}>
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -128,7 +136,7 @@ export function InvoicesPage() {
                       <TableRow key={row.invoice.id}>
                         <TableCell>
                           <Link
-                            to={`/invoices/${row.invoice.invoiceNumber}`}
+                            to={invoicePath(row.invoice.invoiceNumber)}
                             className="font-medium underline-offset-4 hover:underline"
                           >
                             {row.invoice.invoiceNumber}
