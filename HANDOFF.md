@@ -10,17 +10,18 @@ Work so far was done in a Claude.ai chat, then in Claude Code. This file tells t
 - PRD gap closed: **US-5.2 · Must: choose the app currency** is in `docs/PRD.md`, `docs/user-stories.md` and `docs/decisions.md`. The F5 sample data criteria became **US-5.1 · Must: load sample data and clear all data** (issue #19); the dataset itself shipped in #18 and closed #16.
 - Repository foundation: README, AGENTS.md, CLAUDE.md, LICENSE (MIT), docs/, .gitignore, `.github/pull_request_template.md` (Definition of Done + "Closes #"), `.github/ISSUE_TEMPLATE/user-story.yml` (story, priority, area, acceptance criteria), `scripts/setup-github.sh`.
 - **Milestone 1 approved (gate 1 passed, 2026-10-20):** every checklist item in `docs/PRD.md` is ticked, and the decision is logged in `docs/decisions.md`.
+- **New direction (2026-10-20, #22):** a design engineer portfolio project, designed in code with no Figma. Stack: Vite, React, TypeScript, Tailwind and shadcn/ui (with shadcn charts). Design tokens are shadcn's theme colours and Tailwind's spacing, kept in `src/index.css`. Deployed on Vercel with a preview link for every pull request. The Definition of Done now asks for a review on the Vercel preview, a screenshot in the pull request, and shadcn/ui components and theme tokens.
 - GitHub: private repository https://github.com/begovacamina-source/studio-ledger, branch `main`, first commit "Milestone 1: product foundation".
 - `scripts/setup-github.sh` has been run: 8 labels, the "MVP" milestone and 17 issues (#1–#17, one per story, acceptance criteria from `docs/PRD.md`). A second run skips everything.
 - The `gh` CLI is installed in `~/.local/bin` (add it to `PATH` if a shell can't find it). Commits use the GitHub noreply email, set for this repository only.
 
 ## Next (pick up here)
 
-Phase 2: UX flows (1–2 weeks; gate: wireframes reviewed).
+Phase 2: Rough screens (1–2 weeks; gate: rough screens reviewed on the Vercel preview).
 
-1. Sitemap: every screen in the MVP and how they connect.
-2. User flows for the three core journeys in `docs/PRD.md` (import records, understand the month, collect an unpaid invoice).
-3. Low-fidelity wireframes for every screen, including empty, loading and error states.
+1. Set up the app: Vite + React + TypeScript (strict), Tailwind and shadcn/ui, with the theme tokens (including the status tokens) in `src/index.css`.
+2. Connect the repository to Vercel: production from `main`, a preview link on every pull request.
+3. Build every MVP screen roughly with shadcn/ui components and the sample dataset in `data/`, covering the three core journeys in `docs/PRD.md` and the empty, loading and error states. Layout and flow first; visual polish is Phase 3.
 
 ## Notes
 
