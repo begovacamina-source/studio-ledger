@@ -44,6 +44,8 @@ Everything else is out of scope until the PRD changes. See [docs/PRD.md](docs/PR
 | [docs/data-model.md](docs/data-model.md) | Entities, fields and CSV formats |
 | [docs/user-stories.md](docs/user-stories.md) | Story list with priorities |
 | [docs/decisions.md](docs/decisions.md) | Decision log |
+| [docs/definition-of-done.md](docs/definition-of-done.md) | Release checklist (Must / Nice) |
+| [docs/verification-log.md](docs/verification-log.md) | Evidence for each checked item |
 | [AGENTS.md](AGENTS.md) | Instructions for Codex and other coding agents |
 
 `docs/PRD.md` is the single source of truth for the product: change it through pull requests. The PRD was first written in a Claude Doc, which is now a retired snapshot and is no longer exported or edited.

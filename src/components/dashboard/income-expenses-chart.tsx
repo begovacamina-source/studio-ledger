@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/chart'
 import type { MonthTotals } from '@/lib/calculations'
 import { formatMonthLong, formatMonthShort } from '@/lib/dates'
-import { formatMoney } from '@/lib/money'
+import { formatAxisMoney, formatMoney } from '@/lib/money'
 import type { Currency } from '@/lib/types'
 
 const chartConfig = {
@@ -69,14 +69,12 @@ export function IncomeExpensesChart({
             <YAxis
               tickLine={false}
               axisLine={false}
-              width={64}
+              // Sized to the longest tick, so "14.000 KM" fits as well as "$14,000".
+              width="auto"
               allowDecimals={false}
               // An empty period gets a $100 scale instead of cent ticks.
               domain={hasData ? [0, 'auto'] : [0, 10_000]}
-              // Axis ticks are whole amounts, so drop the ".00".
-              tickFormatter={(cents: number) =>
-                formatMoney(cents, currency).replace(/[.,]00(?= KM|$)/, '')
-              }
+              tickFormatter={(cents: number) => formatAxisMoney(cents, currency)}
             />
             <ChartTooltip cursor={{ fill: 'var(--muted)' }} content={<MonthTooltip currency={currency} />} />
             <ChartLegend content={<ChartLegendContent />} />
