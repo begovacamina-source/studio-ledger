@@ -29,3 +29,13 @@ export function formatMoney(cents: number, currency: Currency = 'USD'): string {
       return `${sign}${groupThousands(whole, '.')},${fraction} KM`
   }
 }
+
+/**
+ * Formats a whole-amount chart axis tick: $14,000, €14,000 or 14.000 KM.
+ * The space before KM is non-breaking so the label never wraps.
+ */
+export function formatAxisMoney(cents: number, currency: Currency = 'USD'): string {
+  return formatMoney(cents, currency)
+    .replace(/[.,]00(?= KM|$)/, '')
+    .replace(' KM', ' KM')
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatMoney, parseAmountToCents } from './money'
+import { formatAxisMoney, formatMoney, parseAmountToCents } from './money'
 
 describe('parseAmountToCents', () => {
   it('parses dot-decimal amounts into integer cents', () => {
@@ -35,5 +35,22 @@ describe('formatMoney', () => {
   it('formats small amounts', () => {
     expect(formatMoney(0)).toBe('$0.00')
     expect(formatMoney(5)).toBe('$0.05')
+  })
+})
+
+describe('formatAxisMoney', () => {
+  it('drops the cents on whole axis amounts', () => {
+    expect(formatAxisMoney(1_400_000, 'USD')).toBe('$14,000')
+    expect(formatAxisMoney(1_400_000, 'EUR')).toBe('€14,000')
+    expect(formatAxisMoney(1_400_000, 'BAM')).toBe('14.000 KM')
+    expect(formatAxisMoney(0, 'BAM')).toBe('0 KM')
+  })
+
+  it('keeps BAM on one line with a non-breaking space', () => {
+    expect(formatAxisMoney(1_400_000, 'BAM')).not.toMatch(/\s(?<! )/)
+  })
+
+  it('keeps cents that are not zero', () => {
+    expect(formatAxisMoney(1_250_050, 'BAM')).toBe('12.500,50 KM')
   })
 })

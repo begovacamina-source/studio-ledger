@@ -40,7 +40,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [x] **PB-21** Must · Amounts are relabelled, never converted: switching keeps the same digits (for example $47,160.00 → €47,160.00 → 47.160,00 KM).
 - [x] **PB-22** Must · After a switch, no amount on the Overview (cards, chart axis, chart table, Outstanding), Invoices (list, panel) or Expenses (list, total) shows another currency, and the choice survives a reload.
 - [ ] **PB-23** Must · Chart tooltips, forms, dialogs and import screens also show amounts in the chosen currency.
-- [ ] **PB-24** Must · Chart axis labels fit on one line in every currency, BAM included.
+- [x] **PB-24** Must · Chart axis labels fit on one line in every currency, BAM included.
 
 ### Charts
 
