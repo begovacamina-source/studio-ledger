@@ -158,9 +158,9 @@ export function MatchStep({
                 </TableCell>
                 <TableCell>
                   {required ? (
-                    // Locked on: a required field has to be imported. It looks on but can't be
-                    // switched off; aria-disabled keeps it focusable so the tooltip can say why.
-                    // Its field menu still works.
+                    // Locked on: a required field has to be imported. It shows on, at the reduced
+                    // opacity shadcn uses for disabled controls; aria-disabled keeps it focusable
+                    // so the tooltip can say why. Its field menu still works.
                     <Tooltip>
                       {/* A wrapper as the trigger, so the tooltip's data-state doesn't replace the switch's. */}
                       <TooltipTrigger asChild>
@@ -169,7 +169,7 @@ export function MatchStep({
                             checked
                             aria-disabled
                             aria-label={`Import ${name(column)}`}
-                            className="cursor-not-allowed"
+                            className="cursor-not-allowed opacity-50"
                             onClick={(e) => e.preventDefault()}
                           />
                         </span>
