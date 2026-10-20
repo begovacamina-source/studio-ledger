@@ -15,6 +15,7 @@ import {
   type ParsedFile,
   type RecordType,
 } from '@/lib/csv-import'
+import { APP_CURRENCY } from '@/lib/settings'
 import { cn } from '@/lib/utils'
 import { useLedger } from '@/state/use-ledger'
 
@@ -66,7 +67,7 @@ export function ImportPage() {
   function handleFileRead(parsed: ParsedFile, name: string) {
     const mapping = autoMatch(parsed.headers, type)
     const guess = {
-      dateFormat: suggestDateFormat(parsed, mapping, type),
+      dateFormat: suggestDateFormat(parsed, mapping, type, APP_CURRENCY),
       decimal: suggestDecimalSeparator(parsed, mapping, type),
     }
     setFile({ parsed, name })

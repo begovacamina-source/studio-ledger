@@ -30,7 +30,7 @@ const settingsFor = (file: ParsedFile, type: ImportSettings['type']): ImportSett
   return {
     type,
     mapping,
-    dateFormat: suggestDateFormat(file, mapping, type),
+    dateFormat: suggestDateFormat(file, mapping, type, 'USD'),
     decimal: suggestDecimalSeparator(file, mapping, type),
   }
 }
@@ -97,14 +97,24 @@ describe('dates and decimals', () => {
   })
 
   it('suggests the date format from the first rows', () => {
-    const suggest = (dates: string[]) => {
+    const suggest = (dates: string[], currency: 'USD' | 'EUR' | 'BAM' = 'USD') => {
       const file = parse('date,amount,category\n' + dates.map((d) => `${d},5,Office`).join('\n'))
-      return suggestDateFormat(file, autoMatch(file.headers, 'expenses'), 'expenses')
+      return suggestDateFormat(file, autoMatch(file.headers, 'expenses'), 'expenses', currency)
     }
     expect(suggest(['2026-10-05'])).toBe('YYYY-MM-DD')
     expect(suggest(['05.10.2026'])).toBe('DD.MM.YYYY')
     expect(suggest(['25/10/2026', '05/10/2026'])).toBe('DD/MM/YYYY')
     expect(suggest(['10/25/2026', '10/05/2026'])).toBe('MM/DD/YYYY')
+  })
+
+  it('settles ambiguous slash dates by currency', () => {
+    const suggest = (currency: 'USD' | 'EUR' | 'BAM') => {
+      const file = parse('date,amount,category\n05/10/2026,5,Office\n03/04/2026,5,Office\n')
+      return suggestDateFormat(file, autoMatch(file.headers, 'expenses'), 'expenses', currency)
+    }
+    expect(suggest('USD')).toBe('MM/DD/YYYY')
+    expect(suggest('EUR')).toBe('DD/MM/YYYY')
+    expect(suggest('BAM')).toBe('DD/MM/YYYY')
   })
 
   it('suggests the decimal separator', () => {

@@ -3,6 +3,7 @@ import { DESCRIPTION_MAX } from './invoice-form'
 import {
   EXPENSE_CATEGORIES,
   type Client,
+  type Currency,
   type Expense,
   type ExpenseCategory,
   type ISODate,
@@ -152,10 +153,22 @@ function columnValues(file: ParsedFile, mapping: ColumnMapping, kind: FieldSpec[
     .filter(Boolean)
 }
 
-/** The first format that reads every date in the first rows; YYYY-MM-DD when there is nothing to go on. */
-export function suggestDateFormat(file: ParsedFile, mapping: ColumnMapping, type: RecordType): DateFormat {
+/**
+ * The first format that reads every date in the first rows; YYYY-MM-DD when
+ * there is nothing to go on. When dates like 05/10/2026 fit both slash formats,
+ * USD suggests MM/DD/YYYY and EUR or BAM suggest DD/MM/YYYY.
+ */
+export function suggestDateFormat(
+  file: ParsedFile,
+  mapping: ColumnMapping,
+  type: RecordType,
+  currency: Currency,
+): DateFormat {
   const values = columnValues(file, mapping, 'date', type)
-  return DATE_FORMATS.find((f) => values.length > 0 && values.every((v) => parseDate(v, f))) ?? 'YYYY-MM-DD'
+  const fits = DATE_FORMATS.filter((f) => values.length > 0 && values.every((v) => parseDate(v, f)))
+  if (fits.includes('DD/MM/YYYY') && fits.includes('MM/DD/YYYY'))
+    return currency === 'USD' ? 'MM/DD/YYYY' : 'DD/MM/YYYY'
+  return fits[0] ?? 'YYYY-MM-DD'
 }
 
 /** Comma when amounts in the first rows end in a comma and one or two digits, otherwise dot. */
