@@ -6,20 +6,22 @@ A personal finance dashboard for freelance creatives. It answers three questions
 2. How much have I spent?
 3. Which clients still owe me money?
 
-> **Status:** Phase 2 — Rough screens. The app is set up and the Overview dashboard is built roughly with the sample data.
+**Live app:** [studio-ledger-rho.vercel.app](https://studio-ledger-rho.vercel.app). It opens on a fictional sample, and your records stay in your browser.
+
+> **Status:** Phase 3, design polish, with release checks under way. Every MVP screen is built and deployed: Overview, Invoices, Clients, Expenses, CSV import and Settings. Keyboard and contrast checks pass. Still to do before v1.0.0: the design review, a screen-reader spot check, and the case study with a usability test. See [`docs/definition-of-done.md`](docs/definition-of-done.md).
 
 ## Run locally
 
 Needs Node.js 22 or later.
 
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-`npm test` runs the unit and component tests, `npm run lint` runs the linter, and `npm run build` makes a production build in `dist/`.
+`npm ci` installs the exact versions in `package-lock.json`. `npm run dev` serves the app at http://localhost:5173 with the sample data. `npm test` runs the unit and component tests, `npm run lint` runs the linter, and `npm run build` makes a production build in `dist/`.
 
-`npm run test:e2e` runs the three core journeys in Playwright against a production build. Locally it uses your installed Google Chrome; without Chrome, run `npx playwright install chromium` once and remove `channel` in `playwright.config.ts`. CI (`.github/workflows/ci.yml`) runs lint, the unit tests, the build and the journeys on every pull request.
+`npm run test:e2e` runs Playwright against a production build: the three core journeys, keyboard-only flows, and text and non-text contrast checks. Locally it uses your installed Google Chrome; without Chrome, run `npx playwright install chromium` once and remove `channel` in `playwright.config.ts`. CI (`.github/workflows/ci.yml`) runs lint, the unit tests, the build and the journeys on every pull request.
 
 ## Why this project exists
 
@@ -30,10 +32,10 @@ Freelancers track invoices, clients, income and expenses across spreadsheets and
 | Area | What it does |
 | --- | --- |
 | Overview dashboard | Received, Outstanding, Expenses and Net income for a period; income vs expenses chart; who owes money |
-| Invoices and clients | Add invoices, link them to clients, mark paid or unpaid, filter by status |
+| Invoices and clients | Add invoices, link them to clients, mark paid or not paid (with undo), filter by status; a Clients page with totals per client |
 | Expenses | Record and categorise expenses |
 | CSV import | Upload, match columns, preview and validate, import |
-| Sample data | A fictional six-month dataset for demos and tests |
+| Sample data and settings | A fictional six-month dataset, loaded on a first visit; currency (USD, EUR or BAM, formatting only); clear all data |
 
 Everything else is out of scope until the PRD changes. See [docs/PRD.md](docs/PRD.md).
 
@@ -52,7 +54,7 @@ Everything else is out of scope until the PRD changes. See [docs/PRD.md](docs/PR
 
 `docs/PRD.md` is the single source of truth for the product: change it through pull requests. The PRD was first written in a Claude Doc, which is now a retired snapshot and is no longer exported or edited.
 
-## Planned tech stack
+## Tech stack
 
 Vite · React · TypeScript · Tailwind CSS · shadcn/ui (design system, including shadcn charts) · Papa Parse · browser storage (no backend) · Vitest, Testing Library, Playwright · deployed on Vercel, with a preview link for every pull request.
 
