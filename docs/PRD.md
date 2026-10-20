@@ -92,7 +92,7 @@ The MVP succeeds if a freelancer can answer the three core questions in under 10
 2. Ship a deployed, working app, not only mockups.
 3. Be explicit about what was validated and what was assumed.
 
-**Success metrics (measured in usability testing, 5–8 participants)**
+**Success metrics (measured in usability testing, 2–3 participants)**
 
 | Metric | Target |
 | --- | --- |
@@ -506,7 +506,7 @@ Each story becomes one GitHub issue and one Codex task. Should items ship only a
 - [ ] Status filter tabs: All, Paid, Pending, Overdue, each with a count.
 - [ ] Search matches invoice number and client name.
 - [ ] The list shows 10 invoices per page, with pagination, on desktop and mobile. The page is kept in the URL, and changing a filter or the search goes back to page 1.
-- [ ] (Should) The table can be sorted by due date, amount and client.
+- [ ] (Future work, #41) The table can be sorted by due date, amount and client. Moved out of the MVP on 2026-10-20.
 
 **US-2.4 · Must** — As a freelancer, I want to edit or delete an invoice, so I can fix mistakes.
 

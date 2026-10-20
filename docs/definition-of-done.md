@@ -2,7 +2,7 @@
 
 The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an item only when working code, a passing test or a reviewed preview supports it, and record that evidence in [`docs/verification-log.md`](verification-log.md) under the item's ID. This file holds the checklist only.
 
-**Must** = required for release. **Nice** = do it if time allows; never blocks release.
+**Must** = required for release. **Nice** = do it if time allows; never blocks release. Items under **Future work** are out of this release; they are kept here so they aren't lost.
 
 ## Product behavior
 
@@ -46,7 +46,6 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [x] **PB-25** Must · The numbers behind the Received and Expenses chart are in a table for screen readers (month, Received, Expenses, Net income), and its totals match the summary cards.
 - [ ] **PB-26** Must · Hovering or tapping a month shows its exact Received, Expenses and Net income.
-- [ ] **PB-27** Nice · The chart's table can also be shown on screen, not only to screen readers.
 
 ### Stories
 
@@ -56,7 +55,7 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 - [x] **UX-1** Must · Status is never shown by colour alone: every badge reads Paid, Pending or "Overdue · N days".
 - [x] **UX-2** Must · A search or filter that matches nothing shows an empty state with a way to clear it, on Invoices and Expenses.
-- [ ] **UX-3** Must · Data views show skeleton rows and cards while loading.
+- [ ] **UX-3** Must · Data views appear straight away with no empty or loading flash: records are read from browser storage before the first render, so no skeletons are needed. If loading ever becomes asynchronous, data views show skeleton rows and cards instead.
 - [x] **UX-4** Must · Saving, marking as paid and importing each confirm with a toast, with undo where the PRD asks for it.
 - [ ] **UX-5** Must · The UI uses only glossary terms: no screen shows "Unpaid", "revenue", "billed" or accounting jargon.
 - [x] **UX-6** Must · Settings is opened from the gear icon at the far right of the top bar, not from a main tab.
@@ -71,8 +70,6 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [ ] **A11Y-2** Must · Every flow works by keyboard alone, with visible focus and no focus traps.
 - [ ] **A11Y-3** Must · Text contrast is at least 4.5:1, and UI and chart elements at least 3:1.
 - [ ] **A11Y-4** Must · A screen-reader spot check of each new screen passes: labels, statuses and form errors are announced.
-- [ ] **A11Y-5** Nice · A full screen-reader review of the three core journeys is done and its findings recorded.
-- [ ] **A11Y-6** Nice · Automated accessibility scans (axe) report no violations on every screen.
 - [ ] **A11Y-7** Nice · At 200% zoom every action is reachable without clipping.
 
 ## Data and persistence
@@ -101,7 +98,6 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [ ] **TEST-2** Must · Every calculation and behavior rule in the PRD has a unit test against the sample dataset.
 - [ ] **TEST-3** Must · Playwright tests cover the three core journeys: import records, understand the month, collect an unpaid invoice.
 - [ ] **TEST-4** Must · Tests, lint and build run in CI on every pull request and must pass before merging.
-- [ ] **TEST-5** Nice · The core journeys pass in Chromium, Firefox and WebKit.
 
 ## Git/GitHub workflow
 
@@ -124,14 +120,24 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 - [ ] **DEP-2** Must · The production URL opens without a Vercel login, and the three core journeys pass a smoke test there.
 - [ ] **DEP-3** Must · Direct links such as `/settings` and `/invoices/INV-002` load on production.
 - [ ] **DEP-4** Must · Page title, description and favicon identify Studio Ledger.
-- [ ] **DEP-5** Nice · Production Lighthouse scores are 90+ for performance and 95+ for accessibility, with the test conditions recorded.
 
 ## Portfolio/case study
 
 - [ ] **CASE-1** Must · The case study explains the problem, the user, the MVP scope and the non-goals, matching the PRD.
 - [ ] **CASE-2** Must · It shows the process (PRD, rough screens, design polish in code with no Figma, build, validation) with concrete decisions and tradeoffs.
-- [ ] **CASE-3** Must · A usability test with 5–8 participants is run against the PRD success metrics, and the results are reported, including whether people preferred CSV import over typing records.
+- [ ] **CASE-3** Must · A usability test with 2–3 participants is run against the PRD success metrics, and the results are reported, including whether people preferred CSV import over typing records.
 - [ ] **CASE-4** Must · It says plainly what was validated and what was assumed, including that discovery interviews were skipped.
 - [ ] **CASE-5** Must · Real desktop and mobile screenshots show the released app.
 - [ ] **CASE-6** Must · It links to the live demo and says how reviewers can see the private repository.
-- [ ] **CASE-7** Nice · A short walkthrough video shows the three core journeys.
+
+## Future work
+
+Not part of the MVP release (decided 2026-10-20, see `docs/decisions.md`). Former Nice items keep their IDs.
+
+- [ ] **US-2.3 sorting** · Sort the invoice table by due date, amount and client (the Should item of US-2.3, now #41).
+- [ ] **PB-27** · The chart's table can also be shown on screen, not only to screen readers.
+- [ ] **A11Y-5** · A full screen-reader review of the three core journeys is done and its findings recorded.
+- [ ] **A11Y-6** · Automated accessibility scans (axe) report no violations on every screen.
+- [ ] **TEST-5** · The core journeys pass in Chromium, Firefox and WebKit.
+- [ ] **DEP-5** · Production Lighthouse scores are 90+ for performance and 95+ for accessibility, with the test conditions recorded.
+- [ ] **CASE-7** · A short walkthrough video shows the three core journeys.
