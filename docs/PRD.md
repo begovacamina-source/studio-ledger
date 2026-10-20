@@ -254,6 +254,7 @@ date,amount,category,description
 **Edge cases**
 
 - If the previous period value is 0, the change is shown as "—" rather than a percentage.
+- If the previous Net income is 0 or negative, the Net income change is shown as "—" rather than a percentage.
 - Net income can be negative and is shown with a minus sign, not only in red.
 - A month with no records shows 0 in the chart, not a gap.
 - All sums are calculated in cents and formatted only for display.

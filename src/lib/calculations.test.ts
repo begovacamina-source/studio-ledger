@@ -4,6 +4,7 @@ import {
   displayStatus,
   monthlyTotals,
   netIncome,
+  netIncomeChange,
   outstanding,
   outstandingList,
   percentChange,
@@ -132,6 +133,14 @@ describe('change vs previous period', () => {
     expect(percentChange(1323000, 0)).toBeNull()
     const september = periodFigures(ledger, month('2026-09'))
     expect(september.received.change).toBeNull()
+  })
+
+  it('shows "—" for Net income when the previous Net income is 0 or negative', () => {
+    expect(netIncomeChange(100000, 0)).toBeNull()
+    expect(netIncomeChange(100000, -258487)).toBeNull()
+    expect(netIncomeChange(150000, 100000)).toBeCloseTo(50)
+    // August 2026 Net income is -$2,584.87, so September shows "—".
+    expect(periodFigures(ledger, month('2026-09')).netIncome.change).toBeNull()
   })
 
   it('compares with the previous period of equal length', () => {

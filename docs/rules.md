@@ -40,6 +40,7 @@ The Outstanding card shows a count instead of a change, e.g. "3 invoices · 1 ov
 ## Edge cases
 
 - Previous period value of 0 → change shown as "—".
+- Previous Net income of 0 or less → Net income change shown as "—" (a percentage of a negative value gives a misleading sign).
 - Net income can be negative; show a minus sign, not only red.
 - A month with no records shows 0 in the chart, not a gap.
 - All sums are calculated in cents and formatted only for display.

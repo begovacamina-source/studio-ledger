@@ -27,7 +27,7 @@ function loadLedger(): { ledger: Ledger } | { error: string } {
 }
 
 function Dashboard({ ledger }: { ledger: Ledger }) {
-  const [periodId, setPeriodId] = useState<PeriodId>('this-month')
+  const [periodId, setPeriodId] = useState<PeriodId>('last-6-months')
   const today = todayLocal()
   const period = useMemo(() => getPeriod(periodId, today), [periodId, today])
 

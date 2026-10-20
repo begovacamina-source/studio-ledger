@@ -35,6 +35,13 @@ describe('Overview dashboard', () => {
     expect(badges[5]).toHaveTextContent('Pending')
   })
 
+  it('opens on Last 6 months', () => {
+    render(<App />)
+    expect(screen.getByRole('combobox', { name: 'Period' })).toHaveTextContent('Last 6 months')
+    // May–October 2026 on 2026-10-19.
+    expect(screen.getByText('$47,160.00')).toBeInTheDocument()
+  })
+
   it('never shows banned terms', () => {
     const { container } = render(<App />)
     expect(container.textContent).not.toMatch(/unpaid|revenue|billed/i)

@@ -64,16 +64,24 @@ export interface PeriodFigures {
   netIncome: Figure
 }
 
+/** Net income change is "—" (null) when the previous Net income is 0 or negative. */
+export function netIncomeChange(current: number, previous: number): number | null {
+  return previous <= 0 ? null : percentChange(current, previous)
+}
+
 export function periodFigures(ledger: Ledger, period: Period): PeriodFigures {
   const previous = previousPeriod(period)
-  const figure = (calc: (p: Period) => number): Figure => {
+  const figure = (
+    calc: (p: Period) => number,
+    change: (current: number, previous: number) => number | null = percentChange,
+  ): Figure => {
     const value = calc(period)
-    return { value, change: percentChange(value, calc(previous)) }
+    return { value, change: change(value, calc(previous)) }
   }
   return {
     received: figure((p) => received(ledger.invoices, p)),
     expenses: figure((p) => expensesTotal(ledger.expenses, p)),
-    netIncome: figure((p) => netIncome(ledger, p)),
+    netIncome: figure((p) => netIncome(ledger, p), netIncomeChange),
   }
 }
 
