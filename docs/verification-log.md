@@ -2,6 +2,20 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-20 · Chart axis labels on one line (PB-24)
+
+**Pull request:** the one that fixes the BAM axis labels (stacked on the Definition of Done PR).
+
+**Run on this branch:** `npm test` (14 files, 147 tests passed), `npm run lint` (exit 0, no warnings), `npm run build` (passed; same 914 kB bundle warning), and the dev server reviewed in the browser on the sample data, "Last 6 months".
+
+| Items | What was verified |
+| --- | --- |
+| PB-24 | The Y axis of "Received and Expenses" now sizes itself to its longest tick (`width="auto"` instead of 64), and BAM ticks use a non-breaking space before "KM". `money.test.ts` "formatAxisMoney" checks `$14,000`, `€14,000`, `14.000 KM` and `0 KM` with no breaking space. Preview at 1280 px and 375 px in USD, EUR and BAM: every tick ($0 to $14,000, €0 to €14,000, 0 KM to 14.000 KM) renders as one line (one `tspan` each), and none starts left of the chart's edge. Screenshots: `docs/screenshots/bam-axis-1280.jpg`, `docs/screenshots/bam-axis-375.jpg`. |
+
+**Found, not fixed:** at 375 px the top bar (tabs and the Settings gear) is wider than the screen (459 px), so the page scrolls sideways. This was already there and is not caused by the chart.
+
+**Not verified:** widths other than 1280 and 375 px; periods with much larger amounts (for example six-digit ticks); the Vercel preview.
+
 ## 2026-10-20 · Baseline at `main` 96d7b23 (after #31)
 
 **Pull request:** the one that adds the Definition of Done (docs only; no app code changed).
@@ -43,7 +57,7 @@ Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-d
 
 **Found, not fixed (items left open):**
 
-- PB-24: in BAM the chart's axis ticks wrap onto two lines ("14.000" over "KM") at the default desktop width. The amounts are correct; the layout breaks.
+- PB-24: in BAM the chart's axis ticks wrap onto two lines ("14.000" over "KM") at the default desktop width. The amounts are correct; the layout breaks. (Fixed later; see the PB-24 entry above.)
 - CODE-5: components use arbitrary values such as `ring-[3px]` and `min-w-[26rem]` to `min-w-[52rem]` on tables.
 - CODE-7: the bundle is 914 kB.
 - TEST-2: the rule "a client with invoices cannot be deleted" has no test (client management, US-2.5, is not built).
