@@ -123,11 +123,11 @@ The release checklist for the MVP, based on [`docs/PRD.md`](PRD.md). Check an it
 
 ## Portfolio/case study
 
-- [ ] **CASE-1** Must · The case study explains the problem, the user, the MVP scope and the non-goals, matching the PRD.
-- [ ] **CASE-2** Must · It shows the process (PRD, rough screens, design polish in code with no Figma, build, validation) with concrete decisions and tradeoffs.
-- [ ] **CASE-4** Must · It says plainly what was validated and what was assumed, including that discovery interviews were skipped.
-- [ ] **CASE-5** Must · Real desktop and mobile screenshots show the released app.
-- [ ] **CASE-6** Must · It links to the live demo and to the public repository.
+- [x] **CASE-1** Must · The case study explains the problem, the user, the MVP scope and the non-goals, matching the PRD.
+- [x] **CASE-2** Must · It shows the process (PRD, rough screens, design polish in code with no Figma, build, validation) with concrete decisions and tradeoffs.
+- [x] **CASE-4** Must · It says plainly what was validated and what was assumed, including that discovery interviews were skipped.
+- [x] **CASE-5** Must · Real desktop and mobile screenshots show the released app.
+- [x] **CASE-6** Must · It links to the live demo and to the public repository.
 
 ## Future work
 
