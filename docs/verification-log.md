@@ -2,6 +2,23 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-28 · Case study (CASE-1, CASE-2, CASE-4, CASE-5, CASE-6)
+
+**Pull request:** the case study checks PR (branch `docs/case-study-checks`), after #60.
+
+| Items | What was verified |
+| --- | --- |
+| CASE-1 (newly checked) | `docs/case-study.md` sections 1–3 compared with `docs/PRD.md`. The problem's three consequences and the primary user goal match the PRD's Problem statement. The persona Maja, her table and the four jobs to be done match Target users, and the persona is marked as an assumption. The MVP table covers the five feature areas and the three core journeys. The Non-goals table covers all ten rows of the PRD's "Out of scope for MVP", with the same reasons. |
+| CASE-2 (newly checked) | Section 4 covers each stage in a table with dates and pull requests: PRD and foundation (#18–#21), rough screens as working features (#22–#31), design polish in code with no Figma (#33, #36, #37, #49), build (#39, #40), quality (#45–#51), and validation moved to after v1.0. It says plainly that the phases overlapped instead of following the planned gates. Section 5 gives the decisions and trade-offs (cash received, integer cents, one currency, no partial payments, browser-only storage, first-visit sample, import matching, undo in the panel, card breakpoints, field borders, scope cuts). |
+| CASE-4 (newly checked) | Section 7 opens with "Discovery interviews were skipped" (decided 2026-10-19), and its table marks two claims validated, with how they were checked, and five as assumed. Section 8 says the app hasn't been tested with users and that the usability test (CASE-3) moved to after v1.0. |
+| CASE-5 (newly checked) | Section 9 shows 8 screens at 1280 px and at 375 px, plus two full-page Overviews. All 18 files in `docs/screenshots/release/` exist, and every image the case study references is there. They were taken on production for #53 (see the UX-10 entry). Since the screenshot commit (afc352e), the only commits on `main` outside `docs/` change `src/test/setup.ts` and the case-study PDF script and its dev dependencies. No app code changed, so they still show the released app. |
+| CASE-6 (newly checked) | The header and "Seeing the code" link to https://studio-ledger-rho.vercel.app and https://github.com/begovacamina-source/studio-ledger. Both returned HTTP 200 to an unauthenticated request on 2026-10-28, the live page's title is "Studio Ledger", and `gh repo view` reports the repository's visibility as PUBLIC. |
+| All five | The project owner reviewed the final case study (with #59 and #60 merged) and reported being happy with it. |
+
+**Not verified:** the links inside `docs/case-study.pdf` weren't clicked; the PDF was checked only by extracting its text in #59 and #60. The screenshots weren't retaken. The case study doesn't list two of the PRD's goal-level non-goals ("processing payments" and "serving teams and agencies"), though it does say it isn't accounting software. The owner's review notes weren't recorded.
+
+**Found, not fixed:** section 4's stage table still says "The design review (UX-10) comes before the release". UX-10 was done on 2026-10-21, so that wording is now out of date.
+
 ## 2026-10-21 · Design review (UX-10)
 
 **Pull request:** the UX-10 and repository access PR (branch `docs/ux-10-and-repo-access`).
