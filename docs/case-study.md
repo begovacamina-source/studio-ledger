@@ -97,7 +97,7 @@ The phase gates still did their job as checkpoints: every app change was reviewe
 The code was written with an AI coding agent (Claude Code), one user story per branch and pull request. I acted as product owner, designer and reviewer. The PRD was the single source of truth. A release checklist (`docs/definition-of-done.md`) was ticked only with evidence: a passing test, a reviewed preview, or a check in the browser. A dated verification log records what was checked and what wasn't.
 
 **In numbers:**
-- 34 merged pull requests up to this draft (#18–#53), with CI on every one from #45 on.
+- 40 merged pull requests (#18–#59), with CI on every one from #45 on.
 - 223 unit and component tests.
 - 60 Playwright tests: the three core journeys, keyboard-only flows, text and non-text contrast, the screen-reader checks, and a check that the app makes no network calls.
 
