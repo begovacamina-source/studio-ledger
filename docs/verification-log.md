@@ -2,6 +2,18 @@
 
 Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-done.md). Newest first. Each entry gives the date, the pull request or commit that was checked, the checklist items it supports, and what was actually verified. Record only what was run or seen, and say what was not covered.
 
+## 2026-10-28 · Release v1.0.0 (GIT-4)
+
+**Pull request:** the GIT-4 PR (branch `docs/git-4-release`), after #61.
+
+| Items | What was verified |
+| --- | --- |
+| GIT-4 (newly checked) | **The tag:** `v1.0.0` is an annotated tag on 40bde3b, the merge commit of #61, the last pull request before the release. Before tagging, CI on that commit (run 40766883120, `push` to `main`) concluded **success**. `git ls-remote` shows `refs/tags/v1.0.0^{}` at 40bde3bb4ad44aad2cc33c218fa79059390f82e8. **The note:** the tag message and the GitHub release (https://github.com/begovacamina-source/studio-ledger/releases/tag/v1.0.0, published, not a draft or pre-release, and the repository's latest release) list every delivered story with its issue and pull requests: US-1.1–US-1.3, US-2.1–US-2.5, US-3.1, US-3.2, US-4.1–US-4.4, US-5.1 and US-5.2. Each story's pull requests come from the GitHub issues and the pull request titles. They also list what isn't in the release: US-1.4, table sorting (#41), the usability test (CASE-3) and the PRD's out-of-scope list. With GIT-4 checked, every Must item in `docs/definition-of-done.md` is checked. |
+
+**Not verified:** this log entry and the GIT-4 tick land after the tag, so `v1.0.0` itself shows GIT-4 unchecked; the release notes say so. The production deployment of 40bde3b wasn't checked again; that commit changed only docs.
+
+**Found, not fixed:** none.
+
 ## 2026-10-28 · Case study (CASE-1, CASE-2, CASE-4, CASE-5, CASE-6)
 
 **Pull request:** the case study checks PR (branch `docs/case-study-checks`), after #60.
