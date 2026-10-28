@@ -62,7 +62,7 @@ Three journeys define it, and each has an end-to-end test:
 
 ### Non-goals
 
-Studio Ledger is not accounting software. The PRD made this list binding, and every task was reviewed against it:
+The PRD rules out four things for the product as a whole: replacing accounting software, filing taxes, processing payments, and serving teams and agencies. It also made a list of features binding, and every task was reviewed against it:
 
 | Left out | Why |
 | --- | --- |
