@@ -101,10 +101,13 @@ The code was written with an AI coding agent (Claude Code), one user story per b
 - 223 unit and component tests.
 - 60 Playwright tests: the three core journeys, keyboard-only flows, text and non-text contrast, the screen-reader checks, and a check that the app makes no network calls.
 
-> **✍️ To fill in: working with an AI agent.** What it was like to direct the build: where it helped, where you had to correct it, and what you'd change in how you briefed it. Examples you might use from the pull requests:
-> - The stacked-PR mistake that led to the "never stack pull requests" rule.
-> - Pushing to an already-merged pull request.
-> - Its suggestion to reword checklist items when evidence couldn't exist (TEST-4, GIT-3).
+**Working with an AI agent.** The agent made me efficient, and it felt like collaborating with myself: I set the direction and reviewed, and it did the building.
+
+I still had to correct it. It stacked pull requests on top of each other, which led to the "never stack pull requests" rule. It pushed to #45 after that pull request was already merged. And Vercel was looking in the wrong build folder until it was told to use `dist`.
+
+It also suggested rewording checklist items when the evidence they asked for couldn't exist (TEST-4, GIT-3), and I agreed.
+
+What I'd change in how I briefed it, I don't know yet.
 
 ![The Overview on a phone: the key figures stacked, with the menu button in the top bar](screenshots/release/overview-phone.png)
 
@@ -227,11 +230,13 @@ Planned after v1.0, from the PRD and the future-work list:
 
 ## 11. Reflection
 
-> **✍️ To fill in: your own reflections.** Some prompts:
-> - What would you do differently: skipping discovery, releasing before a usability test, phase gates?
-> - What did designing in code with no Figma give you, and what did it cost?
-> - Which decision are you proudest of, and which one are you least sure about?
-> - What did you learn about directing an AI coding agent with a PRD and a Definition of Done?
+**What I'd do differently.** If I had users available to test it with, I would gladly run the usability test before releasing.
+
+**Designing in code with no Figma.** It gave me more space to work on different things, and it made me more efficient. I miss Figma, because I like designing in general. But an AI agent can bring an idea to life as well; you just don't do it by clicking.
+
+**What I'm proudest of.** I can't point to one decision. I'm proud that I questioned anything I didn't understand.
+
+**What I learned.** It is extremely easy to have a checklist you can track, and to make sure you are meeting the goals needed to release a working product.
 
 ## Seeing the code
 

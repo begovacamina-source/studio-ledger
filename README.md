@@ -8,7 +8,7 @@ A personal finance dashboard for freelance creatives. It answers three questions
 
 **Live app:** [studio-ledger-rho.vercel.app](https://studio-ledger-rho.vercel.app). It opens on a fictional sample, and your records stay in your browser.
 
-> **Status:** Phase 3, design polish, with release checks under way. Every MVP screen is built and deployed: Overview, Invoices, Clients, Expenses, CSV import and Settings. Keyboard and contrast checks pass. Still to do before v1.0.0: the design review, a screen-reader spot check, and the case study with a usability test. See [`docs/definition-of-done.md`](docs/definition-of-done.md).
+> **Status:** The MVP is complete and released. Every MVP screen is built and deployed: Overview, Invoices, Clients, Expenses, CSV import and Settings. A usability test with 2–3 participants is future work. See [`docs/definition-of-done.md`](docs/definition-of-done.md) and the [case study](docs/case-study.md).
 
 ## Run locally
 
