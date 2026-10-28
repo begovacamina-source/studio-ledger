@@ -29,7 +29,7 @@ Evidence for the items checked in [`docs/definition-of-done.md`](definition-of-d
 
 **Not verified:** the links inside `docs/case-study.pdf` weren't clicked; the PDF was checked only by extracting its text in #59 and #60. The screenshots weren't retaken. The case study doesn't list two of the PRD's goal-level non-goals ("processing payments" and "serving teams and agencies"), though it does say it isn't accounting software. The owner's review notes weren't recorded.
 
-**Found, not fixed:** section 4's stage table still says "The design review (UX-10) comes before the release". UX-10 was done on 2026-10-21, so that wording is now out of date.
+**Found, not fixed:** none left. Section 4's stage table said "The design review (UX-10) comes before the release", which was out of date because UX-10 was done on 2026-10-21. Fixed after the release on branch `docs/case-study-ux-10-line`, which removes the sentence and rebuilds `docs/case-study.pdf`; the `v1.0.0` tag still has the old wording.
 
 ## 2026-10-21 · Design review (UX-10)
 
